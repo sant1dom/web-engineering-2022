@@ -13,6 +13,8 @@ public class AutoreImpl extends DataItemImpl<Integer> implements Autore {
     private String cognome;
     private String nomeArtistico;
     private TipologiaAutore tipologiaAutore;
+    private List<Disco> dischi;
+    private List<Traccia> tracce;
 
     public AutoreImpl(){
         super();
@@ -20,14 +22,16 @@ public class AutoreImpl extends DataItemImpl<Integer> implements Autore {
         this.cognome = "";
         this.nomeArtistico = "";
         this.tipologiaAutore = null;
+        this.dischi = null;
     }
 
-    public AutoreImpl(String nome, String cognome, String nomeArtistico, TipologiaAutore tipologiaAutore){
+    public AutoreImpl(String nome, String cognome, String nomeArtistico, TipologiaAutore tipologiaAutore, List<Disco> dischi) {
         super();
         this.nome = nome;
         this.cognome = cognome;
         this.nomeArtistico = nomeArtistico;
         this.tipologiaAutore = tipologiaAutore;
+        this.dischi = dischi;
     }
 
     @Override
@@ -68,6 +72,26 @@ public class AutoreImpl extends DataItemImpl<Integer> implements Autore {
     @Override
     public void setTipologia(TipologiaAutore tipologiaAutore) {
         this.tipologiaAutore = tipologiaAutore;
+    }
+
+    @Override
+    public List<Disco> getDischi() {
+        return this.dischi;
+    }
+
+    @Override
+    public void setDischi(List<Disco> dischi) {
+        this.dischi = dischi;
+    }
+
+    @Override
+    public List<Traccia> getTracce() {
+        return this.tracce;
+    }
+
+    @Override
+    public void setTracce(List<Traccia> tracce) {
+        this.tracce = tracce;
     }
 
 }

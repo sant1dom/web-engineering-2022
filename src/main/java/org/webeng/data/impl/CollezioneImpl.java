@@ -5,12 +5,14 @@ import org.webeng.data.model.Disco;
 import org.webeng.data.model.Utente;
 import org.webeng.framework.data.DataItemImpl;
 
+import java.util.Date;
 import java.util.List;
 
-public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione {
+    public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione {
     private String titolo;
     private String privacy;
     private Utente utente;
+    private Date dataCreazione;
     private List<Disco> dischi;
     private List<Utente> utentiCondivisione;
 
@@ -18,6 +20,7 @@ public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione 
         super();
         this.titolo = "";
         this.privacy = "";
+        this.dataCreazione = new Date();
         this.utente = null;
         this.dischi = null;
         this.utentiCondivisione = null;
@@ -27,6 +30,7 @@ public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione 
         super();
         this.titolo = titolo;
         this.privacy = privacy;
+        this.dataCreazione = new Date();
         this.utente = utente;
         this.dischi = dischi;
         this.utentiCondivisione = utentiCondivisione;
@@ -63,6 +67,16 @@ public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione 
     }
 
     @Override
+    public Date getDataCreazione() {
+        return this.dataCreazione;
+    }
+
+    @Override
+    public void setDataCreazione(Date dataCreazione) {
+        this.dataCreazione = dataCreazione;
+    }
+
+    @Override
     public List<Disco> getDischi() {
         return dischi;
     }
@@ -84,12 +98,17 @@ public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione 
 
     @Override
     public void addUtenteCondiviso(Utente utente) {
+        if (this.utentiCondivisione == null) {
+            this.utentiCondivisione = new java.util.ArrayList<>();
+        }
         this.utentiCondivisione.add(utente);
     }
 
     @Override
     public void removeUtenteCondiviso(Utente utente) {
-        this.utentiCondivisione.remove(utente);
+        if (this.utentiCondivisione != null) {
+            this.utentiCondivisione.remove(utente);
+        }
     }
 
 }

@@ -19,6 +19,6 @@ public interface AutoreDAO {
 
     List<Autore> getAutori(Disco disco) throws DataException;
 
-    List<Autore> getAutori(Traccia tracce) throws DataException;
+    List<Autore> getAutori(Traccia traccia) throws DataException;
 
 }

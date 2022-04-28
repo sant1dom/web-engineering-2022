@@ -2,6 +2,7 @@ package org.webeng.data.dao;
 
 import org.webeng.data.model.Disco;
 import org.webeng.data.model.Image;
+import org.webeng.data.proxy.DiscoProxy;
 import org.webeng.framework.data.DataException;
 
 import java.util.List;

@@ -2,6 +2,7 @@ package org.webeng.data.model;
 
 import org.webeng.framework.data.DataItem;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Collezione extends DataItem<Integer> {
@@ -16,6 +17,10 @@ public interface Collezione extends DataItem<Integer> {
      Utente getUtente();
     
      void setUtente(Utente utente);
+
+     Date getDataCreazione();
+
+     void setDataCreazione(Date dataCreazione);
     
      List<Disco> getDischi();
     

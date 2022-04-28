@@ -3,6 +3,7 @@ package org.webeng.data.impl;
 import org.webeng.data.model.*;
 import org.webeng.framework.data.DataItemImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
@@ -17,6 +18,8 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     private List<Autore> autori;
     private List<Image> immagini;
     private List<Traccia> tracce;
+    private Disco padre;
+    private List<Disco> figli;
 
     public DiscoImpl() {
         super();
@@ -120,6 +123,41 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     }
 
     @Override
+    public Disco getPadre() {
+        return this.padre;
+    }
+
+    @Override
+    public void setPadre(Disco disco) {
+        this.padre = disco;
+    }
+
+    @Override
+    public List<Disco> getFigli() {
+        return this.figli;
+    }
+
+    @Override
+    public void setFigli(List<Disco> figli) {
+        this.figli = figli;
+    }
+
+    @Override
+    public void addFiglio(Disco disco) {
+        if (this.figli == null) {
+            this.figli = new ArrayList<>();
+        }
+        this.figli.add(disco);
+    }
+
+    @Override
+    public void removeFiglio(Disco disco) {
+        if (this.figli != null) {
+            this.figli.remove(disco);
+        }
+    }
+
+    @Override
     public Utente getUtente() {
         return utente;
     }
@@ -141,12 +179,17 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
 
     @Override
     public void addAutore(Autore autore) {
+        if (this.autori == null) {
+            this.autori = new ArrayList<>();
+        }
         this.autori.add(autore);
     }
 
     @Override
     public void removeAutore(Autore autore) {
-        this.autori.remove(autore);
+        if (this.autori != null) {
+            this.autori.remove(autore);
+        }
     }
 
     @Override
@@ -161,12 +204,17 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
 
     @Override
     public void addImmagine(Image immagine) {
+        if (this.immagini == null) {
+            this.immagini = new ArrayList<>();
+        }
         this.immagini.add(immagine);
     }
 
     @Override
     public void removeImmagine(Image immagine) {
-        this.immagini.remove(immagine);
+        if (this.immagini != null) {
+            this.immagini.remove(immagine);
+        }
     }
 
     @Override
@@ -181,11 +229,16 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
 
     @Override
     public void addTraccia(Traccia traccia) {
+        if(this.tracce == null) {
+            this.tracce = new ArrayList<>();
+        }
         this.tracce.add(traccia);
     }
 
     @Override
     public void removeTraccia(Traccia traccia) {
-        this.tracce.remove(traccia);
+        if (this.tracce != null) {
+            this.tracce.remove(traccia);
+        }
     }
 }

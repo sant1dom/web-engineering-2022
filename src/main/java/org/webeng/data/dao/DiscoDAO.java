@@ -23,5 +23,5 @@ public interface DiscoDAO {
 
     List<Disco> getDischi(Utente utente) throws DataException;
 
-    List<Disco> getFigli() throws DataException;
+    List<Disco> getFigli(Disco disco) throws DataException;
 }

@@ -71,7 +71,17 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
 
     @Override
     public void addAutore(Autore autore) {
+        if (this.autori == null) {
+            this.autori = new java.util.ArrayList<>();
+        }
         this.autori.add(autore);
+    }
+
+    @Override
+    public void removeAutore(Autore autore) {
+        if (this.autori != null) {
+            this.autori.remove(autore);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package org.webeng.data.impl;
 
+import org.webeng.data.model.Disco;
 import org.webeng.data.model.Image;
 import org.webeng.framework.data.DataItemImpl;
 
@@ -10,6 +11,7 @@ public class ImageImpl extends DataItemImpl<Integer> implements Image {
     private String imageType;
     private long imageSize;
     private String fileName;
+    private Disco disco;
 
     public ImageImpl(InputStream imageData, String imageType, long imageSize, String fileName) {
         super();
@@ -65,5 +67,15 @@ public class ImageImpl extends DataItemImpl<Integer> implements Image {
     @Override
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    @Override
+    public Disco getDisco() {
+        return this.disco;
+    }
+
+    @Override
+    public void setDisco(Disco disco) {
+        this.disco = disco;
     }
 }

@@ -23,4 +23,6 @@ public interface Traccia extends DataItem<Integer> {
 
     void addAutore(Autore autore);
 
+    void removeAutore(Autore autore);
+
 }

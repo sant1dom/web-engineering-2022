@@ -61,4 +61,15 @@ public interface Disco extends DataItem<Integer> {
 
     void setFormato(Formato formato);
 
+    Disco getPadre();
+
+    void setPadre(Disco disco);
+
+    List<Disco> getFigli();
+
+    void setFigli(List<Disco> figli);
+
+    void addFiglio(Disco disco);
+
+    void removeFiglio(Disco disco);
 }

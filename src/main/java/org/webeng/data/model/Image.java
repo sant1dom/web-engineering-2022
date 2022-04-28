@@ -22,4 +22,9 @@ public interface Image extends DataItem<Integer> {
     String getFileName();
 
     void setFileName(String imageFilename);
+
+    Disco getDisco();
+
+    void setDisco(Disco disco);
+
 }
