@@ -1,7 +1,7 @@
-package org.webeng.impl;
+package org.webeng.data.impl;
 
+import org.webeng.data.model.*;
 import org.webeng.framework.data.DataItemImpl;
-import org.webeng.model.*;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.webeng.model;
+package org.webeng.data.model;
 
 import org.webeng.framework.data.DataItem;
 
@@ -21,12 +21,12 @@ public interface Autore extends DataItem<Integer> {
 
     void setTipologia(TipologiaAutore tipologia);
 
-    List<Disco> getDischi();
+    /*List<Disco> getDischi();
 
     void setDischi(List<Disco> dischi);
 
     List<Traccia> getTracce();
 
-    void setTracce(List<Traccia> tracce);
+    void setTracce(List<Traccia> tracce);*/
 
 }

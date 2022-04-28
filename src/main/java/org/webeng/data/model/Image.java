@@ -1,4 +1,4 @@
-package org.webeng.model;
+package org.webeng.data.model;
 
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.data.DataItem;
@@ -19,7 +19,7 @@ public interface Image extends DataItem<Integer> {
 
     void setImageSize(long size);
 
-    public String getFilename();
+    String getFileName();
 
-    public void setFilename(String imageFilename);
+    void setFileName(String imageFilename);
 }

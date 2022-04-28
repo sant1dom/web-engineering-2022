@@ -1,9 +1,9 @@
-package org.webeng.impl;
+package org.webeng.data.impl;
 
+import org.webeng.data.model.Disco;
 import org.webeng.framework.data.DataItemImpl;
-import org.webeng.model.Collezione;
-import org.webeng.model.Disco;
-import org.webeng.model.Utente;
+import org.webeng.data.model.Collezione;
+import org.webeng.data.model.Utente;
 
 import java.util.List;
 

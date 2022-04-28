@@ -1,9 +1,8 @@
-package org.webeng.impl;
+package org.webeng.data.impl;
 
+import org.webeng.data.model.Autore;
+import org.webeng.data.model.Traccia;
 import org.webeng.framework.data.DataItemImpl;
-import org.webeng.model.Autore;
-import org.webeng.model.Disco;
-import org.webeng.model.Traccia;
 
 import java.util.List;
 

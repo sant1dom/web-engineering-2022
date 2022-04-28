@@ -1,4 +1,4 @@
-package org.webeng.model;
+package org.webeng.data.model;
 
 import org.webeng.framework.data.DataItem;
 
