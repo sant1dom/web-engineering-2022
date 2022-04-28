@@ -9,6 +9,8 @@ import org.webeng.framework.data.DataException;
 import java.util.List;
 
 public interface AutoreDAO {
+    Autore createAutore() throws DataException;
+
     Autore getAutore(String nomeArtistico) throws DataException;
 
     Autore getAutore(int autore_key) throws DataException;
