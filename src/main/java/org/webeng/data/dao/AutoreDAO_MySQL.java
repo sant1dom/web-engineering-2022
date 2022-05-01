@@ -108,7 +108,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
         Autore a = null;
         try {
             sAutoreByNomeArtistico.setString(1, nomeArtistico);
-            try (ResultSet rs = sAutoreByID.executeQuery()) {
+            try (ResultSet rs = sAutoreByNomeArtistico.executeQuery()) {
                 if (rs.next()) {
                     a = createAutore(rs);
                     dataLayer.getCache().add(Autore.class, a);
