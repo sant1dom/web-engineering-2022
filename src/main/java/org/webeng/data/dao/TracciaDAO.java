@@ -4,6 +4,7 @@ import org.webeng.data.model.Autore;
 import org.webeng.data.model.Traccia;
 import org.webeng.data.model.Disco;
 import org.webeng.data.model.Traccia;
+import org.webeng.data.proxy.TracciaProxy;
 import org.webeng.framework.data.DataException;
 
 import java.util.List;

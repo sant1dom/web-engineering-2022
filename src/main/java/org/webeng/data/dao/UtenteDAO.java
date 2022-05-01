@@ -18,5 +18,5 @@ public interface UtenteDAO {
 
     List<Utente> getUtenti(Collezione collezione) throws DataException;
 
-    List<Utente> getUtenti(Disco disco) throws DataException;
+    Utente getUtente(Disco disco) throws DataException;
 }

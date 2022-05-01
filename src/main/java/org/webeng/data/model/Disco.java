@@ -2,6 +2,7 @@ package org.webeng.data.model;
 
 import org.webeng.framework.data.DataItem;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface Disco extends DataItem<Integer> {
@@ -60,6 +61,10 @@ public interface Disco extends DataItem<Integer> {
     Formato getFormato();
 
     void setFormato(Formato formato);
+
+    LocalDate getDataInserimento();
+
+    void setDataInserimento(LocalDate dataInserimento);
 
     Disco getPadre();
 

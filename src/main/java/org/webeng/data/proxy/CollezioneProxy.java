@@ -9,6 +9,7 @@ import org.webeng.framework.data.DataException;
 import org.webeng.framework.data.DataItemProxy;
 import org.webeng.framework.data.DataLayer;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,7 +65,7 @@ public class CollezioneProxy extends CollezioneImpl implements DataItemProxy {
     }
 
     @Override
-    public void setDataCreazione(Date dataCreazione){
+    public void setDataCreazione(LocalDate dataCreazione){
         super.setDataCreazione(dataCreazione);
         this.modified = true;
     }

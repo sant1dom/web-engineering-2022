@@ -1,15 +1,13 @@
 package org.webeng.data.proxy;
 
-import org.webeng.data.dao.AutoreDAO;
-import org.webeng.data.dao.DiscoDAO;
-import org.webeng.data.dao.ImageDAO;
-import org.webeng.data.dao.TracciaDAO;
+import org.webeng.data.dao.*;
 import org.webeng.data.impl.DiscoImpl;
 import org.webeng.data.model.*;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.data.DataItemProxy;
 import org.webeng.framework.data.DataLayer;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,6 +69,12 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     @Override
     public void setFormato(Formato formato) {
         super.setFormato(formato);
+        this.modified = true;
+    }
+
+    @Override
+    public void setDataInserimento(LocalDate dataInserimento) {
+        super.setDataInserimento(dataInserimento);
         this.modified = true;
     }
 
@@ -205,6 +209,18 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     public void removeTraccia(Traccia traccia) {
         super.removeTraccia(traccia);
         this.modified = true;
+    }
+
+    @Override
+    public Utente getUtente() {
+        if (super.getUtente() == null) {
+            try {
+                super.setUtente(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(this));
+            } catch (DataException ex) {
+                Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return super.getUtente();
     }
 
     //METODI DEL PROXY

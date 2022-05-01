@@ -1,16 +1,21 @@
 package org.webeng.data.impl;
 
 import org.webeng.data.model.Autore;
+import org.webeng.data.model.Disco;
 import org.webeng.data.model.Traccia;
 import org.webeng.framework.data.DataItemImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
     private String titolo;
     private int durata;
     private String iswc;
+    private LocalDate dataInserimento;
     private List<Autore> autori;
+    private List<Traccia> figli;
+    private List<Disco> dischi;
 
     public TracciaImpl(String titolo, int durata, String iswc, List<Autore> autori) {
         super();
@@ -58,6 +63,16 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
         this.iswc = iswc;
     }
 
+    @Override
+    public LocalDate getDataInserimento() {
+        return this.dataInserimento;
+    }
+
+    @Override
+    public void setDataInserimento(LocalDate dataInserimento) {
+        this.dataInserimento = dataInserimento;
+    }
+
 
     @Override
     public List<Autore> getAutori() {
@@ -84,4 +99,38 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
         }
     }
 
+    @Override
+    public List<Traccia> getFigli() {
+        return this.figli;
+    }
+
+    @Override
+    public void setFigli(List<Traccia> figli) {
+        this.figli = figli;
+    }
+
+    @Override
+    public void addFiglio(Traccia figlio) {
+        if (this.figli == null) {
+            this.figli = new java.util.ArrayList<>();
+        }
+        this.figli.add(figlio);
+    }
+
+    @Override
+    public void removeFiglio(Traccia figlio) {
+        if (this.figli != null) {
+            this.figli.remove(figlio);
+        }
+    }
+
+    @Override
+    public List<Disco> getDischi() {
+        return this.dischi;
+    }
+
+    @Override
+    public void setDischi(List<Disco> dischi) {
+        this.dischi = dischi;
+    }
 }

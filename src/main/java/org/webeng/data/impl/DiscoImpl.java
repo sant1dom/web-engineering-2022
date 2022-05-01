@@ -3,6 +3,7 @@ package org.webeng.data.impl;
 import org.webeng.data.model.*;
 import org.webeng.framework.data.DataItemImpl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     private Genere genere;
     private StatoConservazione statoConservazione;
     private Formato formato;
+    private LocalDate dataInserimento;
     private Utente utente;
     private List<Autore> autori;
     private List<Image> immagini;
@@ -30,13 +32,14 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.genere = null;
         this.statoConservazione = null;
         this.formato = null;
+        this.dataInserimento = null;
         this.utente = null;
         this.autori = null;
         this.immagini = null;
         this.tracce = null;
     }
 
-    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce) {
+    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce) {
         super();
         this.titolo = titolo;
         this.anno = anno;
@@ -45,6 +48,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.genere = genere;
         this.statoConservazione = statoConservazione;
         this.formato = formato;
+        this.dataInserimento = dataInserimento;
         this.utente = utente;
         this.autori = autori;
         this.immagini = immagini;
@@ -120,6 +124,16 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     @Override
     public void setFormato(Formato formato) {
         this.formato = formato;
+    }
+
+    @Override
+    public LocalDate getDataInserimento() {
+        return this.dataInserimento;
+    }
+
+    @Override
+    public void setDataInserimento(LocalDate dataInserimento) {
+        this.dataInserimento = dataInserimento;
     }
 
     @Override

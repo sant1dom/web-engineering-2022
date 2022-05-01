@@ -1,9 +1,6 @@
 package org.webeng.data.dao;
 
-import org.webeng.data.model.Autore;
-import org.webeng.data.model.Collezione;
-import org.webeng.data.model.Disco;
-import org.webeng.data.model.Utente;
+import org.webeng.data.model.*;
 import org.webeng.framework.data.DataException;
 
 import java.util.List;
@@ -21,7 +18,10 @@ public interface DiscoDAO {
 
     List<Disco> getDischi(Autore autore) throws DataException;
 
+    List<Disco> getDischi(Traccia traccia) throws DataException;
+
     List<Disco> getDischi(Utente utente) throws DataException;
 
     List<Disco> getFigli(Disco disco) throws DataException;
+
 }

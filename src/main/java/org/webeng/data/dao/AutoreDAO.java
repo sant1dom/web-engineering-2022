@@ -23,4 +23,5 @@ public interface AutoreDAO {
 
     List<Autore> getAutori(Traccia traccia) throws DataException;
 
+    void deleteAutore(Autore autore) throws DataException;
 }

@@ -2,6 +2,7 @@ package org.webeng.data.model;
 
 import org.webeng.framework.data.DataItem;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface Traccia extends DataItem<Integer> {
@@ -17,6 +18,10 @@ public interface Traccia extends DataItem<Integer> {
 
     void setISWC(String iswc);
 
+    LocalDate getDataInserimento();
+
+    void setDataInserimento(LocalDate dataInserimento);
+
     List<Autore> getAutori();
 
     void setAutori(List<Autore> autori);
@@ -25,4 +30,15 @@ public interface Traccia extends DataItem<Integer> {
 
     void removeAutore(Autore autore);
 
+    List<Traccia> getFigli();
+
+    void setFigli(List<Traccia> figli);
+
+    void addFiglio(Traccia figlio);
+
+    void removeFiglio(Traccia figlio);
+
+    List<Disco> getDischi();
+
+    void setDischi(List<Disco> dischi);
 }

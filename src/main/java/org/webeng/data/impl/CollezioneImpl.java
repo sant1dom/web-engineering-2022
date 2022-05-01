@@ -5,14 +5,15 @@ import org.webeng.data.model.Disco;
 import org.webeng.data.model.Utente;
 import org.webeng.framework.data.DataItemImpl;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
     public class CollezioneImpl extends DataItemImpl<Integer> implements Collezione {
     private String titolo;
     private String privacy;
+    private LocalDate dataCreazione;
     private Utente utente;
-    private Date dataCreazione;
     private List<Disco> dischi;
     private List<Utente> utentiCondivisione;
 
@@ -20,7 +21,7 @@ import java.util.List;
         super();
         this.titolo = "";
         this.privacy = "";
-        this.dataCreazione = new Date();
+        this.dataCreazione = LocalDate.now();
         this.utente = null;
         this.dischi = null;
         this.utentiCondivisione = null;
@@ -30,7 +31,7 @@ import java.util.List;
         super();
         this.titolo = titolo;
         this.privacy = privacy;
-        this.dataCreazione = new Date();
+        this.dataCreazione = LocalDate.now();
         this.utente = utente;
         this.dischi = dischi;
         this.utentiCondivisione = utentiCondivisione;
@@ -67,12 +68,12 @@ import java.util.List;
     }
 
     @Override
-    public Date getDataCreazione() {
+    public LocalDate getDataCreazione() {
         return this.dataCreazione;
     }
 
     @Override
-    public void setDataCreazione(Date dataCreazione) {
+    public void setDataCreazione(LocalDate dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
 
