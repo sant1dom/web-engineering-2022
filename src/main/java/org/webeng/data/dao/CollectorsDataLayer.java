@@ -15,7 +15,7 @@ public class CollectorsDataLayer extends DataLayer {
     public void init() throws DataException {
         //registriamo i nostri dao
         //register our daos
-        registerDAO(Autore.class, new AuthoreDAO_MySQL(this));
+        registerDAO(Autore.class, new AutoreDAO_MySQL(this));
         registerDAO(Utente.class, new UtenteDAO_MySQL(this));
         registerDAO(Collezione.class, new CollezioneDAO_MySQL(this));
         registerDAO(Traccia.class, new TracciaDAO_MySQL(this));

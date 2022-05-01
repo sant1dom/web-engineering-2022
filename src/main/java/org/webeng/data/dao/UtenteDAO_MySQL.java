@@ -1,11 +1,22 @@
 package org.webeng.data.dao;
 
-import org.webeng.framework.data.DAO;
+import org.webeng.data.model.Collezione;
+import org.webeng.data.model.Disco;
+import org.webeng.data.model.Utente;
+import org.webeng.data.proxy.UtenteProxy;
+import org.webeng.framework.data.*;
 
-public class UtenteDAO_MySQL extends DAO {
-    private PreparedStatement sUtenti,sUtenteByID,sUtenteByUsername,sUtentiByCollezione,uUtente,iUtente;
-    public UtenteDAO_MySQL(CollectorsDataLayer collectorsDataLayer) {
-        super();
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
+    private PreparedStatement sUtenti,sUtenteByID,sUtenteByUsername,sUtentiByCollezione,sUtentiByDisco,uUtente,iUtente,dUtente;
+    public UtenteDAO_MySQL(DataLayer d) {
+        super(d);
     }
 
         @Override
@@ -18,7 +29,11 @@ public class UtenteDAO_MySQL extends DAO {
                 sUtenteByID = connection.prepareStatement("SELECT * FROM utente WHERE id=?");
                 sUtenti = connection.prepareStatement("SELECT id FROM utente");
                 sUtenteByUsername = connection.prepareStatement("SELECT * from utente WHERE username=?");
-                sUtentiByCollezione = connection.prepareStatement(""); //TODO: necessario inserimento query
+                sUtentiByCollezione = connection.prepareStatement("SELECT utente.id FROM utente JOIN collezione_condivisa_con ccc on utente.id = ccc.utente_id JOIN collezione c on ccc.collezione_id = c.id WHERE c.id=?");
+                sUtentiByDisco = connection.prepareStatement("SELECT utente.id FROM utente JOIN disco d on utente.id = d.utente_id WHERE d.id=?");
+                uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, email=?, username=?, password=? WHERE id=?");
+                iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, email, username, password) VALUES (?,?,?,?,?)");
+                dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
             } catch (SQLException ex) {
                 throw new DataException("Error initializing users data layer", ex);
             }
@@ -26,19 +41,24 @@ public class UtenteDAO_MySQL extends DAO {
 
         @Override
         public void destroy() throws DataException {
-            //anche chiudere i PreparedStamenent è una buona pratica...
             try {
-                sUtenteByID.close();
                 sUtenti.close();
+                sUtenteByID.close();
+                sUtenteByUsername.close();
+                sUtentiByCollezione.close();
+                sUtentiByDisco.close();
+                uUtente.close();
+                iUtente.close();
+                dUtente.close();
 
             } catch (SQLException ex) {
-                //
+                throw new DataException("Error closing prepared statements",ex);
             }
             super.destroy();
         }
 
         @Override
-        public Utente createUtente() throws DataException {
+        public Utente createUtente() {
             return new UtenteProxy(getDataLayer());
         }
 
@@ -48,10 +68,10 @@ public class UtenteDAO_MySQL extends DAO {
                 u.setKey(rs.getInt("id"));
                 u.setNome(rs.getString("nome"));
                 u.setCognome(rs.getString("cognome"));
-                a.setEmail(rs.getString("email"));
-                a.setUsername(rs.getString("username"));
-                a.setPassword(rs.getString("password"));
-                return a;
+                u.setEmail(rs.getString("email"));
+                u.setUsername(rs.getString("username"));
+                u.setPassword(rs.getString("password"));
+                return u;
             } catch (SQLException ex) {
                 throw new DataException("Unable to create user object form ResultSet", ex);
             }
@@ -65,7 +85,7 @@ public class UtenteDAO_MySQL extends DAO {
                 try (ResultSet rs = sUtenteByUsername.executeQuery()) {
                     if (rs.next()) {
                         u = createUtente(rs);
-                        dataLayer.getCache().add(User.class, u);
+                        dataLayer.getCache().add(Utente.class, u);
                     }
                 }
             } catch (SQLException ex) {
@@ -80,7 +100,7 @@ public class UtenteDAO_MySQL extends DAO {
             //prima vediamo se l'oggetto è già stato caricato
             //first look for this object in the cache
             if (dataLayer.getCache().has(Utente.class, utente_key)) {
-                a = dataLayer.getCache().get(Utente.class, utente_key);
+                u = dataLayer.getCache().get(Utente.class, utente_key);
             } else {
                 //altrimenti lo carichiamo dal database
                 //otherwise load it from database
@@ -123,7 +143,7 @@ public class UtenteDAO_MySQL extends DAO {
                         long next_version = current_version + 1;
 
                         uUtente.setLong(5, next_version);
-                        uUtente.setInt(6, autore.getKey());
+                        uUtente.setInt(6, utente.getKey());
                         uUtente.setLong(7, current_version);
 
                         if (uUtente.executeUpdate() == 0) {
@@ -135,7 +155,7 @@ public class UtenteDAO_MySQL extends DAO {
                         iUtente.setString(1, utente.getNome());
                         iUtente.setString(2, utente.getCognome());
                         if (utente.getUsername() != null) {
-                            iutente.setString(3, utente.getUsername());
+                            iUtente.setString(3, utente.getUsername());
                         } else {
                             iUtente.setNull(3, Types.VARCHAR);
                         }
@@ -188,7 +208,7 @@ public class UtenteDAO_MySQL extends DAO {
                     throw new DataException("Unable to store utente", ex);
                 }
             }
-        }
+
 
         @Override
         public List<Utente> getUtenti() throws DataException {
@@ -203,7 +223,47 @@ public class UtenteDAO_MySQL extends DAO {
             return result;
         }
 
+    @Override
+    public List<Utente> getUtenti(Collezione collezione) throws DataException {
+        List<Utente> result = new ArrayList<>();
+        try {
 
+            sUtentiByCollezione.setInt(1, collezione.getKey());
+            try (ResultSet rs = sUtentiByCollezione.executeQuery()) {
+                while (rs.next()) {
+                    result.add(getUtente(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load users in shared collection", ex);
+        }
+        return result;
     }
 
+    @Override
+    public Utente getUtente(Disco disco) throws DataException {
+        Utente u = null;
+        try {
+            sUtentiByDisco.setInt(1, disco.getKey());
+            try (ResultSet rs = sUtentiByDisco.executeQuery()) {
+                if(rs.next()) {
+                    u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+                }
+            }
+        } catch (SQLException ex) {
+                throw new DataException("Unable to load utente related to disk", ex);
+            }
+        return u;
+    }
+
+    @Override
+    public void deleteUtente(Utente utente) throws DataException {
+        try {
+            dUtente.setInt(1, utente.getKey());
+            dUtente.execute();
+        } catch (SQLException ex) {
+            throw new DataException("Unable to delete utente", ex);
+        }
+    }
 }

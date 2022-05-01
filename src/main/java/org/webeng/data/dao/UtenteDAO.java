@@ -8,6 +8,8 @@ import org.webeng.framework.data.DataException;
 import java.util.List;
 
 public interface UtenteDAO {
+    Utente createUtente() throws DataException;
+
     Utente getUtente(String username) throws DataException;
 
     Utente getUtente(int utente_key) throws DataException;
@@ -19,4 +21,6 @@ public interface UtenteDAO {
     List<Utente> getUtenti(Collezione collezione) throws DataException;
 
     Utente getUtente(Disco disco) throws DataException;
+
+    void deleteUtente(Utente utente) throws DataException;
 }

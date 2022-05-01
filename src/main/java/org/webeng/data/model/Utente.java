@@ -38,4 +38,6 @@ public interface Utente extends DataItem<Integer> {
     void addDisco(Disco disco);
 
     void removeDisco(Disco disco);
+
+    String getPassword();
 }
