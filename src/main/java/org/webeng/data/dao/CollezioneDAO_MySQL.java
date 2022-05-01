@@ -8,14 +8,13 @@ import org.webeng.framework.data.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-public class CollezioneDAO_MySQL extends DAO {
-    private PreparedStatement sCollezioni,sCollezioneByTitolo,sCollezioneByID,sCollezioniByDisco,sCollezioniByUtente,sUtentiCondivisi,uCollezione,iCollezione,dCollezione;
-    private ResultSet rsCollezioni,rsCollezioneByTitolo,rsCollezioneByID,rsCollezioniByDisco,rsCollezioniByUtente,rsUtentiCondivisi
-    public CollezioneDAO_MySQL(CollectorsDataLayer collectorsDataLayer) {
-        super();
+public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
+    private PreparedStatement sCollezioni,sCollezioneByTitolo,sCollezioneByID,sCollezioniByDisco,sCollezioniByUtente,uCollezione,iCollezione,dCollezione;
+    public CollezioneDAO_MySQL(DataLayer d) {
+        super(d);
     }
 
     @Override
@@ -26,11 +25,10 @@ public class CollezioneDAO_MySQL extends DAO {
             sCollezioni = connection.prepareStatement("SELECT * FROM collezione");
             sCollezioneByID = connection.prepareStatement("SELECT * FROM collezione WHERE id = ?");
             sCollezioneByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE titolo = ?");
-            sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN disco_collezione dhc on collezione.id = dhc.collezione_id JOIN disco d on d.id = dhc.disco_id WHERE d.id = ?");
-            sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN utente_collezione uhc on collezione.id = uhc.collezione_id JOIN utente u on u.id = uhc.utente_id WHERE u.id = ?");
-            sUtentiCondivisi=connection.prepareStatement("SELECT utente.id FROM utente JOIN utente_collezione chu on utente.id=chu.utente_id JOIN collezione c on c.id=chu.collezione_id WHERE c.id= ?");
-            uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, data_creazione = ?, version = ? WHERE id = ? AND version = ?");
-            iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione) VALUES (?, ?, ?)");
+            sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc on collezione.id = dhc.collezione_id JOIN disco d on d.id = dhc.disco_id WHERE d.id = ?");
+            sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ?");
+            uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
+            iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione, utente_id) VALUES (?, ?, ?, ?)");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
@@ -63,9 +61,9 @@ public class CollezioneDAO_MySQL extends DAO {
             c.setKey(rs.getInt("id"));
             c.setTitolo(rs.getString("titolo"));
             c.setPrivacy(rs.getString("privacy"));
-            c.setDataCreazione(rs.getString("data_creazione"));
+            c.setDataCreazione(LocalDate.parse(rs.getString("data_creazione")));
             c.setVersion(rs.getLong("version"));
-            return a;
+            return c;
         } catch (SQLException ex) {
             throw new DataException("Unable to create collection object form ResultSet", ex);
         }
@@ -98,12 +96,12 @@ public class CollezioneDAO_MySQL extends DAO {
 
     @Override
     public Collezione getCollezione(String titolo) throws DataException {
-       Collezione c = null;
+        Collezione c = null;
         try {
             sCollezioneByTitolo.setString(1, titolo);
             try (ResultSet rs = sCollezioneByTitolo.executeQuery()) {
                 if (rs.next()) {
-                    a = createCollezione(rs);
+                    c = createCollezione(rs);
                     dataLayer.getCache().add(Collezione.class, c);
                 }
             }
@@ -126,14 +124,12 @@ public class CollezioneDAO_MySQL extends DAO {
                 uCollezione.setString(1, collezione.getTitolo());
                 uCollezione.setString(2, collezione.getPrivacy());
 
-                uCollezione.setDate(3,java.sql.Date.valueOf(collezione.getDataCreazione()));
-
                 long current_version = collezione.getVersion();
                 long next_version = current_version + 1;
 
-                uCollezione.setLong(5, next_version);
-                uCollezione.setInt(6, autore.getKey());
-                uCollezione.setLong(7, current_version);
+                uCollezione.setLong(3, next_version);
+                uCollezione.setInt(4, collezione.getKey());
+                uCollezione.setLong(5, current_version);
 
                 if (uCollezione.executeUpdate() == 0) {
                     throw new OptimisticLockException(collezione);
@@ -144,7 +140,7 @@ public class CollezioneDAO_MySQL extends DAO {
                 iCollezione.setString(1, collezione.getTitolo());
                 iCollezione.setString(2,collezione.getPrivacy());
                 iCollezione.setDate(3,java.sql.Date.valueOf(collezione.getDataCreazione()));
-
+                iCollezione.setInt(4, collezione.getUtente().getKey());
                 if (iCollezione.executeUpdate() == 1) {
                     //per leggere la chiave generata dal database
                     //per il record appena inserito, usiamo il metodo
@@ -193,7 +189,7 @@ public class CollezioneDAO_MySQL extends DAO {
     }
 
     @Override
-    public List<Autore> getCollezioni() throws DataException {
+    public List<Collezione> getCollezioni() throws DataException {
         List<Collezione> result = new ArrayList<>();
         try (ResultSet rs = sCollezioni.executeQuery()) {
             while (rs.next()) {
@@ -206,7 +202,7 @@ public class CollezioneDAO_MySQL extends DAO {
     }
 
     @Override
-    public List<Autore> getCollezioni(Disco disco) throws DataException {
+    public List<Collezione> getCollezioni(Disco disco) throws DataException {
         List<Collezione> result = new ArrayList<>();
         try {
             sCollezioniByDisco.setInt(1, disco.getKey());
@@ -222,7 +218,7 @@ public class CollezioneDAO_MySQL extends DAO {
     }
 
     @Override
-    public List<Autore> getCollezioni(Utente utente) throws DataException {
+    public List<Collezione> getCollezioni(Utente utente) throws DataException {
         List<Collezione> result = new ArrayList<>();
         try {
             sCollezioniByUtente.setInt(1, utente.getKey());
@@ -237,25 +233,8 @@ public class CollezioneDAO_MySQL extends DAO {
         return result;
     }
 
-
     @Override
-    public List<Utente> getUtentiCondivisi(Collezione collezione) throws DataException {
-        List<Utente> result = new ArrayList<>();
-        try {
-            sUtentiCondivisi.setInt(1, collezione.getKey());
-            try (ResultSet rs = sUtentiCondivisi.executeQuery()) {
-                while (rs.next()) {
-                    result.add(getUtente(rs.getInt("id")));
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable to load utenti condivisi by collection", ex);
-        }
-        return result;
-    }
-
-    @Override
-    public void deleteAutore(Collezione collezione) throws DataException {
+    public void deleteCollezione(Collezione collezione) throws DataException {
         try {
             dCollezione.setInt(1, collezione.getKey());
             dCollezione.execute();
@@ -263,8 +242,5 @@ public class CollezioneDAO_MySQL extends DAO {
             throw new DataException("Unable to delete collezione", ex);
         }
     }
-
-
-
 }
-}
+

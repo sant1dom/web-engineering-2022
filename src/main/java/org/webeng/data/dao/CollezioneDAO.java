@@ -8,6 +8,8 @@ import org.webeng.framework.data.DataException;
 import java.util.List;
 
 public interface CollezioneDAO {
+    Collezione createCollezione();
+
     Collezione getCollezione(int id) throws DataException;
 
     Collezione getCollezione(String titolo) throws DataException;
@@ -20,5 +22,5 @@ public interface CollezioneDAO {
 
     List<Collezione> getCollezioni(Utente utente) throws DataException;
 
-    List<Utente> getUtentiCondivisi(Collezione collezione) throws DataException;
+    void deleteCollezione(Collezione collezione) throws DataException;
 }
