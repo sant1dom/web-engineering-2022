@@ -2,6 +2,7 @@ package org.webeng.data.dao;
 
 import org.webeng.data.model.Collezione;
 import org.webeng.data.model.Disco;
+import org.webeng.data.model.Traccia;
 import org.webeng.data.model.Utente;
 import org.webeng.data.proxy.UtenteProxy;
 import org.webeng.framework.data.*;
@@ -261,7 +262,11 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     public void deleteUtente(Utente utente) throws DataException {
         try {
             dUtente.setInt(1, utente.getKey());
-            dUtente.execute();
+            if (dUtente.executeUpdate() == 1) {
+                //rimuoviamo l'oggetto dalla cache
+                //remove the object from the cache
+                dataLayer.getCache().delete(Utente.class, utente.getKey());
+            }
         } catch (SQLException ex) {
             throw new DataException("Unable to delete utente", ex);
         }

@@ -8,9 +8,13 @@ import java.util.List;
 public interface DiscoDAO {
     Disco getDisco(String barcode) throws DataException;
 
+    Disco createDisco();
+
     Disco getDisco(int disco_key) throws DataException;
 
     void storeDisco(Disco disco) throws DataException;
+
+    void deleteDisco(Disco disco) throws DataException;
 
     List<Disco> getDischi() throws DataException;
 
@@ -24,4 +28,5 @@ public interface DiscoDAO {
 
     List<Disco> getFigli(Disco disco) throws DataException;
 
+    Disco getPadre(Disco disco) throws DataException;
 }

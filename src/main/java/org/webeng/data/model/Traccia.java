@@ -41,4 +41,8 @@ public interface Traccia extends DataItem<Integer> {
     List<Disco> getDischi();
 
     void setDischi(List<Disco> dischi);
+
+    Traccia getPadre();
+
+    void setPadre(Traccia padre);
 }

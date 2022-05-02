@@ -1,6 +1,7 @@
 package org.webeng.data.dao;
 import org.webeng.data.model.Collezione;
 import org.webeng.data.model.Disco;
+import org.webeng.data.model.Traccia;
 import org.webeng.data.model.Utente;
 import org.webeng.data.proxy.CollezioneProxy;
 import org.webeng.framework.data.*;
@@ -237,7 +238,11 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     public void deleteCollezione(Collezione collezione) throws DataException {
         try {
             dCollezione.setInt(1, collezione.getKey());
-            dCollezione.execute();
+            if (dCollezione.executeUpdate() == 1) {
+                //rimuoviamo l'oggetto dalla cache
+                //remove the object from the cache
+                dataLayer.getCache().delete(Collezione.class, collezione.getKey());
+            }
         } catch (SQLException ex) {
             throw new DataException("Unable to delete collezione", ex);
         }

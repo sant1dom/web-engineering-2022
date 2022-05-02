@@ -16,7 +16,6 @@ import java.util.List;
 
 public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
     private PreparedStatement sAutori, sAutoreByID, sAutoreByNomeArtistico, sAutoriByDisco, sAutoriByTraccia, uAutore, iAutore, dAutore;
-    private ResultSet rsAutori, rsAutoreByID, rsAutoreByNomeArtistico, rsAutoriByDisco, rsAutoriByTraccia;
 
     public AutoreDAO_MySQL(DataLayer d) {
         super(d);
@@ -36,7 +35,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             iAutore = connection.prepareStatement("INSERT INTO autore (nome, cognome, nome_artistico, tipologia_autore) VALUES (?, ?, ?, ?)");
             dAutore = connection.prepareStatement("DELETE FROM autore WHERE id = ?");
         } catch (SQLException ex) {
-            throw new DataException("Error initializing authors data layer", ex);
+                throw new DataException("Error initializing authors data layer", ex);
         }
     }
 
@@ -257,7 +256,11 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
     public void deleteAutore(Autore autore) throws DataException {
         try {
             dAutore.setInt(1, autore.getKey());
-            dAutore.execute();
+            if (dAutore.executeUpdate() == 1) {
+                //rimuoviamo l'oggetto dalla cache
+                //remove the object from the cache
+                dataLayer.getCache().delete(Autore.class, autore.getKey());
+            }
         } catch (SQLException ex) {
             throw new DataException("Unable to delete autore", ex);
         }

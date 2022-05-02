@@ -13,6 +13,7 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
     private int durata;
     private String iswc;
     private LocalDate dataInserimento;
+    private Traccia padre;
     private List<Autore> autori;
     private List<Traccia> figli;
     private List<Disco> dischi;
@@ -132,5 +133,15 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
     @Override
     public void setDischi(List<Disco> dischi) {
         this.dischi = dischi;
+    }
+
+    @Override
+    public void setPadre(Traccia padre) {
+        this.padre = padre;
+    }
+
+    @Override
+    public Traccia getPadre() {
+        return this.padre;
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageDAO_MySQL extends DAO implements ImageDAO {
-    private PreparedStatement sImageByID, sImageByDisco, sImageByFileName;
+    private PreparedStatement sImageByID, sImageByDisco, sImageByFileName, sImages;
 
     public ImageDAO_MySQL(DataLayer d) {
         super(d);
@@ -29,6 +29,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
             sImageByID = connection.prepareStatement("SELECT * FROM image WHERE ID=?");
             sImageByDisco = connection.prepareStatement("SELECT id FROM image WHERE disco_id=?");
             sImageByFileName = connection.prepareStatement("SELECT * FROM image WHERE filename=?");
+            sImages = connection.prepareStatement("SELECT id FROM image");
         } catch (SQLException ex) {
             throw new DataException("Error initializing newspaper data layer", ex);
         }
@@ -60,6 +61,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
             i.setImageType(rs.getString("type"));
             i.setFileName(rs.getString("filename"));
             i.setVersion(rs.getLong("version"));
+            i.setDiscoKey(rs.getInt("disco_id"));
         } catch (SQLException ex) {
             throw new DataException("Unable to create image object form ResultSet", ex);
         }
@@ -102,7 +104,6 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
                         //e lo mettiamo anche nella cache
                         //and put it also in the cache
                         dataLayer.getCache().add(Image.class, i);
-
                     }
                 }
             } catch (SQLException ex) {
@@ -114,7 +115,16 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
 
     @Override
     public List<Image> getImages() throws DataException {
-        return null;
+        List<Image> images = new ArrayList<>();
+        try (ResultSet rs = sImages.executeQuery()) {
+            while (rs.next()) {
+                images.add(getImage(rs.getInt("id")));
+            }
+        }
+        catch (SQLException ex) {
+            throw new DataException("Unable to load images", ex);
+        }
+        return images;
     }
 
     @Override

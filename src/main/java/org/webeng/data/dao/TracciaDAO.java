@@ -12,9 +12,13 @@ import java.util.List;
 public interface TracciaDAO {
     Traccia getTraccia(String iswc) throws DataException;
 
+    Traccia createTraccia();
+
     Traccia getTraccia(int traccia_key) throws DataException;
 
     void storeTraccia(Traccia traccia) throws DataException;
+
+    void deleteTraccia(Traccia traccia) throws DataException;
 
     List<Traccia> getTracce() throws DataException;
 
@@ -23,4 +27,6 @@ public interface TracciaDAO {
     List<Traccia> getTracce(Autore autore) throws DataException;
 
     List<Traccia> getFigli(Traccia traccia) throws DataException;
+
+    Traccia getPadre(Traccia traccia) throws DataException;
 }

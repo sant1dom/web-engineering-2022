@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     protected boolean modified;
+    protected int utente_key;
+    protected int padre_key;
 
     protected DataLayer dataLayer;
 
@@ -21,6 +23,8 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
         super();
         //dependency injection
         this.dataLayer = d;
+        this.utente_key = 0;
+        this.padre_key = 0;
         this.modified = false;
     }
 
@@ -97,7 +101,6 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     }
 
 
-
     @Override
     public void setFigli(List<Disco> figli) {
         super.setFigli(figli);
@@ -117,8 +120,21 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     }
 
     @Override
+    public Utente getUtente() {
+        if (super.getUtente() == null && utente_key > 0) {
+            try {
+                super.setUtente(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(utente_key));
+            } catch (DataException ex) {
+                Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return super.getUtente();
+    }
+
+    @Override
     public void setUtente(Utente utente) {
         super.setUtente(utente);
+        this.utente_key = utente.getKey();
         this.modified = true;
     }
 
@@ -211,17 +227,6 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
         this.modified = true;
     }
 
-    @Override
-    public Utente getUtente() {
-        if (super.getUtente() == null) {
-            try {
-                super.setUtente(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(this));
-            } catch (DataException ex) {
-                Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return super.getUtente();
-    }
 
     //METODI DEL PROXY
     //PROXY-ONLY METHODS
@@ -233,5 +238,15 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     @Override
     public boolean isModified() {
         return modified;
+    }
+
+    public void setUtenteKey(int utente_key) {
+        this.utente_key = utente_key;
+        super.setUtente(null);
+    }
+
+    public void setPadreKey(int padre_key) {
+        this.padre_key = padre_key;
+        super.setPadre(null);
     }
 }

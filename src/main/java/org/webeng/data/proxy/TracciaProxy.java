@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 public class TracciaProxy extends TracciaImpl implements DataItemProxy {
     protected boolean modified;
+    protected int padre_key;
 
     protected DataLayer dataLayer;
 
@@ -25,6 +26,7 @@ public class TracciaProxy extends TracciaImpl implements DataItemProxy {
         super();
         //dependency injection
         this.dataLayer = d;
+        this.padre_key = 0;
         this.modified = false;
     }
 
@@ -133,6 +135,24 @@ public class TracciaProxy extends TracciaImpl implements DataItemProxy {
     @Override
     public void setDischi(List<Disco> dischi) {
         super.setDischi(dischi);
+        this.modified = true;
+    }
+
+    @Override
+    public Traccia getPadre() {
+        if (super.getPadre() == null) {
+            try {
+                super.setPadre(((TracciaDAO) dataLayer.getDAO(Traccia.class)).getPadre(this));
+            } catch (DataException ex) {
+                Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return super.getPadre();
+    }
+
+    @Override
+    public void setPadre(Traccia traccia) {
+        super.setPadre(traccia);
         this.modified = true;
     }
     //METODI DEL PROXY
