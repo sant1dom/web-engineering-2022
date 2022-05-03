@@ -172,7 +172,7 @@ public class DiscoProxy extends DiscoImpl implements DataItemProxy {
     public List<Image> getImmagini(){
         if (super.getImmagini() == null) {
             try {
-                super.setImmagini(((ImageDAO) dataLayer.getDAO(Image.class)).getImages(this));
+                super.setImmagini(((ImageDAO) dataLayer.getDAO(Image.class)).getImmagini(this));
             } catch (DataException ex) {
                 Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
             }

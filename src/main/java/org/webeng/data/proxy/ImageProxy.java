@@ -91,8 +91,6 @@ public class ImageProxy extends ImageImpl implements DataItemProxy {
 
     public void setDiscoKey(int disco_key) {
         this.disco_key = disco_key;
-        //resettiamo la cache dell'autore
-        //reset author cache
         super.setDisco(null);
     }
 }
