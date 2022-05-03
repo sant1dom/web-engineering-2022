@@ -72,7 +72,7 @@ public class CollezioneProxy extends CollezioneImpl implements DataItemProxy {
 
     @Override
     public List<Disco> getDischi(){
-        if(super.getDischi() != null){
+        if(super.getDischi() == null){
             try {
                 super.setDischi(((DiscoDAO) dataLayer.getDAO(Disco.class)).getDischi(this));
             } catch (DataException ex) {
@@ -90,9 +90,9 @@ public class CollezioneProxy extends CollezioneImpl implements DataItemProxy {
 
     @Override
     public List<Utente> getUtentiCondivisi(){
-        if(super.getUtente() == null && utente_key > 0) {
+        if(super.getUtentiCondivisi() == null && utente_key > 0) {
             try {
-                super.setUtentiCondivisi(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtenti(this));
+                super.setUtentiCondivisi(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtentiCondivisi(this));
             } catch (DataException ex) {
                 Logger.getLogger(CollezioneProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
