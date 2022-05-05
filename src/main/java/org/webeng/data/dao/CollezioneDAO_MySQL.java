@@ -1,7 +1,6 @@
 package org.webeng.data.dao;
 import org.webeng.data.model.Collezione;
 import org.webeng.data.model.Disco;
-import org.webeng.data.model.Traccia;
 import org.webeng.data.model.Utente;
 import org.webeng.data.proxy.CollezioneProxy;
 import org.webeng.framework.data.*;
@@ -13,7 +12,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
-    private PreparedStatement sCollezioni,sCollezioneByTitolo,sCollezioneByID,sCollezioniByDisco,sCollezioniByUtente,uCollezione,iCollezione,dCollezione;
+    private PreparedStatement sCollezioni;
+    private PreparedStatement sCollezioneByTitolo;
+    private PreparedStatement sCollezioneByID;
+    private PreparedStatement sCollezioniByDisco;
+    private PreparedStatement sCollezioniByUtente;
+    private PreparedStatement uCollezione;
+    private PreparedStatement iCollezione;
+    private PreparedStatement dCollezione;
     public CollezioneDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -247,5 +253,6 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             throw new DataException("Unable to delete collezione", ex);
         }
     }
+
 }
 

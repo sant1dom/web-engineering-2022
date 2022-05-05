@@ -2,7 +2,6 @@ package org.webeng.data.dao;
 
 import org.webeng.data.model.Collezione;
 import org.webeng.data.model.Disco;
-import org.webeng.data.model.Traccia;
 import org.webeng.data.model.Utente;
 import org.webeng.data.proxy.UtenteProxy;
 import org.webeng.framework.data.*;
@@ -15,7 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
-    private PreparedStatement sUtenti,sUtenteByID,sUtenteByUsername,sUtentiByCollezione,sUtentiByDisco,uUtente,iUtente,dUtente;
+    private PreparedStatement sUtenti;
+    private PreparedStatement sUtenteByID;
+    private PreparedStatement sUtenteByUsername;
+    private PreparedStatement sUtentiByCollezione;
+    private PreparedStatement sUtentiByDisco;
+    private PreparedStatement uUtente;
+    private PreparedStatement iUtente;
+    private PreparedStatement dUtente;
+    private PreparedStatement addUtenteCollezione;
     public UtenteDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -35,6 +42,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, email=?, username=?, password=? WHERE id=?");
                 iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, email, username, password) VALUES (?,?,?,?,?)");
                 dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
+                addUtenteCollezione = connection.prepareStatement("INSERT INTO collezione_condivisa_con (utente_id, collezione_id) VALUES (?,?)");
             } catch (SQLException ex) {
                 throw new DataException("Error initializing users data layer", ex);
             }
@@ -51,7 +59,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 uUtente.close();
                 iUtente.close();
                 dUtente.close();
-
+                addUtenteCollezione.close();
             } catch (SQLException ex) {
                 throw new DataException("Error closing prepared statements",ex);
             }
@@ -269,6 +277,24 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to delete utente", ex);
+        }
+    }
+
+    @Override
+    public void addUtentiCondivisi(List<Utente> utente, Collezione collezione) throws DataException {
+        for (Utente u : utente) {
+            addUtenteCondiviso(u, collezione);
+        }
+    }
+
+    @Override
+    public void addUtenteCondiviso(Utente utente, Collezione collezione) throws DataException {
+        try {
+            addUtenteCollezione.setInt(1, utente.getKey());
+            addUtenteCollezione.setInt(2, collezione.getKey());
+            addUtenteCollezione.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Unable to add user to shared collection", ex);
         }
     }
 }

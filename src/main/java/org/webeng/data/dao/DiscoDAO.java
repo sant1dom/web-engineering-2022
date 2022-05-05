@@ -29,4 +29,9 @@ public interface DiscoDAO {
     List<Disco> getFigli(Disco disco) throws DataException;
 
     Disco getPadre(Disco disco) throws DataException;
+
+    void addDischi(Collezione collezione, List<Disco> dischi) throws DataException;
+
+    void addDisco(Collezione collezione, Disco disco) throws DataException;
+
 }

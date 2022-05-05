@@ -12,7 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
-    private PreparedStatement sTracciaByID, sTracciaByISWC, sTracce, sTracceByDisco, sTracceByAutore, sFigliTraccia, sPadreTraccia, iTraccia, uTraccia, dTraccia;
+    private PreparedStatement sTracciaByID;
+    private PreparedStatement sTracciaByISWC;
+    private PreparedStatement sTracce;
+    private PreparedStatement sTracceByDisco;
+    private PreparedStatement sTracceByAutore;
+    private PreparedStatement sFigliTraccia;
+    private PreparedStatement sPadreTraccia;
+    private PreparedStatement iTraccia;
+    private PreparedStatement uTraccia;
+    private PreparedStatement dTraccia;
+    private PreparedStatement addTracciaAutore;
+    private PreparedStatement addTracciaDisco;
     public TracciaDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -31,6 +42,8 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             iTraccia = connection.prepareStatement("INSERT INTO traccia (titolo, iswc, data_inserimento, durata, padre, version) VALUES (?,?,?,?,?,?)");
             uTraccia = connection.prepareStatement("UPDATE traccia SET titolo = ?, iswc = ?, durata = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
             dTraccia = connection.prepareStatement("DELETE FROM traccia WHERE id = ? AND version = ?");
+            addTracciaAutore = connection.prepareStatement("INSERT INTO traccia_autore (traccia_id, autore_id) VALUES (?,?)");
+            addTracciaDisco = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?, ?)");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer",ex);
         }
@@ -45,6 +58,12 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             sTracceByDisco.close();
             sTracceByAutore.close();
             sFigliTraccia.close();
+            sPadreTraccia.close();
+            iTraccia.close();
+            uTraccia.close();
+            dTraccia.close();
+            addTracciaAutore.close();
+            addTracciaDisco.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing tracks data layer",ex);
         }
@@ -272,5 +291,41 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             throw new DataException("Error getting track's parent",ex);
         }
         return padre;
+    }
+
+    @Override
+    public void addTracce(Disco disco, List<Traccia> tracce) throws DataException {
+        for (Traccia traccia : tracce) {
+            addTraccia(disco, traccia);
+        }
+    }
+
+    @Override
+    public void addTraccia(Disco disco, Traccia traccia) throws DataException {
+        try {
+            addTracciaDisco.setInt(1, disco.getKey());
+            addTracciaDisco.setInt(2, traccia.getKey());
+            addTracciaDisco.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Error setting track", ex);
+        }
+    }
+
+    @Override
+    public void addTracce(Autore autore, List<Traccia> tracce) throws DataException {
+        for (Traccia traccia : tracce) {
+            addTraccia(autore, traccia);
+        }
+    }
+
+    @Override
+    public void addTraccia(Autore autore, Traccia traccia) throws DataException {
+        try {
+            addTracciaAutore.setInt(1, autore.getKey());
+            addTracciaAutore.setInt(2, traccia.getKey());
+            addTracciaAutore.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Error setting track", ex);
+        }
     }
 }

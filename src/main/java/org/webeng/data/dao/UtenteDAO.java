@@ -23,4 +23,8 @@ public interface UtenteDAO {
     Utente getUtente(Disco disco) throws DataException;
 
     void deleteUtente(Utente utente) throws DataException;
+
+    void addUtentiCondivisi(List<Utente> utente, Collezione collezione) throws DataException;
+
+    void addUtenteCondiviso(Utente utente, Collezione collezione) throws DataException;
 }

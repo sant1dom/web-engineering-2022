@@ -29,4 +29,12 @@ public interface TracciaDAO {
     List<Traccia> getFigli(Traccia traccia) throws DataException;
 
     Traccia getPadre(Traccia traccia) throws DataException;
+
+    void addTracce(Disco disco, List<Traccia> tracce) throws DataException;
+
+    void addTraccia(Disco disco, Traccia traccia) throws DataException;
+
+    void addTracce(Autore autore, List<Traccia> tracce) throws DataException;
+
+    void addTraccia(Autore autore, Traccia traccia) throws DataException;
 }
