@@ -69,6 +69,11 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }

@@ -10,7 +10,6 @@ import org.webeng.framework.data.DataItemProxy;
 import org.webeng.framework.data.DataLayer;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,7 +91,7 @@ public class CollezioneProxy extends CollezioneImpl implements DataItemProxy {
     public List<Utente> getUtentiCondivisi(){
         if(super.getUtentiCondivisi() == null && utente_key > 0) {
             try {
-                super.setUtentiCondivisi(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtentiCondivisi(this));
+                super.setUtentiCondivisi(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtenti(this));
             } catch (DataException ex) {
                 Logger.getLogger(CollezioneProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
