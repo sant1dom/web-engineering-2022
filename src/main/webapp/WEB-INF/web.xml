@@ -7,7 +7,7 @@
     </context-param>
     <context-param>
         <param-name>view.outline_template</param-name>
-        <param-value>outline.ftl.html</param-value>
+        <param-value>outline.ftl</param-value>
     </context-param>
     <context-param>
         <param-name>view.date_format</param-name>
@@ -31,7 +31,7 @@
     </context-param>
     <context-param>
         <param-name>view.error_template</param-name>
-        <param-value>error.ftl.html</param-value>
+        <param-value>error.ftl</param-value>
     </context-param>
     <context-param>
         <param-name>security.protect.patterns</param-name>
@@ -69,7 +69,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>issues</welcome-file>
+        <welcome-file>home</welcome-file>
     </welcome-file-list>
     <resource-ref>
         <res-ref-name>jdbc/collector_site</res-ref-name>

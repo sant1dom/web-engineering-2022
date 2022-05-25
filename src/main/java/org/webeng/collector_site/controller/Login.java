@@ -22,7 +22,7 @@ public class Login extends CollectorsBaseController {
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
         request.setAttribute("referrer", request.getParameter("referrer"));
-        result.activate("login.ftl.html", request, response);
+        result.activate("login.ftl", request, response);
     }
 
     private void action_login(HttpServletRequest request, HttpServletResponse response) throws IOException {
