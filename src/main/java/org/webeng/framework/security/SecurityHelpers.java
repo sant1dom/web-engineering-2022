@@ -1,20 +1,27 @@
 package org.webeng.framework.security;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class SecurityHelpers {
 
-    //--------- SESSION SECURITY ------------    
+    private SecurityHelpers() {
+    }
+
+    //--------- SESSION SECURITY ------------
     //questa funzione esegue una serie di controlli di sicurezza
     //sulla sessione corrente. Se la sessione non è valida, la cancella
     //e ritorna null, altrimenti la aggiorna e la restituisce
-    //this method executed a set of standard chacks on the current session.
+    //this method executed a set of standard checks on the current session.
     //If the session exists and is valid, it is returned, otherwise
     //the session is invalidated and the method returns null
     public static HttpSession checkSession(HttpServletRequest r) {
@@ -68,7 +75,7 @@ public class SecurityHelpers {
             //note: besides checking if the session contains an userid, we should 
             //check if the userid is valid, possibly querying the user database
             check = false;
-        } else if ((s.getAttribute("ip") == null) || !((String) s.getAttribute("ip")).equals(r.getRemoteHost())) {
+        } else if ((s.getAttribute("ip") == null) || !(s.getAttribute("ip")).equals(r.getRemoteHost())) {
             //check sull'ip del client
             //check if the client ip chaged
             check = false;
@@ -139,9 +146,8 @@ public class SecurityHelpers {
             s.invalidate();
         }
         s = request.getSession(true);
-        for (String key : attributes.keySet()) {
-            Object value = attributes.get(key);
-            s.setAttribute(key, value);
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+            s.setAttribute(entry.getKey(), entry.getValue());
         }
         return s;
     }
@@ -154,11 +160,10 @@ public class SecurityHelpers {
         //we can use this technique to check if the request was made in https 
         //and, if not, build the URL needed to redirect the browser to https
         if (request.getScheme().equals("http")) {
-            String url = "https://" + request.getServerName()
+            return "https://" + request.getServerName()
                     + ":" + request.getServerPort()
                     + request.getRequestURI() //request.getContextPath() + request.getServletPath() +  (request.getPathInfo() != null) ? request.getPathInfo() : ""
                     + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-            return url;
         } else {
             return null;
         }
@@ -197,4 +202,30 @@ public class SecurityHelpers {
         return name.replaceAll("[^a-zA-Z0-9_.-]", "_");
     }
 
+    //usata per il pretty printing del digest
+    //used to pretty-print the digest
+    private static String bytesToHexString(byte[] byteArray) {
+        StringBuilder hexStringBuffer = new StringBuilder();
+        for (byte b : byteArray) {
+            char[] hexDigits = new char[2];
+            hexDigits[0] = Character.forDigit((b >> 4) & 0xF, 16);
+            hexDigits[1] = Character.forDigit((b & 0xF), 16);
+            hexStringBuffer.append(new String(hexDigits));
+        }
+        return hexStringBuffer.toString();
+    }
+
+    //usata per fare encrypt della password
+    //used to encrypt the password
+    public static String encryptPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            return bytesToHexString(digest);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(SecurityHelpers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

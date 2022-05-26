@@ -8,6 +8,9 @@
  */
 package org.webeng.collector_site.controller;
 
+import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.model.Utente;
+import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
@@ -19,31 +22,40 @@ import java.io.IOException;
 
 public class Login extends CollectorsBaseController {
 
-    private void action_default(HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateManagerException {
+    public static final String REFERRER = "referrer";
+
+    private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
-        request.setAttribute("referrer", request.getParameter("referrer"));
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
         result.activate("login.ftl", request, response);
     }
 
     private void action_login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("u");
-        String password = request.getParameter("p");
+        String password = SecurityHelpers.encryptPassword(request.getParameter("p"));
         //... VALIDAZIONE IDENTITA'...
         //... IDENTITY CHECKS ...
+        Utente utente = null;
+        try {
+            utente = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().doLogin(username, password);
+        } catch (DataException ex) {
+            handleError(ex, request, response);
+        }
 
-        if (!username.isEmpty() && !password.isEmpty()) {
+        if (utente != null) {
             //se la validazione ha successo
             //if the identity validation succeeds
             //carichiamo lo userid dal database utenti
             //load userid from user database
-            int userid = 1;
+
+            int userid = utente.getKey();
             SecurityHelpers.createSession(request, username, userid);
             //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
             //if an origin URL has been transmitted, return to it
-            if (request.getParameter("referrer") != null) {
-                response.sendRedirect(request.getParameter("referrer"));
+            if (request.getParameter(REFERRER) != null) {
+                response.sendRedirect(request.getParameter(REFERRER));
             } else {
-                response.sendRedirect("issues");
+                response.sendRedirect("home");
             }
         } else {
             handleError("Login failed", request, response);
@@ -56,7 +68,7 @@ public class Login extends CollectorsBaseController {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException
+     * @throws ServletException if a servlet-specific error occurs
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
