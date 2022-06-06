@@ -27,6 +27,17 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.dischi = dischi;
     }
 
+    public UtenteImpl(String nome, String cognome, String username, String email, String password) {
+        super();
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.collezioni = null;
+        this.dischi = null;
+    }
+
     public UtenteImpl(){
         super();
         this.nome = "";

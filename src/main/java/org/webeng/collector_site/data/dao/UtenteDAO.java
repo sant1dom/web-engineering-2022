@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface UtenteDAO {
 
-    Utente doLogin(String username, String password) throws DataException;
+    Utente doLogin(String email, String password) throws DataException;
+
     Utente createUtente() throws DataException;
 
     Utente getUtente(String username) throws DataException;

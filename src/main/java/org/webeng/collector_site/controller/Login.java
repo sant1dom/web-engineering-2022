@@ -31,12 +31,13 @@ public class Login extends CollectorsBaseController {
     }
 
     private void action_login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String username = request.getParameter("u");
-        String password = SecurityHelpers.encryptPassword(request.getParameter("p"));
+        String username = request.getParameter("username");
+        String password = SecurityHelpers.encryptPassword(request.getParameter("password"));
         //... VALIDAZIONE IDENTITA'...
-        //... IDENTITY CHECKS ...
+
         Utente utente = null;
         try {
+
             utente = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().doLogin(username, password);
         } catch (DataException ex) {
             handleError(ex, request, response);
@@ -55,10 +56,10 @@ public class Login extends CollectorsBaseController {
             if (request.getParameter(REFERRER) != null) {
                 response.sendRedirect(request.getParameter(REFERRER));
             } else {
-                response.sendRedirect("home");
+                response.sendRedirect("/");
             }
         } else {
-            handleError("Login failed", request, response);
+            handleError("Login fallito", request, response);
         }
     }
 
@@ -74,7 +75,7 @@ public class Login extends CollectorsBaseController {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
         try {
-            if (request.getParameter("login") != null) {
+            if (request.getParameter("username") != null && request.getParameter("password") != null) {
                 action_login(request, response);
             } else {
                 String https_redirect_url = SecurityHelpers.checkHttps(request);

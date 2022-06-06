@@ -57,6 +57,16 @@
 
     <!--  LOGIN  -->
     <servlet>
+        <servlet-name>register</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.Register</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>register</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+    <!--  LOGIN  -->
+    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.Login</servlet-class>
     </servlet>
@@ -75,15 +85,6 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
-    <!--  CART  -->
-    <servlet>
-        <servlet-name>cart</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.Cart</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>cart</servlet-name>
-        <url-pattern>/cart</url-pattern>
-    </servlet-mapping>
     <!--  END SERVLET  -->
 
     <session-config>

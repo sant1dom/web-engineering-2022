@@ -1,3 +1,12 @@
+<#include "outlines/outline_header.ftl">
+<#include "outlines/outline_sidebar.ftl">
+
+<!-- GLOABAL LOADER -->
+<div id="global-loader">
+    <img src="../assets/images/loader.svg" class="loader-img" alt="Loader">
+</div>
+<!-- End GLOABAL LOADER -->
+
 <!-- PAGE -->
 <div class="page">
     <div class="page-main">
@@ -70,3 +79,4 @@
         <!--app-content close-->
     </div>
 </div>
+<#include "outlines/outline_footer.ftl">

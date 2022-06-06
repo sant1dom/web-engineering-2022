@@ -6,10 +6,7 @@ import org.webeng.collector_site.data.model.Utente;
 import org.webeng.collector_site.data.proxy.UtenteProxy;
 import org.webeng.framework.data.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +39,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             sUtenteByUsername = connection.prepareStatement("SELECT * from utente WHERE username=?");
             sUtentiByCollezione = connection.prepareStatement("SELECT utente.id FROM utente JOIN collezione_condivisa_con ccc on utente.id = ccc.utente_id JOIN collezione c on ccc.collezione_id = c.id WHERE c.id=?");
             sUtentiByDisco = connection.prepareStatement("SELECT utente.id FROM utente JOIN disco d on utente.id = d.utente_id WHERE d.id=?");
-            uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, email=?, username=?, password=? WHERE id=?");
-            iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, email, username, password) VALUES (?,?,?,?,?)");
+            uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, username=?, email=?, password=? WHERE id=?");
+            iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, username, email, password) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
             addUtenteCollezione = connection.prepareStatement("INSERT INTO collezione_condivisa_con (utente_id, collezione_id) VALUES (?,?)");
         } catch (SQLException ex) {
@@ -90,6 +87,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     private UtenteProxy createUtente(ResultSet rs) throws DataException {
         try {
             UtenteProxy u = (UtenteProxy) createUtente();
+            rs.next();
             u.setKey(rs.getInt("id"));
             u.setNome(rs.getString("nome"));
             u.setCognome(rs.getString("cognome"));
@@ -153,14 +151,17 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 if (utente instanceof DataItemProxy && !((DataItemProxy) utente).isModified()) {
                     return;
                 }
-                uUtente.setString(1, utente.getNome());
-                uUtente.setString(2, utente.getCognome());
-                if (utente.getUsername() != null) {
-                    uUtente.setString(3, utente.getUsername());
+                if (utente.getNome() != null) {
+                    uUtente.setString(1, utente.getNome());
                 } else {
-                    uUtente.setNull(3, Types.VARCHAR);
+                    uUtente.setString(1, null);
                 }
-
+                if (utente.getCognome() != null) {
+                    uUtente.setString(2, utente.getCognome());
+                } else {
+                    uUtente.setString(2, null);
+                }
+                uUtente.setString(3, utente.getUsername());
                 uUtente.setString(4, utente.getEmail());
                 uUtente.setString(5, utente.getPassword());
 
