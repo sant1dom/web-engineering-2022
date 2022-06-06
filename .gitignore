@@ -26,3 +26,5 @@ hs_err_pid*
 
 context.xml
 target\
+/src/main/webapp/templates/html/
+/src/main/webapp/templates/Esempio_Templates_Fwk_Maven/

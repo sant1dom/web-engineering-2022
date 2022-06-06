@@ -8,14 +8,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Home extends CollectorsBaseController {
+public class Cart extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        result.activate("index.ftl", request, response);
+        result.activate("cart.ftl", request, response);
     }
 
     /**
