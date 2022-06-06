@@ -54,6 +54,10 @@
         <servlet-name>home</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>registrazione</servlet-name>
+        <url-pattern>/registrazione</url-pattern>
+    </servlet-mapping>
 
     <!--  LOGIN  -->
     <servlet>
@@ -76,6 +80,10 @@
     </servlet-mapping>
 
     <!--  LOGOUT  -->
+    <servlet>
+        <servlet-name>registrazione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.Registrazione</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>logout</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.Logout</servlet-class>
