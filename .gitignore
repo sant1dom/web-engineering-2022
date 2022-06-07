@@ -25,6 +25,8 @@ hs_err_pid*
 .idea
 
 context.xml
-target\
 /src/main/webapp/templates/html/
 /src/main/webapp/templates/Esempio_Templates_Fwk_Maven/
+target\
+web-engineering-2022.iml
+.idea\
