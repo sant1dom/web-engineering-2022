@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class FailureResult {
 
+    public static final String REFERRER = "referrer";
+
     protected ServletContext context;
     private final TemplateResult template;
 
@@ -51,7 +53,7 @@ public class FailureResult {
         //ma per sicurezza controlliamo comunque il tipo effettivo dell'oggetto
         //we assume that the exception has been passed using the request attributes        
         //but we always check the real object type
-        if (request.getAttribute("exception") instanceof Exception) {
+       if (request.getAttribute("exception") instanceof Exception) {
             activate((Exception) request.getAttribute("exception"), request, response);
         } else {
             activate("Unknown error", request, response);
@@ -63,6 +65,11 @@ public class FailureResult {
             //Scriviamo il messaggio di errore nel log del server
             //Log the error message in the server log
             System.err.println(message);
+
+            request.setAttribute("error", message);
+            request.setAttribute(REFERRER, request.getParameter(REFERRER));
+            template.activate("error.ftl", request, response);
+
             // ATTENZIONE: in un ambiente di produzione, i messaggi di errore DEVONO essere limitati a informazioni generiche, non a stringhe di complete di eccezione
             //e.g., potremmo mappare solo la classe dell'eccezione (IOException, SQLException, ecc.) in messaggi come "Errore IO", "Errore database", ecc.
             //WARNING: in a production environment, error messages MUST be limited to generic information, not full exception strings
@@ -70,15 +77,14 @@ public class FailureResult {
 
             //se abbiamo registrato un template per i messaggi di errore, proviamo a usare quello
             //if an error template has been configured, try it
-            if (context.getInitParameter("view.error_template") != null) {
-                request.setAttribute("error", message);
-                request.setAttribute("outline_tpl", "");
-                template.activate(context.getInitParameter("view.error_template"), request, response);
-            } else {
-                //altrimenti, inviamo un errore HTTP
-                //otherwise, use HTTP errors
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
-            }
+//            if (context.getInitParameter("view.error") != null) {
+//                request.setAttribute("error", message);
+//                template.activate(context.getInitParameter("view.error"), request, response);
+//            } else {
+//                //altrimenti, inviamo un errore HTTP
+//                //otherwise, use HTTP errors
+//                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
+//            }
         } catch (Exception ex) {
             //se qualcosa va male inviamo un errore HTTP
             //if anything goue wrong, sent an HTTP error

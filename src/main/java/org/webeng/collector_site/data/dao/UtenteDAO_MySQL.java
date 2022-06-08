@@ -85,15 +85,19 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     }
 
     private UtenteProxy createUtente(ResultSet rs) throws DataException {
+        if (rs == null) {
+            return null;
+        }
         try {
             UtenteProxy u = (UtenteProxy) createUtente();
-            rs.next();
-            u.setKey(rs.getInt("id"));
-            u.setNome(rs.getString("nome"));
-            u.setCognome(rs.getString("cognome"));
-            u.setEmail(rs.getString("email"));
-            u.setUsername(rs.getString("username"));
-            u.setPassword(rs.getString("password"));
+            if (rs.next()) {
+                u.setKey(rs.getInt("id"));
+                u.setNome(rs.getString("nome"));
+                u.setCognome(rs.getString("cognome"));
+                u.setEmail(rs.getString("email"));
+                u.setUsername(rs.getString("username"));
+                u.setPassword(rs.getString("password"));
+            }
             return u;
         } catch (SQLException ex) {
             throw new DataException("Unable to create user object form ResultSet", ex);

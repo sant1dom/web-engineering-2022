@@ -38,7 +38,12 @@
                                     <div class="card overflow-hidden">
                                         <div class="card-body">
                                             <div class="d-flex">
-                                                VUOTO
+                                                <#if utente??>
+                                                    ${utente.getNome()!}
+                                                    ${utente.getNome()!}
+                                                <#else>
+                                                    CIAO
+                                                </#if>
                                             </div>
                                         </div>
                                     </div>

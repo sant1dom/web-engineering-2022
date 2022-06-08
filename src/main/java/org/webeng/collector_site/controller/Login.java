@@ -18,6 +18,7 @@ import org.webeng.framework.security.SecurityHelpers;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class Login extends CollectorsBaseController {
@@ -37,7 +38,6 @@ public class Login extends CollectorsBaseController {
 
         Utente utente = null;
         try {
-
             utente = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().doLogin(username, password);
         } catch (DataException ex) {
             handleError(ex, request, response);
@@ -85,5 +85,12 @@ public class Login extends CollectorsBaseController {
         } catch (IOException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
-    }   
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     */
+    public String getServletInfo() {
+        return "Short description";
+    }
 }

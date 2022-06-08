@@ -30,3 +30,4 @@ src/main/webapp/META-INF/context.xml
 /src/main/webapp/templates/Esempio_Templates_Fwk_Maven/
 target\
 .idea\
+META-INF\
