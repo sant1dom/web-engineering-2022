@@ -129,4 +129,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         return modified;
     }
 
+    @Override
+    public String toString(){
+        return super.toString();
+    }
 }

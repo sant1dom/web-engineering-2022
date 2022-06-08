@@ -24,14 +24,20 @@ public class Home extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
+            //sessione dell'utente
             HttpSession s = request.getSession(false);
+            //id dell'utente
+            int userid = (int) s.getAttribute("userid");
+            //datalayer
+            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
             //ottengo il DAO dell'utente
-            UtenteDAO utenteDAO = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO();
+            UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
             //ottengo l'utente tramite la sua id nella sessione
-            Utente utente = utenteDAO.getUtente(Integer.parseInt(s.getAttribute("userid").toString()));
-            //ci deve essere un errore in createUtente o getUtente(id) perchè non posso ripescare i dati dell'utente creato
-            System.out.println(s.getAttribute("userid").toString() + " " + s.getAttribute("username"));
-            System.out.println(utente.getNome()); //non stampa nulla
+            Utente utente = utenteDAO.getUtente(userid);
+
+            System.out.println(utente); //non stampa nulla
+
+
             if (utente != null) {
                 TemplateResult result = new TemplateResult(getServletContext());
                 request.setAttribute(REFERRER, request.getParameter(REFERRER));
@@ -42,7 +48,7 @@ public class Home extends CollectorsBaseController {
                 request.setAttribute(REFERRER, request.getParameter(REFERRER));
                 result.activate("index.ftl", request, response);
             }
-        } catch (DataException | TemplateManagerException ex) {
+        } catch (TemplateManagerException | DataException ex) {
             handleError(ex, request, response);
         }
     }

@@ -139,4 +139,15 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     public void removeDisco(Disco disco) {
         this.dischi.remove(disco);
     }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "nome='" + this.getNome() + '\'' +
+                ", cognome='" + this.getCognome() + '\'' +
+                ", email='" + this.getEmail() + '\'' +
+                ", password='" + this.getPassword() + '\'' +
+                ", username='" + this.getUsername() + '\'' +
+                '}';
+    }
 }
