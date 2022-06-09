@@ -25,7 +25,7 @@ public class Error extends CollectorsBaseController {
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        result.activate("error.ftl", request, response);
+        result.activate("/errors/error.ftl", request, response);
     }
 
     /**

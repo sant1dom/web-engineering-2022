@@ -24,19 +24,7 @@ public class Home extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
-            //sessione dell'utente
-            HttpSession s = request.getSession(false);
-            //id dell'utente
-            int userid = (int) s.getAttribute("userid");
-            //datalayer
-            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-            //ottengo il DAO dell'utente
-            UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
-            //ottengo l'utente tramite la sua id nella sessione
-            Utente utente = utenteDAO.getUtente(userid);
-
-            System.out.println(utente); //non stampa nulla
-
+            Utente utente = getUtente(request, response);
 
             if (utente != null) {
                 TemplateResult result = new TemplateResult(getServletContext());
@@ -48,9 +36,30 @@ public class Home extends CollectorsBaseController {
                 request.setAttribute(REFERRER, request.getParameter(REFERRER));
                 result.activate("index.ftl", request, response);
             }
-        } catch (TemplateManagerException | DataException ex) {
+        } catch (TemplateManagerException ex) {
             handleError(ex, request, response);
         }
+    }
+
+    private Utente getUtente(HttpServletRequest request, HttpServletResponse response) {
+        Utente utente = null;
+
+        try {
+            //sessione dell'utente
+            HttpSession s = request.getSession(false);
+            //id dell'utente
+            int userid = (int) s.getAttribute("userid");
+            //datalayer
+            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+            //ottengo il DAO dell'utente
+            UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
+            //ottengo l'utente tramite la sua id nella sessione
+            utente = utenteDAO.getUtente(userid);
+        } catch (DataException ex) {
+            handleError(ex, request, response);
+        }
+
+        return utente;
     }
 
     /**

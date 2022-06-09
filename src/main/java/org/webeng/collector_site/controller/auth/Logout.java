@@ -6,8 +6,9 @@
  * This example shows how to use sessions to authenticate the user
  *
  */
-package org.webeng.collector_site.controller;
+package org.webeng.collector_site.controller.auth;
 
+import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.framework.security.SecurityHelpers;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class Logout extends CollectorsBaseController {
         if (request.getParameter("referrer") != null) {
             response.sendRedirect(request.getParameter("referrer"));
         } else {
-            response.sendRedirect("issues");
+            response.sendRedirect("/");
         }
     }
 
@@ -38,7 +39,6 @@ public class Logout extends CollectorsBaseController {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

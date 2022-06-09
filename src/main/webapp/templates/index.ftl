@@ -40,7 +40,7 @@
                                             <div class="d-flex">
                                                 <#if utente??>
                                                     ${utente.getNome()!}
-                                                    ${utente.getNome()!}
+                                                    ${utente.getCognome()!}
                                                 <#else>
                                                     CIAO
                                                 </#if>

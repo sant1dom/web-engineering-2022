@@ -20,6 +20,11 @@
                         <div class="panel-body tabs-menu-body p-0 pt-5">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab5">
+                                    <#if error??>
+                                        <div class=text-red>
+                                            ${error!}
+                                        </div>
+                                    </#if>
                                     <div class="wrap-input100 validate-input input-group">
                                         <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
                                             <i class="mdi mdi-account" aria-hidden="true"></i>

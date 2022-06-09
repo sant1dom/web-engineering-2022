@@ -68,7 +68,7 @@ public class FailureResult {
 
             request.setAttribute("error", message);
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
-            template.activate("error.ftl", request, response);
+            template.activate("/errors/error.ftl", request, response);
 
             // ATTENZIONE: in un ambiente di produzione, i messaggi di errore DEVONO essere limitati a informazioni generiche, non a stringhe di complete di eccezione
             //e.g., potremmo mappare solo la classe dell'eccezione (IOException, SQLException, ecc.) in messaggi come "Errore IO", "Errore database", ecc.

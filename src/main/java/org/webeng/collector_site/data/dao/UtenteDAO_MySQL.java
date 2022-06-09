@@ -106,14 +106,12 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     @Override
     public Utente getUtente(String username) throws DataException {
-        Utente u = null;
+        Utente u;
         try {
             sUtenteByUsername.setString(1, username);
             try (ResultSet rs = sUtenteByUsername.executeQuery()) {
-                if (rs.next()) {
-                    u = createUtente(rs);
-                    dataLayer.getCache().add(Utente.class, u);
-                }
+                u = createUtente(rs);
+                dataLayer.getCache().add(Utente.class, u);
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load user by username", ex);
@@ -123,7 +121,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
     @Override
     public Utente getUtente(int utente_key) throws DataException {
-        Utente u = null;
+        Utente u;
         //prima vediamo se l'oggetto è già stato caricato
         //first look for this object in the cache
         if (dataLayer.getCache().has(Utente.class, utente_key)) {
@@ -134,10 +132,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             try {
                 sUtenteByID.setInt(1, utente_key);
                 try (ResultSet rs = sUtenteByID.executeQuery()) {
-                    if (rs.next()) {
-                        u = createUtente(rs);
-                        dataLayer.getCache().add(Utente.class, u);
-                    }
+                    u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+
                 }
             } catch (SQLException ex) {
                 throw new DataException("Unable to load user by ID", ex);
