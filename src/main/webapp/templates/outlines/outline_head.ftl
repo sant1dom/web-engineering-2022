@@ -13,13 +13,13 @@
           content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
 
     <!-- FAVICON -->
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/brand/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/brand/favicon.ico" />
 
     <!-- TITLE -->
     <title>Collector Site</title>
 
     <!-- BOOTSTRAP CSS -->
-    <link id="style" href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link id="style" href="./assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- STYLE CSS -->
     <link href="./assets/css/style.css" rel="stylesheet" />
@@ -31,7 +31,7 @@
     <link href="./assets/css/icons.css" rel="stylesheet" />
 
     <!-- COLOR SKIN CSS -->
-    <link id="theme" rel="stylesheet" type="text/css" media="all" href="/assets/colors/color1.css" />
+    <link id="theme" rel="stylesheet" type="text/css" media="all" href="./assets/colors/color1.css" />
 
 
 
