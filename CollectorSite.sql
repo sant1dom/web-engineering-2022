@@ -225,7 +225,7 @@ CREATE TABLE `utente` (
   `cognome` varchar(45) DEFAULT NULL,
   `username` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
+  `password` varchar(64) DEFAULT NULL,
   `version` int unsigned DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
