@@ -1,0 +1,11 @@
+.navbar-brand {
+    margin-right: 3rem;
+    margin-left: 3rem;
+}
+
+@media (max-width: 991px) {
+    .navbar-brand {
+        margin-right: 0;
+        margin-left: 0;
+    }
+}
