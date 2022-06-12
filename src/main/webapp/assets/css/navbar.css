@@ -1,11 +1,121 @@
+.navbar {
+    padding: 0;
+    height: 4rem;
+}
+
+/* Logo */
 .navbar-brand {
     margin-right: 3rem;
     margin-left: 3rem;
 }
+/* ---- */
+
+/* Pulsanti di login e registrazione */
+.bt-navbar-registrati {
+    background-color: #f5df2b;
+    border-color: #f5df2b;
+    border-radius: 3px;
+    border-style: hidden;
+    padding: 3px 10px;
+    margin-right: 4rem;
+    margin-left: 1rem;
+    text-decoration: white;
+}
+
+.bt-navbar-accedi {
+    color: white;
+    background-color: transparent;
+    border-color: transparent;
+    border-style: hidden;
+    padding: 10px 10px;
+    height: 100%;
+}
+/* ---------------------------------- */
+
+/* Rettangolo nero intorno ai pulsanti */
+.nav-square{
+    height: 4rem;
+    padding: 10px 10px;
+}
+
+.nav-square:hover {
+    background-color: black;
+}
+/* ----------------------------------- */
+
+/* Barra di ricerca e relativo simbolo */
+.btn-search {
+    background-color: transparent;
+    border-color: transparent;
+    border-style: hidden;
+    outline: transparent;
+}
+
+.form-inline {
+    height: 3rem;
+}
+
+.search-bar {
+    height: 100%;
+    padding-left: 10px;
+    border-radius: 5px;
+    border-color: transparent;
+    border-style: hidden;
+    outline: transparent;
+}
+
+.search-bar:focus {
+    width: 25rem;
+}
+/* ---------------------------------- */
+
+.hidden {
+    display: none
+}
 
 @media (max-width: 991px) {
+    .navbar {
+        padding: 0.8rem;
+    }
+
     .navbar-brand {
         margin-right: 0;
         margin-left: 0;
+    }
+
+    .search-bar, .search-bar:focus {
+        margin: 0;
+        width: 100%;
+    }
+
+    .btn-search {
+        margin-right: -2rem;
+    }
+
+    .nav-square {
+        background-color: black;
+        margin: 0;
+    }
+
+    .bt-navbar-accedi {
+        padding: 0;
+        margin: 0;
+    }
+
+    .form-inline {
+        margin-top: 1rem;
+    }
+
+    .resp991 {
+        display: none;
+    }
+
+    .hidden {
+        display: block;
+    }
+
+    .bt-navbar-registrati {
+        float: right;
+        margin: 10px;
     }
 }
