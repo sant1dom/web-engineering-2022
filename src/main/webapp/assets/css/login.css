@@ -1,0 +1,65 @@
+.bg-image {
+    background-image: unset;
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding-top: 10%;
+}
+
+.card {
+    margin-right: 30%;
+    width: 35%;
+    height: auto;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+    outline: none;
+    border-style: none;
+}
+
+.card-header {
+    background-color: #ffc000;
+    text-align: center;
+}
+
+.titolo {
+    color: black;
+    font-weight: bold;
+}
+
+.label {
+    color: white;
+}
+
+.text-red {
+    color: red;
+}
+
+.login-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.vinile_form {
+    position: absolute;
+    margin-left: 5%;
+    z-index: -1;
+    width: auto;
+    height: 56%;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+}
+
+@media (max-width: 480px) {
+    .vinile_form {
+        display: none;
+    }
+
+    .card {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}

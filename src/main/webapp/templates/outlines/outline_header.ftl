@@ -30,11 +30,11 @@
                 <a class="nav-link disabled" href="#">Disabled</a>
             </li>
         </ul>
-        <div class="nav-square">
-            <button type="button" class="bt-navbar-accedi">Accedi</button>
-            <button type="button" class="bt-navbar-registrati hidden">Registrati</button>
+        <div class="nav-square-accedi">
+            <a href="login" class="bt-navbar-accedi">Accedi</a>
+            <a href="register" class="bt-navbar-registrati hidden">Registrati</a>
         </div>
-        <button type="button" class="bt-navbar-registrati resp991">Registrati</button>
+        <a href="register" class="bt-navbar-registrati resp991">Registrati</a>
 
     </div>
 </nav>

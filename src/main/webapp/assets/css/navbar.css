@@ -19,27 +19,42 @@
     padding: 3px 10px;
     margin-right: 4rem;
     margin-left: 1rem;
-    text-decoration: white;
+    color: black;
 }
 
 .bt-navbar-accedi {
     color: white;
-    background-color: transparent;
-    border-color: transparent;
-    border-style: hidden;
-    padding: 10px 10px;
+    background: none;
+    border: none;
+    padding: 3px 10px;
     height: 100%;
+}
+
+a:hover, a:focus {
+    outline: none;
+    text-underline: none;
+    text-decoration: none;
+    color: white;
+}
+
+a:hover.bt-navbar-registrati{
+    color:black;
 }
 /* ---------------------------------- */
 
 /* Rettangolo nero intorno ai pulsanti */
-.nav-square{
+.nav-square {
     height: 4rem;
     padding: 10px 10px;
 }
 
-.nav-square:hover {
+.nav-square:hover, .nav-square-accedi:hover {
     background-color: black;
+}
+
+.nav-square-accedi {
+    height: 4rem;
+    padding: 20px 10px;
 }
 /* ----------------------------------- */
 
@@ -92,7 +107,7 @@
         margin-right: -2rem;
     }
 
-    .nav-square {
+    .nav-square, .nav-square-accedi{
         background-color: black;
         margin: 0;
     }
@@ -114,8 +129,9 @@
         display: block;
     }
 
-    .bt-navbar-registrati {
+    .bt-navbar-registrati.hidden {
         float: right;
-        margin: 10px;
+        display: inline-block;
+        margin: 0;
     }
 }

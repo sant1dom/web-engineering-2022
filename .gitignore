@@ -31,3 +31,4 @@ src/main/webapp/META-INF/context.xml
 target\
 .idea\
 META-INF\
+CollectorSite.iml
