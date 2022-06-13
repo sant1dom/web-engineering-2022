@@ -12,7 +12,7 @@
         </form>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item nav-square">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="search">Ricerca avanzata</a>
             </li>
             <li class="nav-item nav-square dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

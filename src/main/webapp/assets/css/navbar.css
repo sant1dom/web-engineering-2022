@@ -59,7 +59,7 @@ a:hover.bt-navbar-registrati{
 /* ----------------------------------- */
 
 /* Barra di ricerca e relativo simbolo */
-.btn-search {
+.btn-search, .btn-search:focus {
     background-color: transparent;
     border-color: transparent;
     border-style: hidden;

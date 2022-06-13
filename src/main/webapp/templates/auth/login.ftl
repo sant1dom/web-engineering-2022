@@ -31,6 +31,6 @@
                 </form>
             </div>
         </div>
-        <img class="vinile login_img" src="/assets/images/vinile_form.png">
+        <img class="vinile login_img" src="/assets/images/vinile.png">
     </div>
 </div>
