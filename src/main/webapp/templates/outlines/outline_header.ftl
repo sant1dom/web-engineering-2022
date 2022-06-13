@@ -30,11 +30,18 @@
                 <a class="nav-link disabled" href="#">Disabled</a>
             </li>
         </ul>
-        <div class="nav-square-accedi">
-            <a href="login" class="bt-navbar-accedi">Accedi</a>
-            <a href="register" class="bt-navbar-registrati hidden">Registrati</a>
-        </div>
-        <a href="register" class="bt-navbar-registrati resp991">Registrati</a>
-
+        <#if (!(utente??))>
+            <div class="nav-square-accedi">
+                <a href="login" class="bt-navbar-accedi">Accedi</a>
+                <a href="register" class="bt-navbar-registrati hidden">Registrati</a>
+            </div>
+            <a href="register" class="bt-navbar-registrati resp991">Registrati</a>
+        <#else>
+            Profilo (da fare)
+            <div class="nav-square hidden">
+                <a href="logout" class="bt-navbar-registrati hidden">Logout</a>
+            </div>
+            <a href="logout" class="bt-navbar-registrati resp991">Logout</a>
+        </#if>
     </div>
 </nav>

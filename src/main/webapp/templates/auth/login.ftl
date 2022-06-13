@@ -1,6 +1,6 @@
 <!-- BACKGROUND-IMAGE -->
 <div class="bg-image">
-    <div class="container">
+    <div class="container login_container">
         <div class="card bg-dark">
             <div class="card-header">
                 <span class="titolo">ACCEDI</span>
@@ -24,13 +24,13 @@
                         </button>
                     </div>
                     <div class="text-center pt-3">
-                        <p class="label">Non sei registrato? <a href="register"
-                                                                class="text-primary ms-1">Registrati!</a>
+                        <p class="label">Non sei registrato?
+                            <a href="register" class="text-primary ms-1">Registrati!</a>
                         </p>
                     </div>
                 </form>
             </div>
         </div>
-        <img class="vinile_form" src="/assets/images/vinile_form.png">
+        <img class="vinile login_img" src="/assets/images/vinile_form.png">
     </div>
 </div>

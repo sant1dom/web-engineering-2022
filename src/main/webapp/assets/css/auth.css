@@ -1,16 +1,25 @@
 .bg-image {
-    background-image: unset;
+    background-image: url("/assets/images/auth_bg.jpg");
     min-height: 100vh;
+    z-index: -999;
 }
 
 .container {
     display: flex;
     justify-content: center;
+}
+
+.container.login_container {
     padding-top: 10%;
 }
 
+.container.register_container {
+    padding-top: 5%;
+}
+
 .card {
-    margin-right: 30%;
+    z-index: 2;
+    margin-right: 50%;
     width: 35%;
     height: auto;
     -webkit-filter: drop-shadow(5px 5px 5px #222);
@@ -42,18 +51,29 @@
     justify-content: center;
 }
 
-.vinile_form {
+.vinile {
     position: absolute;
-    margin-left: 5%;
-    z-index: -1;
+    margin-left: -5%;
     width: auto;
-    height: 56%;
     -webkit-filter: drop-shadow(5px 5px 5px #222);
     filter: drop-shadow(5px 5px 5px #222);
 }
 
+.vinile.login_img {
+    height: 56%;
+}
+
+.vinile.register_img {
+    height: 80%;
+}
+
+.form-one-line {
+    display: flex;
+    justify-content: space-between;
+}
+
 @media (max-width: 480px) {
-    .vinile_form {
+    .vinile {
         display: none;
     }
 
