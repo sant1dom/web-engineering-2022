@@ -75,6 +75,16 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
+    <!--CREA DISCO -->
+    <servlet>
+        <servlet-name>disco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.Disco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>disco</servlet-name>
+        <url-pattern>/disco</url-pattern>
+    </servlet-mapping>
+
     <!--  LOGOUT  -->
     <servlet>
         <servlet-name>logout</servlet-name>

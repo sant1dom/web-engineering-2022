@@ -26,8 +26,6 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
-      <excludeFolder url="file://$MODULE_DIR$/src/main/webapp/templates/Esempio_Templates_Fwk_Maven" />
-      <excludeFolder url="file://$MODULE_DIR$/src/main/webapp/templates/html" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

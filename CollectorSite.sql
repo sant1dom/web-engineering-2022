@@ -105,10 +105,13 @@ CREATE TABLE `disco` (
   `barcode` varchar(45) DEFAULT NULL,
   `etichetta` varchar(45) DEFAULT NULL,
   `genere` varchar(45) DEFAULT NULL,
+  `formato` varchar(45) DEFAULT NULL,
+  `stato_conservazione` varchar(45) DEFAULT NULL,
   `data_inserimento` date DEFAULT NULL,
   `version` int unsigned DEFAULT '1',
   `utente_id` int unsigned NOT NULL,
   `padre` int unsigned NOT NULL,
+
   PRIMARY KEY (`id`),
   KEY `fk_disco_utente1_idx` (`utente_id`),
   KEY `fk_disco_disco1_idx` (`padre`),

@@ -91,9 +91,12 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
         try {
             d.setKey(rs.getInt("id"));
             d.setBarCode(rs.getString("barcode"));
+            d.setTitolo(rs.getString("titolo"));
             d.setAnno(String.valueOf(rs.getInt("anno")));
             d.setGenere(Genere.valueOf(rs.getString("genere")));
             d.setEtichetta(rs.getString("etichetta"));
+            d.setFormato(Formato.valueOf(rs.getString("formato")));
+            d.setStatoConservazione(StatoConservazione.valueOf(rs.getString("stato_conservazione")));
             d.setUtenteKey(rs.getInt("utente_id"));
             d.setPadreKey(rs.getInt("padre"));
         } catch (SQLException ex) {
