@@ -41,7 +41,7 @@ public class Home extends CollectorsBaseController {
         }
     }
 
-    private Utente getUtente(HttpServletRequest request, HttpServletResponse response) {
+    private Utente  getUtente(HttpServletRequest request, HttpServletResponse response) {
         Utente utente = null;
 
         try {
@@ -110,6 +110,7 @@ public class Home extends CollectorsBaseController {
     /**
      * Returns a short description of the servlet.
      */
+    @Override
     public String getServletInfo() {
         return "Short description";
     }
