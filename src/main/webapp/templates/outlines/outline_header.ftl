@@ -37,7 +37,10 @@
             </div>
             <a href="register" class="bt-navbar-registrati resp991">Registrati</a>
         <#else>
-            Profilo (da fare)
+            <a href="profilo" class="bt-navbar-accedi resp991">Profilo (TODO)</a>
+            <div class="nav-square hidden">
+                <a href="profilo" class="bt-navbar-accedi hidden">Profilo (TODO)</a>
+            </div>
             <div class="nav-square hidden">
                 <a href="logout" class="bt-navbar-registrati hidden">Logout</a>
             </div>

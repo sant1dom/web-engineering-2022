@@ -69,7 +69,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             a.setNome(rs.getString("nome"));
             a.setCognome(rs.getString("cognome"));
             a.setNomeArtistico(rs.getString("nome_artistico"));
-            a.setTipologia(TipologiaAutore.valueOf(rs.getString("tipologia")));
+            a.setTipologia(TipologiaAutore.valueOf(rs.getString("tipologia_autore")));
             a.setVersion(rs.getLong("version"));
             return a;
         } catch (SQLException ex) {

@@ -102,7 +102,7 @@
     <servlet-mapping>
         <servlet-name>CreateTraccia</servlet-name>
         <url-pattern>/create-traccia</url-pattern>
-    </servlet-mapping>>
+    </servlet-mapping>
     <!--  END SERVLET  -->
 
 
