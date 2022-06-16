@@ -104,6 +104,15 @@
         <servlet-name>error</servlet-name>
         <url-pattern>/error</url-pattern>
     </servlet-mapping>
+    <!-- TRACCE -->
+    <servlet>
+        <servlet-name>CreateTraccia</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.tracce.CreateTraccia</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateTraccia</servlet-name>
+        <url-pattern>/create-traccia</url-pattern>
+    </servlet-mapping>
     <!--  END SERVLET  -->
 
 

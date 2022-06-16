@@ -110,8 +110,7 @@ CREATE TABLE `disco` (
   `data_inserimento` date DEFAULT NULL,
   `version` int unsigned DEFAULT '1',
   `utente_id` int unsigned NOT NULL,
-  `padre` int unsigned NOT NULL,
-
+  `padre` int unsigned,
   PRIMARY KEY (`id`),
   KEY `fk_disco_utente1_idx` (`utente_id`),
   KEY `fk_disco_disco1_idx` (`padre`),

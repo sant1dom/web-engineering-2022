@@ -24,6 +24,8 @@ public interface TracciaDAO {
 
     List<Traccia> getTracce(Autore autore) throws DataException;
 
+    List<Traccia> getTraccePadri() throws DataException;
+
     List<Traccia> getFigli(Traccia traccia) throws DataException;
 
     Traccia getPadre(Traccia traccia) throws DataException;

@@ -1,7 +1,5 @@
 package org.webeng.collector_site.controller;
 
-import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.dao.UtenteDAO;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -24,7 +22,7 @@ public class Home extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
-            Utente utente = getUtente(request, response);
+            Utente utente = Utility.getUtente(request, response);
 
             if (utente != null) {
                 TemplateResult result = new TemplateResult(getServletContext());
@@ -36,31 +34,12 @@ public class Home extends CollectorsBaseController {
                 request.setAttribute(REFERRER, request.getParameter(REFERRER));
                 result.activate("index.ftl", request, response);
             }
-        } catch (TemplateManagerException ex) {
+        } catch (TemplateManagerException | DataException ex) {
             handleError(ex, request, response);
         }
     }
 
-    private Utente getUtente(HttpServletRequest request, HttpServletResponse response) {
-        Utente utente = null;
 
-        try {
-            //sessione dell'utente
-            HttpSession s = request.getSession(false);
-            //id dell'utente
-            int userid = (int) s.getAttribute("userid");
-            //datalayer
-            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-            //ottengo il DAO dell'utente
-            UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
-            //ottengo l'utente tramite la sua id nella sessione
-            utente = utenteDAO.getUtente(userid);
-        } catch (DataException ex) {
-            handleError(ex, request, response);
-        }
-
-        return utente;
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -110,6 +89,7 @@ public class Home extends CollectorsBaseController {
     /**
      * Returns a short description of the servlet.
      */
+    @Override
     public String getServletInfo() {
         return "Short description";
     }

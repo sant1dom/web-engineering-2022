@@ -15,6 +15,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     private PreparedStatement sTracciaByID;
     private PreparedStatement sTracciaByISWC;
     private PreparedStatement sTracce;
+    private PreparedStatement sTraccePadri;
     private PreparedStatement sTracceByDisco;
     private PreparedStatement sTracceByAutore;
     private PreparedStatement sFigliTraccia;
@@ -35,11 +36,12 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             sTracciaByID = connection.prepareStatement("SELECT * FROM traccia WHERE id = ?");
             sTracciaByISWC = connection.prepareStatement("SELECT * FROM traccia WHERE iswc = ?");
             sTracce = connection.prepareStatement("SELECT id FROM traccia");
+            sTraccePadri = connection.prepareStatement("SELECT id FROM traccia WHERE traccia.padre IS NULL");
             sTracceByDisco = connection.prepareStatement("SELECT t.id FROM traccia t JOIN disco_traccia dt ON t.id = dt.traccia_id JOIN disco d ON d.id = dt.disco_id WHERE d.id = ?");
             sTracceByAutore = connection.prepareStatement("SELECT t.id FROM traccia t JOIN traccia_autore ta ON t.id = ta.traccia_id JOIN autore a ON a.id = ta.autore_id WHERE a.id = ?");
             sFigliTraccia = connection.prepareStatement("SELECT t.id FROM traccia t WHERE t.padre = ?");
             sPadreTraccia = connection.prepareStatement("SELECT padre FROM traccia WHERE id = ?");
-            iTraccia = connection.prepareStatement("INSERT INTO traccia (titolo, iswc, data_inserimento, durata, padre, version) VALUES (?,?,?,?,?,?)");
+            iTraccia = connection.prepareStatement("INSERT INTO traccia (titolo, iswc, data_inserimento, durata, padre, version) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             uTraccia = connection.prepareStatement("UPDATE traccia SET titolo = ?, iswc = ?, durata = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
             dTraccia = connection.prepareStatement("DELETE FROM traccia WHERE id = ? AND version = ?");
             addTracciaAutore = connection.prepareStatement("INSERT INTO traccia_autore (traccia_id, autore_id) VALUES (?,?)");
@@ -55,6 +57,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             sTracciaByID.close();
             sTracciaByISWC.close();
             sTracce.close();
+            sTraccePadri.close();
             sTracceByDisco.close();
             sTracceByAutore.close();
             sFigliTraccia.close();
@@ -153,11 +156,16 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
                     traccia.setVersion(next_version);
                 }
             } else { //insert
-                uTraccia.setString(1, traccia.getTitolo());
-                uTraccia.setString(2, traccia.getISWC());
-                uTraccia.setInt(3, traccia.getDurata());
-                uTraccia.setInt(4, traccia.getPadre().getKey());
-
+                iTraccia.setString(1, traccia.getTitolo());
+                iTraccia.setString(2, traccia.getISWC());
+                iTraccia.setDate(3, Date.valueOf(LocalDate.now()));
+                iTraccia.setInt(4, traccia.getDurata());
+                if (traccia.getPadre() != null) {
+                    iTraccia.setInt(5, traccia.getPadre().getKey());
+                } else {
+                    iTraccia.setNull(5, Types.INTEGER);
+                }
+                iTraccia.setLong(6, traccia.getVersion());
                 if (iTraccia.executeUpdate() == 1) {
                     //per leggere la chiave generata dal database
                     //per il record appena inserito, usiamo il metodo
@@ -181,6 +189,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
                             dataLayer.getCache().add(Traccia.class, traccia);
                         }
                     }
+                }
+                for (Autore a : traccia.getAutori()) {
+                    addTracciaAutore.setInt(1, traccia.getKey());
+                    addTracciaAutore.setInt(2, a.getKey());
+                    addTracciaAutore.executeUpdate();
                 }
             }
 
@@ -259,6 +272,20 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Error getting tracks by author",ex);
+        }
+        return tracce;
+    }
+
+    @Override
+    public List<Traccia> getTraccePadri() throws DataException {
+        List<Traccia> tracce = new ArrayList<>();
+        try {
+            ResultSet rs = sTraccePadri.executeQuery();
+            while(rs.next()){
+                tracce.add(getTraccia(rs.getInt("id")));
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting parents tracks",ex);
         }
         return tracce;
     }

@@ -18,12 +18,13 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
     private List<Traccia> figli;
     private List<Disco> dischi;
 
-    public TracciaImpl(String titolo, int durata, String iswc, List<Autore> autori) {
+    public TracciaImpl(String titolo, int durata, String iswc, List<Autore> autori, Traccia padre) {
         super();
         this.titolo = titolo;
         this.durata = durata;
         this.iswc = iswc;
         this.autori = autori;
+        this.padre = padre;
     }
 
     public TracciaImpl() {
@@ -32,6 +33,7 @@ public class TracciaImpl extends DataItemImpl<Integer> implements Traccia {
         this.durata = 0;
         this.iswc = "";
         this.autori = null;
+        this.padre = null;
     }
 
     @Override
