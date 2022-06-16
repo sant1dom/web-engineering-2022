@@ -10,16 +10,15 @@
 }
 
 .container.login_container {
-    padding-top: 10%;
+    padding-top: 30vh;
 }
 
 .container.register_container {
-    padding-top: 5%;
+    padding-top: 20vh;
 }
 
 .card {
     z-index: 2;
-    margin-right: 50%;
     width: 35%;
     height: auto;
     -webkit-filter: drop-shadow(5px 5px 5px #222);
@@ -52,19 +51,21 @@
 }
 
 .vinile {
+    display: flex;
+    justify-content: center;
     position: absolute;
-    margin-left: -5%;
+    margin-left: -12rem;
     width: auto;
     -webkit-filter: drop-shadow(5px 5px 5px #222);
     filter: drop-shadow(5px 5px 5px #222);
 }
 
 .vinile.login_img {
-    height: 56%;
+    height: 21.5rem;
 }
 
 .vinile.register_img {
-    height: 80%;
+    height: 31rem;
 }
 
 .form-one-line {

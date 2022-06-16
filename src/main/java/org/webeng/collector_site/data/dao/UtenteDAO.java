@@ -21,6 +21,8 @@ public interface UtenteDAO {
 
     List<Utente> getUtenti() throws DataException;
 
+    public List<String> getUtenti(String keyword) throws DataException;
+
     List<Utente> getUtenti(Collezione collezione) throws DataException;
 
     Utente getUtente(Disco disco) throws DataException;

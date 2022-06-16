@@ -21,6 +21,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     private PreparedStatement iUtente;
     private PreparedStatement dUtente;
     private PreparedStatement addUtenteCollezione;
+    private PreparedStatement fUtentiByUsername;
 
     public UtenteDAO_MySQL(DataLayer d) {
         super(d);
@@ -32,7 +33,6 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             super.init();
 
             //precompiliamo tutte le query utilizzate nella classe
-            //precompile all the queries uses in this class
             sLogin = connection.prepareStatement("SELECT * FROM utente WHERE username = ? AND password = ?");
             sUtenteByID = connection.prepareStatement("SELECT * FROM utente WHERE id=?");
             sUtenti = connection.prepareStatement("SELECT id FROM utente");
@@ -43,6 +43,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, username, email, password) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
             addUtenteCollezione = connection.prepareStatement("INSERT INTO collezione_condivisa_con (utente_id, collezione_id) VALUES (?,?)");
+            //query per auto completamento ricerca
+            fUtentiByUsername = connection.prepareStatement("SELECT username from utente WHERE username LIKE CONCAT('%', ? ,'%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing users data layer", ex);
         }
@@ -61,6 +63,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             iUtente.close();
             dUtente.close();
             addUtenteCollezione.close();
+
+            fUtentiByUsername.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing prepared statements", ex);
         }
@@ -99,6 +103,26 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 u.setPassword(rs.getString("password"));
             }
             return u;
+        } catch (SQLException ex) {
+            throw new DataException("Unable to create user object form ResultSet", ex);
+        }
+    }
+
+    private List<Utente> createUtenti(ResultSet rs) throws DataException {
+        if (rs == null) {
+            return null;
+        }
+        UtenteProxy u = (UtenteProxy) createUtente();
+        try {
+            List<Utente> lu = new ArrayList<>();
+            do {
+                u.setKey(rs.getInt("id"));
+                u.setNome(rs.getString("nome"));
+                u.setCognome(rs.getString("cognome"));
+                u.setUsername(rs.getString("username"));
+                lu.add((Utente) u);
+            } while (rs.next());
+            return lu;
         } catch (SQLException ex) {
             throw new DataException("Unable to create user object form ResultSet", ex);
         }
@@ -251,10 +275,28 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     }
 
     @Override
+    public List<String> getUtenti(String keyword) throws DataException {
+        List<String> result = new ArrayList<>();
+        try {
+            fUtentiByUsername.setString(1, keyword);
+            try (ResultSet rs = fUtentiByUsername.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println("utenti: " + rs.getString("username"));
+                    result.add(rs.getString("username"));
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load users", ex);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to set keyword", ex);
+        }
+        return result;
+    }
+
+    @Override
     public List<Utente> getUtenti(Collezione collezione) throws DataException {
         List<Utente> result = new ArrayList<>();
         try {
-
             sUtentiByCollezione.setInt(1, collezione.getKey());
             try (ResultSet rs = sUtentiByCollezione.executeQuery()) {
                 while (rs.next()) {

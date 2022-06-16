@@ -55,6 +55,26 @@
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
+    <!--  SEARCH  -->
+    <servlet>
+        <servlet-name>search</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.search.Search</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <!--  RESULT FOR SEARCH  -->
+    <servlet>
+        <servlet-name>result</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.search.AjaxSearchResult</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>result</servlet-name>
+        <url-pattern>/result</url-pattern>
+    </servlet-mapping>
+
     <!--  LOGIN  -->
     <servlet>
         <servlet-name>register</servlet-name>

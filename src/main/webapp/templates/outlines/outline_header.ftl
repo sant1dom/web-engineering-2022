@@ -6,9 +6,15 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form class="form-inline">
-            <input class="search-bar mr-sm-2 pr-5" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn-search ml-n5" type="button"><i class="fa fa-search"></i></button>
+        <form>
+            <div class="dropdown form-inline">
+                <input class="search-bar pr-5" type="search" placeholder="Search" aria-label="Search"
+                       id="search-box">
+                <a class="btn-search" href="search"><i class="fa fa-search"></i></a>
+
+                <div class="dropdown-menu" id="suggestion-box"></div>
+
+            </div>
         </form>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item nav-square">

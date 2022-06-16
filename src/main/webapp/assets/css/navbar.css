@@ -59,11 +59,13 @@ a:hover.bt-navbar-registrati{
 /* ----------------------------------- */
 
 /* Barra di ricerca e relativo simbolo */
-.btn-search, .btn-search:focus {
+.btn-search, .btn-search:hover, .btn-search:focus{
+    color: black;
     background-color: transparent;
     border-color: transparent;
     border-style: hidden;
     outline: transparent;
+    margin-left: -2.5rem;
 }
 
 .form-inline {
@@ -72,6 +74,7 @@ a:hover.bt-navbar-registrati{
 
 .search-bar {
     height: 100%;
+    width: 25rem;
     padding-left: 10px;
     border-radius: 5px;
     border-color: transparent;
@@ -79,8 +82,8 @@ a:hover.bt-navbar-registrati{
     outline: transparent;
 }
 
-.search-bar:focus {
-    width: 25rem;
+.dropdown-menu {
+    width: 100%;
 }
 /* ---------------------------------- */
 
@@ -90,21 +93,30 @@ a:hover.bt-navbar-registrati{
 
 @media (max-width: 991px) {
     .navbar {
-        padding: 0.8rem;
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+    }
+
+    .navbar-toggler {
+        margin-right: 0.8rem;
+    }
+
+    .navbar-toggler:focus {
+        outline: none;
     }
 
     .navbar-brand {
         margin-right: 0;
-        margin-left: 0;
+        margin-left: 0.8rem;
     }
 
-    .search-bar, .search-bar:focus {
+    .search-bar {
         margin: 0;
         width: 100%;
     }
 
     .btn-search {
-        margin-right: -2rem;
+        padding-left: 0.2rem;
     }
 
     .nav-square, .nav-square-accedi{
