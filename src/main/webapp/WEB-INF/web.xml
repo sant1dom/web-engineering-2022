@@ -77,12 +77,12 @@
 
     <!--CREA DISCO -->
     <servlet>
-        <servlet-name>disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.Disco</servlet-class>
+        <servlet-name>crea-disco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.CreateDisco</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>disco</servlet-name>
-        <url-pattern>/disco</url-pattern>
+        <servlet-name>crea-disco</servlet-name>
+        <url-pattern>/crea-disco</url-pattern>
     </servlet-mapping>
 
     <!--  LOGOUT  -->

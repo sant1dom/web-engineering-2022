@@ -24,6 +24,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     PreparedStatement sDischiByUtente;
     PreparedStatement sFigliDisco;
     PreparedStatement sPadreDisco;
+    PreparedStatement sDischiPadri;
     PreparedStatement uDisco;
     PreparedStatement iDisco;
     PreparedStatement dDisco;
@@ -49,6 +50,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sDischiByUtente = connection.prepareStatement("SELECT d.id FROM disco d WHERE utente_id = ?");
             sFigliDisco = connection.prepareStatement("SELECT d.id FROM disco d WHERE padre = ?");
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
+            sDischiPadri= connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
@@ -318,6 +320,20 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             throw new DataException("Error getting disks' parent", ex);
         }
         return padre;
+    }
+
+    @Override
+    public List<Disco> getDischiPadri() throws DataException {
+        List<Disco> dischi = new ArrayList<>();
+        try {
+            ResultSet rs = sDischiPadri.executeQuery();
+            while(rs.next()){
+                dischi.add(getDisco(rs.getInt("id")));
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting parents disks",ex);
+        }
+        return dischi;
     }
 
     @Override
