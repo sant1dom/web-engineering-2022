@@ -24,6 +24,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     PreparedStatement sDischiByUtente;
     PreparedStatement sFigliDisco;
     PreparedStatement sPadreDisco;
+    PreparedStatement sDischiPadri;
     PreparedStatement uDisco;
     PreparedStatement iDisco;
     PreparedStatement dDisco;
@@ -49,6 +50,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sDischiByUtente = connection.prepareStatement("SELECT d.id FROM disco d WHERE utente_id = ?");
             sFigliDisco = connection.prepareStatement("SELECT d.id FROM disco d WHERE padre = ?");
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
+            sDischiPadri= connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
@@ -91,9 +93,12 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
         try {
             d.setKey(rs.getInt("id"));
             d.setBarCode(rs.getString("barcode"));
+            d.setTitolo(rs.getString("titolo"));
             d.setAnno(String.valueOf(rs.getInt("anno")));
             d.setGenere(Genere.valueOf(rs.getString("genere")));
             d.setEtichetta(rs.getString("etichetta"));
+            d.setFormato(Formato.valueOf(rs.getString("formato")));
+            d.setStatoConservazione(StatoConservazione.valueOf(rs.getString("stato_conservazione")));
             d.setUtenteKey(rs.getInt("utente_id"));
             d.setPadreKey(rs.getInt("padre"));
         } catch (SQLException ex) {
@@ -315,6 +320,20 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             throw new DataException("Error getting disks' parent", ex);
         }
         return padre;
+    }
+
+    @Override
+    public List<Disco> getDischiPadri() throws DataException {
+        List<Disco> dischi = new ArrayList<>();
+        try {
+            ResultSet rs = sDischiPadri.executeQuery();
+            while(rs.next()){
+                dischi.add(getDisco(rs.getInt("id")));
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting parents disks",ex);
+        }
+        return dischi;
     }
 
     @Override
