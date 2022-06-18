@@ -3,11 +3,13 @@ import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.collector_site.data.proxy.CollezioneProxy;
+import org.webeng.collector_site.data.proxy.TracciaProxy;
 import org.webeng.framework.data.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +36,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             sCollezioneByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE titolo = ?");
             sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc on collezione.id = dhc.collezione_id JOIN disco d on d.id = dhc.disco_id WHERE d.id = ?");
             sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ?");
+            iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
-            iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione, utente_id) VALUES (?, ?, ?, ?)");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
@@ -63,12 +65,13 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     }
 
     private CollezioneProxy createCollezione(ResultSet rs) throws DataException {
+        CollezioneProxy c = new CollezioneProxy(getDataLayer());
         try {
-            CollezioneProxy c = (CollezioneProxy)createCollezione();
             c.setKey(rs.getInt("id"));
             c.setTitolo(rs.getString("titolo"));
             c.setPrivacy(rs.getString("privacy"));
             c.setDataCreazione(LocalDate.parse(rs.getString("data_creazione")));
+            c.setUtenteKey(rs.getInt("utente_id"));
             c.setVersion(rs.getLong("version"));
             return c;
         } catch (SQLException ex) {
@@ -147,7 +150,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
                 iCollezione.setString(1, collezione.getTitolo());
                 iCollezione.setString(2,collezione.getPrivacy());
                 iCollezione.setDate(3,java.sql.Date.valueOf(collezione.getDataCreazione()));
-                iCollezione.setInt(4, collezione.getUtente().getKey());
+                iCollezione.setLong(4, collezione.getVersion());
+                iCollezione.setInt(5, collezione.getUtente().getKey());
                 if (iCollezione.executeUpdate() == 1) {
                     //per leggere la chiave generata dal database
                     //per il record appena inserito, usiamo il metodo

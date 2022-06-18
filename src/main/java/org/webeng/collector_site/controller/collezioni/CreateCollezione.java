@@ -4,7 +4,9 @@ import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.impl.CollezioneImpl;
+import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
+import org.webeng.collector_site.data.model.Genere;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -14,6 +16,7 @@ import org.webeng.framework.security.SecurityHelpers;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,12 +60,22 @@ public class CreateCollezione extends CollectorsBaseController {
     private void saveCollezione(HttpServletRequest request, HttpServletResponse response) {
         try {
             String titolo = request.getParameter("titolo");
-            Utente utente= (Utente) request.getAttribute("utente");
+            Utente utente= Utility.getUtente(request, response);
+            String privacy = request.getParameter("privacy");
             List<Disco> dischi = new ArrayList<>();
+
             for (String disco : request.getParameterValues("disco")) {
                 dischi.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(disco)));
             }
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(new CollezioneImpl(titolo,null, utente, dischi, null));
+
+            LocalDate dataCreazione= LocalDate.now();
+            Collezione collezione=new CollezioneImpl(titolo,privacy,utente,dataCreazione,dischi,null);
+            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+
+            for (Disco disco : dischi) {
+                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
+            }
+
             response.sendRedirect("/home");
         } catch (Exception e) {
             handleError(e, request, response);

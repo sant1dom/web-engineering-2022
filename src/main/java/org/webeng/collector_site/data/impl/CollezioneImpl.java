@@ -26,11 +26,11 @@ import java.util.List;
         this.utentiCondivisione = null;
     }
 
-    public CollezioneImpl(String titolo, String privacy, Utente utente, List<Disco> dischi, List<Utente> utentiCondivisione) {
+    public CollezioneImpl(String titolo, String privacy, Utente utente, LocalDate dataCreazione, List<Disco> dischi, List<Utente> utentiCondivisione) {
         super();
         this.titolo = titolo;
         this.privacy = privacy;
-        this.dataCreazione = LocalDate.now();
+        this.dataCreazione = dataCreazione;
         this.utente = utente;
         this.dischi = dischi;
         this.utentiCondivisione = utentiCondivisione;

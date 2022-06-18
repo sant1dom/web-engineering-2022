@@ -7,7 +7,7 @@
         <#if dischi??>
             <select id="disco" name="disco" class="selectpicker" required multiple data-live-search="true">
                 <#list dischi as disco>
-                    <option value="${disco.key}">${disco.titolo}</option>
+                    <option value="${disco.key}">${disco.titolo} | ${disco.anno} | ${disco.etichetta} | ${disco.genere}  </option>
                 </#list>
             </select>
         <#else>
@@ -21,14 +21,13 @@
         <input type="text" class="form-control" required id="titolo" name="titolo" placeholder="Titolo">
     </div>
 
-
     <div class="form-group col-7">
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="condivisa">
-            <label class="custom-control-label" for="condivisa">Rendi la collezione condivisa</label>
-        </div>
+        <label for="privacy">Privacy</label>
+        <select id="privacy" name=privacy" class="selectpicker" data-live-search="true" required>
+            <option value="PRIVATA">PRIVATA</option>
+            <option value="CONDIVISA">CONDIVISA</option>
+        </select>
     </div>
-
 
     <div class="form-group col-3">
         <button type="submit" class="btn btn-primary">Salva</button>
