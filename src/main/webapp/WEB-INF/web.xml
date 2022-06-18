@@ -133,6 +133,18 @@
         <servlet-name>CreateTraccia</servlet-name>
         <url-pattern>/create-traccia</url-pattern>
     </servlet-mapping>
+
+
+    <!-- COLLEZIONI -->
+    <servlet>
+        <servlet-name>CreateCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.CreateCollezione</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateCollezione</servlet-name>
+        <url-pattern>/create-collezione</url-pattern>
+    </servlet-mapping>
+
     <!--  END SERVLET  -->
 
 
