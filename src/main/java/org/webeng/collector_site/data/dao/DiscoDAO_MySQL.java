@@ -4,10 +4,7 @@ import org.webeng.collector_site.data.model.*;
 import org.webeng.collector_site.data.proxy.DiscoProxy;
 import org.webeng.framework.data.*;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +26,8 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     PreparedStatement iDisco;
     PreparedStatement dDisco;
     PreparedStatement addDiscoCollezione;
+    PreparedStatement addDiscoAutore;
+    PreparedStatement addDiscoTraccia;
 
     public DiscoDAO_MySQL(DataLayer d) {
         super(d);
@@ -52,9 +51,11 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
             sDischiPadri= connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
-            iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
+            addDiscoAutore= connection.prepareStatement("INSERT INTO disco_autore (disco_id, autore_id) VALUES (?,?)");
+            addDiscoTraccia= connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?,?)");
 
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer", ex);
@@ -182,14 +183,29 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 iDisco.setString(6, disco.getFormato().toString());
                 iDisco.setDate(7, Date.valueOf(disco.getDataInserimento()));
                 iDisco.setInt(8, disco.getUtente().getKey());
-                iDisco.setInt(9, disco.getPadre().getKey());
+                iDisco.setString(9, disco.getStatoConservazione().toString());
+                if(disco.getPadre()!=null){
+                    iDisco.setInt(10, disco.getPadre().getKey());
+                }else
+                    iDisco.setNull(10, Types.INTEGER);
                 if(iDisco.executeUpdate() == 1){
                     try (ResultSet rs = iDisco.getGeneratedKeys()) {
                         if (rs.next()) {
-                            disco.setKey(rs.getInt(1));
+                            int key= rs.getInt(1);
+                            disco.setKey(key);
                             dataLayer.getCache().add(Disco.class, disco);
                         }
                     }
+                }
+                for(Autore a: disco.getAutori()){
+                    addDiscoAutore.setInt(1, disco.getKey());
+                    addDiscoAutore.setInt(2,a.getKey());
+                    addDiscoAutore.executeUpdate();
+                }
+                for(Traccia t: disco.getTracce()){
+                    addDiscoTraccia.setInt(1, disco.getKey());
+                    addDiscoTraccia.setInt(2, t.getKey());
+                    addDiscoTraccia.executeUpdate();
                 }
             }
             if (disco instanceof DataItemProxy) {
@@ -350,7 +366,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             addDiscoCollezione.setInt(2, disco.getKey());
             addDiscoCollezione.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataException("Error setting track", ex);
+            throw new DataException("Error setting disk in collection", ex);
         }
     }
 }

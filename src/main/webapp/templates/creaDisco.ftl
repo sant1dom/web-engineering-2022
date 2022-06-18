@@ -16,6 +16,20 @@
         </#if>
     </div>
     <div class="form-group col-7">
+        <label for="autore">Tracce</label>
+        <#if tracce??>
+            <select id="tracce" name="tracce" class="selectpicker" required multiple data-live-search="true">
+                <#list tracce as traccia>
+                    <option value="${traccia.key}">${traccia.titolo} | ${traccia.durata} | ${traccia.ISWC}</option>
+                </#list>
+            </select>
+        <#else>
+            <p>
+                Non ci sono tracce
+            </p>
+        </#if>
+    </div>
+    <div class="form-group col-7">
         <label for="collezione_id">Collezione</label>
         <#if collezioni??>
             <select id="collezione_id" name="collezione_id" class="selectpicker" required data-live-search="true">
@@ -31,11 +45,11 @@
     </div>
     <div class="form-group col-7">
         <label for="padre">Controlla se il disco è presente:</label>
-        <#if dischiPadre??>
+        <#if dischiPadri??>
             <select id="padre" name="padre" class="selectpicker" data-live-search="true">
                 <option selected value="">Scegli un disco</option>
                 <#list dischiPadri as disco>
-                    <option value="${disco.key}">${disco.titolo}</option>
+                    <option value="${disco.key}">${disco.titolo} | ${disco.anno} | ${disco.etichetta} | ${disco.genere}  </option>
                 </#list>
             </select>
         <#else>
@@ -44,9 +58,10 @@
             </p>
         </#if>
     </div>
+
     <div class="form-group col-7">
         <label for="genere">Genere:</label>
-            <select id="genere" name="genere" class="selectpicker" required >
+            <select id="genere" name="genere" class="selectpicker" data-live-search="true" required >
                 <option selected value="">Scegli un genere</option>
                 <#list generi as genere>
                     <option value="${genere}">${genere}</option>
@@ -54,57 +69,54 @@
             </select>
     </div>
     <div class="form-group col-7">
+        <label for="statoConservazione">Stato di conservazione:</label>
+        <select id="statoConservazione" name="statoConservazione" class="selectpicker" data-live-search="true" required >
+            <#list statoConservazione as stato_conservazione>
+                <option value="${stato_conservazione}">${stato_conservazione}</option>
+            </#list>
+        </select>
+    </div>
+    <div class="form-group col-7">
         <label for="formato">Formato:</label>
-        <select id="formato" name="genere" class="selectpicker" required >
+        <select id="formato" name="formato" class="selectpicker" data-live-search="true" required >
             <option selected value="">Scegli un formato</option>
             <#list formati as formato>
                 <option value="${formato}">${formato}</option>
             </#list>
         </select>
     </div>
-    <label for="titolo">Titolo:</label><br>
-    <input type="text" id="titolo" name="titolo"><br>
+    <div class="form-group col-7">
+        <label for="titolo">Titolo</label>
+        <input type="text" class="form-control" required id="titolo" name="titolo" placeholder="Titolo">
+    </div>
 
-    <label for="anno">Anno:</label><br>
-    <input type="text" id="anno" name="anno"><br>
+    <div class="form-group col-7">
+        <label for="anno">Anno</label>
+        <input type="text" class="form-control" required id="anno" name="anno" placeholder="anno">
+    </div>
 
-    <label for="barcode">Barcode:</label><br>
-    <input type="text" id="barcode" name="barcode"><br>
+    <div class="form-group col-7">
+        <label for="barcode">Barcode</label>
+        <input type="text" class="form-control" required id="barcode" name="barcode" placeholder="Barcode">
+    </div>
 
-    <label for="etichetta">Etichetta:</label><br>
-    <input type="text" id="etichetta" name="etichetta"><br>
-
-    <label for="genere">Genere:</label><br>
-    <select name="genere" id="genere">
-        <option value="POP">Pop</option>
-        <option value="ROCK">Rock</option>
-        <option value="JAZZ">Jazz</option>
-        <option value="CLASSIC">Classic</option>
-        <option value="METAL">Metal</option>
-        <option value="RAP">Rap</option>
-        <option value="BLUES">Blues</option>
-        <option value="PUNK">Punk</option>
-        <option value="RAGGAE">Raggae</option>
-        <option value="COUNTRY">Country</option>
-        <option value="HIPHOP">Hip Hop</option>
-        <option value="ELECTRONIC">Electronic</option>
-        <option value="OTHER">Other</option>
-    </select><br>
-
-    <label for="formato">Formato:</label><br>
-    <select name="formato" id="formato">
-        <option value="CD">CD</option>
-        <option value="VINILE">Vinile</option>
-        <option value="DIGITALE">Digitale</option>
-    </select><br>
-
-    <label for="stato_conservazione">Stato di conservazione:</label><br>
-    <select name="stato_conservazione" id="stato_conservazione">
-        <option value="NUOVO">Nuovo</option>
-        <option value="BUONO">Buono</option>
-        <option value="USATO">Usato</option>
-        <option value="SCARSO">Scarso</option>
-        <option value="ROTTO">Rotto</option>
-    </select><br>
+    <div class="form-group col-7">
+        <label for="etichetta">Etichetta</label>
+        <input type="text" class="form-control" required id="etichetta" name="etichetta" placeholder="Etichetta">
+    </div>
     <input type="submit" value="Crea"><br>
 </form>
+
+<script>
+    $(window).on('load', function () {
+        $('.selectpicker').selectpicker();
+
+        $('#padre').on('change', function () {
+            let selected = $('#padre option:selected');
+            $("input[name='titolo']").val(selected.text().split(' | ')[0]);
+            $("input[name='anno']").val(selected.text().split(' | ')[1]);
+            $("input[name='etichetta']").val(selected.text().split(' | ')[2]);
+            $("select[name='genere']").val(selected.option().split(' | ')[3]);
+        });
+    });
+</script>

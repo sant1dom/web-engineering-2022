@@ -187,9 +187,9 @@ CREATE TABLE `traccia` (
   `titolo` varchar(45) DEFAULT NULL,
   `durata` int DEFAULT NULL,
   `iswc` varchar(11) DEFAULT NULL,
-  `data_inserimento` varchar(45) DEFAULT NULL,
+  `data_inserimento` date DEFAULT NULL,
   `version` int unsigned DEFAULT '1',
-  `padre` int unsigned NOT NULL,
+  `padre` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_traccia_traccia1_idx` (`padre`),
   CONSTRAINT `fk_traccia_traccia1` FOREIGN KEY (`padre`) REFERENCES `traccia` (`id`)
