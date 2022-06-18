@@ -39,7 +39,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.tracce = null;
     }
 
-    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce) {
+    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce, Disco padre) {
         super();
         this.titolo = titolo;
         this.anno = anno;
@@ -53,6 +53,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.autori = autori;
         this.immagini = immagini;
         this.tracce = tracce;
+        this.padre= padre;
     }
 
     @Override
