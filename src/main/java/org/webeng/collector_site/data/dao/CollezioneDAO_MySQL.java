@@ -233,7 +233,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
         List<Collezione> result = new ArrayList<>();
         try {
             sCollezioniByUtente.setInt(1, utente.getKey());
-            try (ResultSet rs = sCollezioneByTitolo.executeQuery()) {
+            try (ResultSet rs = sCollezioniByUtente.executeQuery()) {
                 while (rs.next()) {
                     result.add(getCollezione(rs.getInt("id")));
                 }

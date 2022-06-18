@@ -1,8 +1,8 @@
 <#include "outlines/outline_header.ftl">
 <h2 class="ml-5 mt-3">Crea un nuovo disco</h2>
-<form method="post" action="crea-disco" class="ml-5 mt-3">
+<form method="post" action="crea-disco" class="ml-5 mt-3" enctype="multipart/form-data">
     <div class="form-group col-7">
-        <label for="autore">Autore</label>
+        <label for="autore">Autore:</label>
         <#if authors??>
             <select id="autore" name="autore" class="selectpicker" required multiple data-live-search="true">
                 <#list authors as author>
@@ -16,7 +16,7 @@
         </#if>
     </div>
     <div class="form-group col-7">
-        <label for="autore">Tracce</label>
+        <label for="autore">Tracce:</label>
         <#if tracce??>
             <select id="tracce" name="tracce" class="selectpicker" required multiple data-live-search="true">
                 <#list tracce as traccia>
@@ -30,7 +30,7 @@
         </#if>
     </div>
     <div class="form-group col-7">
-        <label for="collezione_id">Collezione</label>
+        <label for="collezione_id">Collezione:</label>
         <#if collezioni??>
             <select id="collezione_id" name="collezione_id" class="selectpicker" required data-live-search="true">
                 <#list collezioni as collezione>
@@ -44,7 +44,7 @@
         </#if>
     </div>
     <div class="form-group col-7">
-        <label for="padre">Controlla se il disco è presente:</label>
+        <label for="padre">Controlla se presente:</label>
         <#if dischiPadri??>
             <select id="padre" name="padre" class="selectpicker" data-live-search="true">
                 <option selected value="">Scegli un disco</option>
@@ -104,7 +104,13 @@
         <label for="etichetta">Etichetta</label>
         <input type="text" class="form-control" required id="etichetta" name="etichetta" placeholder="Etichetta">
     </div>
+    <div class="form-group col-7">
+    <label for="immagini" class="form-label">Scegli le foto da caricare:</label>
+    <input class="form-control" type="file" id="immagini" name="immagini" multiple />
+    </div>
+    <div class="form-group col-7">
     <input type="submit" value="Crea"><br>
+    </div>
 </form>
 
 <script>
