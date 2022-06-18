@@ -3,7 +3,8 @@
     <context-param>
         <param-name>images.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
-        <param-value>d:/Java/TomcatWork</param-value>
+        <param-value>d:/didattica/teaching_workspace</param-value>
+
     </context-param>
     <context-param>
         <param-name>view.outline_template</param-name>

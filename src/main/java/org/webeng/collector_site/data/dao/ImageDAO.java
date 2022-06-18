@@ -18,5 +18,7 @@ public interface ImageDAO {
 
     List<Image> getImages(Disco disco) throws DataException;
 
+    void storeImages(List<Image> images) throws DataException;
+
 }
 

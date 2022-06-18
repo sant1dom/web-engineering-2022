@@ -143,4 +143,9 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
         return result;
     }
 
+    @Override
+    public void storeImages(List<Image> images) throws DataException {
+
+    }
+
 }
