@@ -23,7 +23,7 @@
 
     <div class="form-group col-7">
         <label for="privacy">Privacy</label>
-        <select id="privacy" name=privacy" class="selectpicker" data-live-search="true" required>
+        <select id="privacy" name=privacy" class="selectpicker">
             <option value="PRIVATA">PRIVATA</option>
             <option value="CONDIVISA">CONDIVISA</option>
         </select>
