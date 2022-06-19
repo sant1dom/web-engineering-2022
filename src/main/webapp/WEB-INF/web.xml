@@ -135,6 +135,16 @@
         <url-pattern>/create-traccia</url-pattern>
     </servlet-mapping>
 
+    <!-- AUTORI -->
+    <servlet>
+        <servlet-name>CreateAutore</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.autori.CreateAutore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateAutore</servlet-name>
+        <url-pattern>/create-autore</url-pattern>
+    </servlet-mapping>
+
 
     <!-- COLLEZIONI -->
     <servlet>

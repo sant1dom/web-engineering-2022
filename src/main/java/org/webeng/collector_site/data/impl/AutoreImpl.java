@@ -22,18 +22,14 @@ public class AutoreImpl extends DataItemImpl<Integer> implements Autore {
         this.cognome = "";
         this.nomeArtistico = "";
         this.tipologiaAutore = null;
-        this.dischi = null;
-        this.tracce = null;
     }
 
-    public AutoreImpl(String nome, String cognome, String nomeArtistico, TipologiaAutore tipologiaAutore, List<Disco> dischi, List<Traccia> tracce) {
+    public AutoreImpl(String nome, String cognome, String nomeArtistico, TipologiaAutore tipologiaAutore) {
         super();
         this.nome = nome;
         this.cognome = cognome;
         this.nomeArtistico = nomeArtistico;
         this.tipologiaAutore = tipologiaAutore;
-        this.dischi = dischi;
-        this.tracce = tracce;
     }
 
     @Override
