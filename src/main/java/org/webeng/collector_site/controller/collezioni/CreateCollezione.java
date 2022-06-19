@@ -62,7 +62,6 @@ public class CreateCollezione extends CollectorsBaseController {
             String titolo = request.getParameter("titolo");
             String privacy = String.valueOf(request.getParameter("privacy"));
             Utente utente= Utility.getUtente(request, response);
-
             List<Disco> dischi = new ArrayList<>();
 
             for (String disco : request.getParameterValues("disco")) {

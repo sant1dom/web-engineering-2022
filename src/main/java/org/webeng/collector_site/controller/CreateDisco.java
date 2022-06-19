@@ -46,7 +46,6 @@ public class CreateDisco extends CollectorsBaseController{
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
         Utente utente= Utility.getUtente(request, response);
-        System.out.println(utente.getKey());
         List<Collezione> collezioni=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(utente);
         List<Autore> autori = ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori();
         List<Disco> dischiPadri=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischiPadri();
@@ -111,34 +110,34 @@ public class CreateDisco extends CollectorsBaseController{
                }
                Disco padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(padre_id));
                Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
+                if(request.getParts()!=null) {
+                    Collection<Part> files_to_upload = request.getParts();
+                    Collection<File> files_uploaded = new ArrayList<>();
 
-               Collection<Part> files_to_upload = request.getParts();
-               Collection<File> files_uploaded = new ArrayList<>();
-
-               for (Part image : files_to_upload) {
-                   File uploaded_file = File.createTempFile("upload_", "", new File(System.getenv("UPLOAD_LOCATION")));
-                   try (InputStream is = image.getInputStream();
-                        OutputStream os = new FileOutputStream(uploaded_file);) {
-                       byte[] buffer = new byte[1024];
-                       int read;
-                       while ((read = is.read(buffer)) > 0) {
-                           os.write(buffer, 0, read);
-                       }
-                   }
-                   files_uploaded.add(uploaded_file);
-               }
-               for (Image immagine : immagini) {
-                   for (Part file_to_upload : files_to_upload) {
-                       for (File file_uploaded : files_uploaded) {
-                           immagine.setImageSize(file_to_upload.getSize());
-                           immagine.setImageType(file_to_upload.getContentType());
-                           immagine.setFileName(file_uploaded.getName());
-                           immagine.setDisco(disco);
-                       }
-                   }
-                   disco.getImmagini().add(immagine);
-               }
-
+                    for (Part image : files_to_upload) {
+                        File uploaded_file = File.createTempFile("upload_", "", new File(System.getenv("UPLOAD_LOCATION")));
+                        try (InputStream is = image.getInputStream();
+                             OutputStream os = new FileOutputStream(uploaded_file);) {
+                            byte[] buffer = new byte[1024];
+                            int read;
+                            while ((read = is.read(buffer)) > 0) {
+                                os.write(buffer, 0, read);
+                            }
+                        }
+                        files_uploaded.add(uploaded_file);
+                    }
+                    for (Image immagine : immagini) {
+                        for (Part file_to_upload : files_to_upload) {
+                            for (File file_uploaded : files_uploaded) {
+                                immagine.setImageSize(file_to_upload.getSize());
+                                immagine.setImageType(file_to_upload.getContentType());
+                                immagine.setFileName(file_uploaded.getName());
+                                immagine.setDisco(disco);
+                            }
+                        }
+                        disco.getImmagini().add(immagine);
+                    }
+                }
                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco);
                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
                response.sendRedirect("/home");

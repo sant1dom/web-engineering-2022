@@ -2,7 +2,7 @@ package org.webeng.framework.data;
 
 /**
  *
- * @author giuse
+ *
  * @param <KT> the key type
  */
 public interface DataItem<KT> {

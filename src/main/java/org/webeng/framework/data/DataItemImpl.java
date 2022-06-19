@@ -11,7 +11,7 @@ public class DataItemImpl<KT> implements DataItem<KT> {
     private long version;
 
     public DataItemImpl() {
-        version = 0;
+        version = 1;
     }
 
     @Override
