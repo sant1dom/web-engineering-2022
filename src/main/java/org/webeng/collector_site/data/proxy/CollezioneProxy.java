@@ -62,10 +62,7 @@ public class CollezioneProxy extends CollezioneImpl implements DataItemProxy {
         super.setUtente(utente);
         this.utente_key = utente.getKey();
     }
-    public void setUtenteKey(int utente_key) {
-        this.utente_key = utente_key;
-        super.setUtente(null);
-    }
+
     @Override
     public void setDataCreazione(LocalDate dataCreazione){
         super.setDataCreazione(dataCreazione);
@@ -100,6 +97,11 @@ public class CollezioneProxy extends CollezioneImpl implements DataItemProxy {
             }
         }
         return super.getUtentiCondivisi();
+    }
+
+    public void setUtenteKey(int utente_key) {
+        this.utente_key = utente_key;
+        super.setUtente(null);
     }
 
     public void setUtentiCondivisi(List<Utente> utentiCondivisi){

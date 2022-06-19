@@ -6,10 +6,7 @@ import org.webeng.collector_site.data.proxy.CollezioneProxy;
 import org.webeng.collector_site.data.proxy.TracciaProxy;
 import org.webeng.framework.data.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,13 +79,9 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     @Override
     public Collezione getCollezione(int collezione_key) throws DataException {
         Collezione c = null;
-        //prima vediamo se l'oggetto è già stato caricato
-        //first look for this object in the cache
         if (dataLayer.getCache().has(Collezione.class, collezione_key)) {
             c = dataLayer.getCache().get(Collezione.class, collezione_key);
         } else {
-            //altrimenti lo carichiamo dal database
-            //otherwise load it from database
             try {
                 sCollezioneByID.setInt(1, collezione_key);
                 try (ResultSet rs = sCollezioneByID.executeQuery()) {
@@ -149,7 +142,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             } else { //insert
                 iCollezione.setString(1, collezione.getTitolo());
                 iCollezione.setString(2,collezione.getPrivacy());
-                iCollezione.setDate(3,java.sql.Date.valueOf(collezione.getDataCreazione()));
+                iCollezione.setDate(3, Date.valueOf(collezione.getDataCreazione()));
                 iCollezione.setLong(4, collezione.getVersion());
                 iCollezione.setInt(5, collezione.getUtente().getKey());
                 if (iCollezione.executeUpdate() == 1) {
@@ -201,47 +194,47 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
 
     @Override
     public List<Collezione> getCollezioni() throws DataException {
-        List<Collezione> result = new ArrayList<>();
+        List<Collezione> collezione = new ArrayList<>();
         try (ResultSet rs = sCollezioni.executeQuery()) {
             while (rs.next()) {
-                result.add(getCollezione(rs.getInt("id")));
+                collezione.add(getCollezione(rs.getInt("id")));
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load collections", ex);
         }
-        return result;
+        return collezione;
     }
 
     @Override
     public List<Collezione> getCollezioni(Disco disco) throws DataException {
-        List<Collezione> result = new ArrayList<>();
+        List<Collezione> collezioni = new ArrayList<>();
         try {
             sCollezioniByDisco.setInt(1, disco.getKey());
             try (ResultSet rs = sCollezioniByDisco.executeQuery()) {
                 while (rs.next()) {
-                    result.add(getCollezione(rs.getInt("id")));
+                    collezioni.add(getCollezione(rs.getInt("id")));
                 }
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load collections by disco", ex);
         }
-        return result;
+        return collezioni;
     }
 
     @Override
     public List<Collezione> getCollezioni(Utente utente) throws DataException {
-        List<Collezione> result = new ArrayList<>();
+        List<Collezione> collezioni= new ArrayList<>();
         try {
             sCollezioniByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sCollezioniByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.add(getCollezione(rs.getInt("id")));
+                    collezioni.add(getCollezione(rs.getInt("id")));
                 }
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load collections by utente", ex);
         }
-        return result;
+        return collezioni;
     }
 
     @Override

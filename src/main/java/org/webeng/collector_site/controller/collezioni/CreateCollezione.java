@@ -52,7 +52,7 @@ public class CreateCollezione extends CollectorsBaseController {
         result.activate("collezioni/create_collezione.ftl", request, response);
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException,IOException  {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }
@@ -60,8 +60,9 @@ public class CreateCollezione extends CollectorsBaseController {
     private void saveCollezione(HttpServletRequest request, HttpServletResponse response) {
         try {
             String titolo = request.getParameter("titolo");
+            String privacy = String.valueOf(request.getParameter("privacy"));
             Utente utente= Utility.getUtente(request, response);
-            String privacy = request.getParameter("privacy");
+
             List<Disco> dischi = new ArrayList<>();
 
             for (String disco : request.getParameterValues("disco")) {

@@ -16,6 +16,7 @@
             </p>
         </#if>
     </div>
+
     <div class="form-group col-5">
         <label for="titolo">Titolo</label>
         <input type="text" class="form-control" required id="titolo" name="titolo" placeholder="Titolo">
@@ -23,9 +24,11 @@
 
     <div class="form-group col-7">
         <label for="privacy">Privacy</label>
-        <select id="privacy" name=privacy" class="selectpicker">
-            <option value="PRIVATA">PRIVATA</option>
-            <option value="CONDIVISA">CONDIVISA</option>
+        <select id="privacy" name=privacy" class="selectpicker" required>
+            <option selected="" value="">Scegli un'opzione</option>
+            <option value="1">PRIVATA</option>
+            <option value="2">PUBBLICA</option>
+            <option value="3">CONDIVISA</option>
         </select>
     </div>
 
@@ -33,3 +36,9 @@
         <button type="submit" class="btn btn-primary">Salva</button>
     </div>
 </form>
+
+<script>
+    $(window).on('load', function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>
