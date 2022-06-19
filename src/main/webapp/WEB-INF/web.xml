@@ -146,6 +146,26 @@
         <url-pattern>/create-collezione</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>UpdateCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.UpdateCollezione</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateCollezione</servlet-name>
+        <url-pattern>/update-collezione</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ListaCollezioniUtente</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.ListaCollezioniUtente</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListaCollezioniUtente</servlet-name>
+        <url-pattern>/lista-collezioni</url-pattern>
+    </servlet-mapping>
+
+
+
     <!--  END SERVLET  -->
 
 
