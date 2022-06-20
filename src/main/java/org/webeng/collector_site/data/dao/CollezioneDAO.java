@@ -18,6 +18,8 @@ public interface CollezioneDAO {
 
     List<Collezione> getCollezioni() throws DataException;
 
+    List<String> getCollezioni(String keyword) throws DataException;
+
     List<Collezione> getCollezioni(Disco disco) throws DataException;
 
     List<Collezione> getCollezioni(Utente utente) throws DataException;

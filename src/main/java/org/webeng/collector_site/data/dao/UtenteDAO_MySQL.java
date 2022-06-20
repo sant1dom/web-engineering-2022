@@ -281,7 +281,6 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             fUtentiByUsername.setString(1, keyword);
             try (ResultSet rs = fUtentiByUsername.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println("utenti: " + rs.getString("username"));
                     result.add(rs.getString("username"));
                 }
             } catch (SQLException ex) {

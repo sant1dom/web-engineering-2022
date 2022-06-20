@@ -11,6 +11,7 @@ $('#search-box').keyup(function () {
             method: "GET",
             data: {keyword: $('#search-box').val()},
             success: function (data) {
+                console.log(data);
                 if (data.length > 0) {
                     let obj = $.parseJSON(data);
                     suggestion_box.children().remove();
