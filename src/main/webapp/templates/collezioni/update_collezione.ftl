@@ -6,7 +6,7 @@
 <form method="post" action="write">
 
     <div class="container">
-        <input type="hidden" name="k" value="${collezione.key!0}"/>
+        <input type="hidden" name="k" />
         <div class="row">
             <div class="four columns clabel">Disco</div>
             <div class="twelve columns"><select name="disco">
@@ -20,5 +20,20 @@
                 </select>
             </div>
         </div>
+        <div class="row">
+            <div class="four columns clabel">Titolo</div>
+            <div class="twelve columns"><input type="text" name="titolo" value="${collezione.titolo}"/> </div>
+        </div>
+
+        <div class="form-group col-7">
+            <label for="privacy">Privacy</label>
+            <select id="privacy" name="privacy" class="selectpicker" required>
+                <option selected="" value="">${collezione.privacy}</option>
+                <option value="PRIVATA">PRIVATA</option>
+                <option value="PUBBLICA">PUBBLICA</option>
+                <option value="CONDIVISA">CONDIVISA</option>
+            </select>
+        </div>
+        <div class="row"><input type="submit" name="update" value="Update"/></div>
     </div>
 </form>

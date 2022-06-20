@@ -7,7 +7,10 @@
         <tr>
             <th scope="col">ID Collezione</th>
             <th scope="col">Titolo</th>
-            <th scope="col">Dettagli</th>
+            <th scope="col">Data ultima modifica</th>
+            <th scope="col">Dettagli dischi</th>
+            <th scope="col">Gestisci collezione</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -16,15 +19,16 @@
                 <tr>
                     <th scope="row">${collezione.key}</th>
                     <td>${collezione.titolo}</td>
-                    <td><a href="issue?n=${collezione.key}">[visualizza dettagli]</a></td>
+                    <td>${collezione.dataCreazione}</td>
+                    <td><a href="listaDischi-collezione?id_collezione=${collezione.key}">visualizza dischi</a></td>
+                    <td><a href="update-collezione?id_collezione=${collezione.key}">modifica</a></td>
+                    <td><a href="delete-collezione?id_collezione=${collezione.key}" >elimina</a></td>
                 </tr>
             </#list>
         </#if>
         </tbody>
         </table>
+        <a href="create-collezione" >Crea una nuova collezione</a>
+
 </div>
-<div class="card-body">
-    <button type="submit" class="btn btn-primary" name="back">
-        Indietro
-    </button>
-</div>
+

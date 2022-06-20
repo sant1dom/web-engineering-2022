@@ -15,6 +15,7 @@ public interface DiscoDAO {
     void storeDisco(Disco disco) throws DataException;
 
     void deleteDisco(Disco disco) throws DataException;
+    void deleteDisco(Collezione collezione,Disco disco) throws DataException;
 
     List<Disco> getDischi() throws DataException;
 

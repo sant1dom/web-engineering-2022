@@ -25,6 +25,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     PreparedStatement uDisco;
     PreparedStatement iDisco;
     PreparedStatement dDisco;
+    PreparedStatement dDiscoCollezione;
     PreparedStatement addDiscoCollezione;
     PreparedStatement addDiscoAutore;
     PreparedStatement addDiscoTraccia;
@@ -53,6 +54,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
+            dDiscoCollezione = connection.prepareStatement("DELETE FROM collezione_disco WHERE collezione_id = ? AND disco_id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addDiscoAutore= connection.prepareStatement("INSERT INTO disco_autore (disco_id, autore_id) VALUES (?,?)");
             addDiscoTraccia= connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?,?)");
@@ -80,6 +82,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             uDisco.close();
             iDisco.close();
             dDisco.close();
+            dDiscoCollezione.close();
             addDiscoCollezione.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing disks data layer", ex);
@@ -229,6 +232,19 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     }
 
     @Override
+    public void deleteDisco(Collezione collezione,Disco disco) throws DataException {
+        try {
+            dDiscoCollezione.setInt(1, collezione.getKey());
+            dDiscoCollezione.setInt(2, disco.getKey());
+            if(dDiscoCollezione.executeUpdate() == 1){
+                dataLayer.getCache().delete(Disco.class, disco.getKey());
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error setting disk in collection", ex);
+        }
+    }
+
+    @Override
     public List<Disco> getDischi() throws DataException {
         List<Disco> dischi = new ArrayList<>();
         try {
@@ -258,6 +274,8 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
         }
         return dischi;
     }
+
+
 
     @Override
     public List<Disco> getDischi(Autore autore) throws DataException {
