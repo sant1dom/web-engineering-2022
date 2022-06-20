@@ -7,15 +7,19 @@ import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.proxy.AutoreProxy;
 import org.webeng.framework.data.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
-    private PreparedStatement sAutori, sAutoreByID, sAutoreByNomeArtistico, sAutoriByDisco, sAutoriByTraccia, uAutore, iAutore, dAutore;
+    private PreparedStatement sAutori;
+    private PreparedStatement sAutoreByID;
+    private PreparedStatement sAutoreByNomeArtistico;
+    private PreparedStatement sAutoriByDisco;
+    private PreparedStatement sAutoriByTraccia;
+    private PreparedStatement uAutore;
+    private PreparedStatement iAutore;
+    private PreparedStatement dAutore;
 
     public AutoreDAO_MySQL(DataLayer d) {
         super(d);
@@ -32,7 +36,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             sAutoriByDisco = connection.prepareStatement("SELECT autore.id FROM autore JOIN disco_autore dha on autore.id = dha.autore_id JOIN disco d on d.id = dha.disco_id WHERE d.id = ?");
             sAutoriByTraccia = connection.prepareStatement("SELECT autore.id FROM autore JOIN traccia_autore tha on autore.id = tha.autore_id JOIN traccia t on t.id = tha.traccia_id WHERE t.id = ?");
             uAutore = connection.prepareStatement("UPDATE autore SET nome = ?, cognome = ?, nome_artistico = ?, tipologia_autore = ?, version = ? WHERE id = ? AND version = ?");
-            iAutore = connection.prepareStatement("INSERT INTO autore (nome, cognome, nome_artistico, tipologia_autore) VALUES (?, ?, ?, ?)");
+            iAutore = connection.prepareStatement("INSERT INTO autore (nome, cognome, nome_artistico, tipologia_autore) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dAutore = connection.prepareStatement("DELETE FROM autore WHERE id = ?");
         } catch (SQLException ex) {
                 throw new DataException("Error initializing authors data layer", ex);

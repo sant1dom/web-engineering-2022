@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -36,11 +37,11 @@ public class ListaCollezioniUtente extends CollectorsBaseController {
 
     }
 
+
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
         List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
         request.setAttribute("collezioni", Objects.requireNonNullElse(collezioni, ""));
-
         result.activate("collezioni/lista_collezioni.ftl", request, response);
 
 
@@ -49,6 +50,7 @@ public class ListaCollezioniUtente extends CollectorsBaseController {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }
+
 
 
 
