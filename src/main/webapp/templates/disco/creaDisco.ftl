@@ -1,10 +1,12 @@
-<#include "outlines/outline_header.ftl">
+<#include "../outlines/outline_header.ftl">
+
+
 <h2 class="ml-5 mt-3">Crea un nuovo disco</h2>
-<form method="post" action="crea-disco" class="ml-5 mt-3" enctype="multipart/form-data">
+<form method="post" action="crea-disco" class="ml-5 mt-3">
     <div class="form-group col-7">
         <label for="autore">Autore:</label>
         <#if authors??>
-            <select id="autore" name="autore" class="selectpicker" required multiple data-live-search="true">
+            <select id="autore" name="autore" class="selectpicker" required multiple data-live-search="true" >
                 <#list authors as author>
                     <option value="${author.key}">${author.nome} ${author.cognome}</option>
                 </#list>
@@ -105,11 +107,7 @@
         <input type="text" class="form-control" required id="etichetta" name="etichetta" placeholder="Etichetta">
     </div>
     <div class="form-group col-7">
-    <label for="immagini" class="form-label">Scegli le foto da caricare:</label>
-    <input class="form-control" type="file" id="immagini" name="immagini" multiple />
-    </div>
-    <div class="form-group col-7">
-    <input type="submit" value="Crea"><br>
+        <input type="submit" value="Crea"><br>
     </div>
 </form>
 

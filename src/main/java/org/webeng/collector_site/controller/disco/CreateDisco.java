@@ -1,8 +1,11 @@
-package org.webeng.collector_site.controller;
+package org.webeng.collector_site.controller.disco;
 
+import org.webeng.collector_site.controller.CollectorsBaseController;
+import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.dao.DiscoDAO;
 import org.webeng.collector_site.data.impl.DiscoImpl;
+import org.webeng.collector_site.data.impl.ImageImpl;
 import org.webeng.collector_site.data.impl.TracciaImpl;
 import org.webeng.collector_site.data.model.*;
 import org.webeng.framework.data.DataException;
@@ -10,6 +13,8 @@ import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +25,7 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.*;
 
-public class CreateDisco extends CollectorsBaseController{
+public class CreateDisco extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
@@ -33,13 +38,56 @@ public class CreateDisco extends CollectorsBaseController{
             request.setAttribute("https-redirect", https_redirect_url);
             if (s == null) {
                 action_anonymous(request, response);
-            } else {
-                action_logged(request, response);
-            }
+            }else{
+                    action_logged(request, response);
+                }
         } catch (TemplateManagerException | DataException | IOException ex) {
             handleError(ex, request, response);
         }
        }
+    }
+
+    private void action_addImages(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+        TemplateResult result = new TemplateResult(getServletContext());
+        result.activate("disco/ creaDisco.ftl", request,response );
+
+    }
+
+    private void saveImages(HttpServletRequest request, HttpServletResponse response) {
+      try {
+          Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("idDisco")));
+
+          if (request.getParts() != null) {
+              Collection<Part> files_to_upload = request.getParts();
+              Collection<File> files_uploaded = new ArrayList<>();
+
+              for (Part image : files_to_upload) {
+                  File uploaded_file = File.createTempFile("upload_", "", new File(System.getenv("UPLOAD_LOCATION")));
+                  try (InputStream is = image.getInputStream();
+                       OutputStream os = new FileOutputStream(uploaded_file);) {
+                      byte[] buffer = new byte[1024];
+                      int read;
+                      while ((read = is.read(buffer)) > 0) {
+                          os.write(buffer, 0, read);
+                      }
+                  }
+                  files_uploaded.add(uploaded_file);
+              }
+
+              for (Part file_to_upload : files_to_upload) {
+                  Image immagine = new ImageImpl();
+                  for (File file_uploaded : files_uploaded) {
+                      immagine.setImageSize(file_to_upload.getSize());
+                      immagine.setImageType(file_to_upload.getContentType());
+                      immagine.setFileName(file_uploaded.getName());
+                      immagine.setDisco(disco);
+                  }
+                  disco.getImmagini().add(immagine);
+              }
+          }
+      }catch (Exception e){
+          handleError(e, request, response);
+      }
     }
 
 
@@ -74,7 +122,7 @@ public class CreateDisco extends CollectorsBaseController{
         request.setAttribute("formati", Objects.requireNonNull(formati));
         request.setAttribute("statoConservazione", Objects.requireNonNull(statoConservazione));
         request.setAttribute("tracce", Objects.requireNonNull(tracce));
-        result.activate("creaDisco.ftl", request,response );
+        result.activate("disco/creaDisco.ftl", request,response );
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -89,12 +137,15 @@ public class CreateDisco extends CollectorsBaseController{
                String anno = request.getParameter("anno");
                String barcode = request.getParameter("barcode");
                String etichetta = request.getParameter("etichetta");
+               System.out.println(request.getParameter("titolo") + request.getParameter("anno") + request.getParameter("barcode") +
+                       request.getParameter("etichetta"));
 
                Genere genere = Genere.valueOf(request.getParameter("genere"));
                Utente utente = Utility.getUtente(request, response);
                Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("collezione_id")));
                Formato formato = Formato.valueOf(request.getParameter("formato"));
                StatoConservazione statoConservazione = StatoConservazione.valueOf(request.getParameter("statoConservazione"));
+               System.out.println(request.getParameter("genere") + request.getParameter("formato") + request.getParameter("statoConservazione"));
                LocalDate dataInserimento = LocalDate.now();
                List<Autore> autori = new ArrayList<>();
                for (String autore : request.getParameterValues("autore")) {
@@ -110,37 +161,14 @@ public class CreateDisco extends CollectorsBaseController{
                }
                Disco padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(padre_id));
                Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
-                if(request.getParts()!=null) {
-                    Collection<Part> files_to_upload = request.getParts();
-                    Collection<File> files_uploaded = new ArrayList<>();
 
-                    for (Part image : files_to_upload) {
-                        File uploaded_file = File.createTempFile("upload_", "", new File(System.getenv("UPLOAD_LOCATION")));
-                        try (InputStream is = image.getInputStream();
-                             OutputStream os = new FileOutputStream(uploaded_file);) {
-                            byte[] buffer = new byte[1024];
-                            int read;
-                            while ((read = is.read(buffer)) > 0) {
-                                os.write(buffer, 0, read);
-                            }
-                        }
-                        files_uploaded.add(uploaded_file);
-                    }
-                    for (Image immagine : immagini) {
-                        for (Part file_to_upload : files_to_upload) {
-                            for (File file_uploaded : files_uploaded) {
-                                immagine.setImageSize(file_to_upload.getSize());
-                                immagine.setImageType(file_to_upload.getContentType());
-                                immagine.setFileName(file_uploaded.getName());
-                                immagine.setDisco(disco);
-                            }
-                        }
-                        disco.getImmagini().add(immagine);
-                    }
-                }
                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco);
                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
-               response.sendRedirect("/home");
+               String idDisco= String.valueOf((((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().ultimoDisco()));
+               System.out.println(idDisco);
+               HttpSession s= SecurityHelpers.checkSession(request);
+               s.setAttribute("idDisco",idDisco);
+               response.sendRedirect("/add-immagini");
            }catch (Exception e){
                handleError(e, request, response);
            }

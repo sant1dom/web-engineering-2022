@@ -36,4 +36,5 @@ public interface DiscoDAO {
 
     void addDisco(Collezione collezione, Disco disco) throws DataException;
 
+    int ultimoDisco() throws DataException;
 }

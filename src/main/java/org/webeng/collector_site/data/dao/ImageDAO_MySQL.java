@@ -1,21 +1,23 @@
 package org.webeng.collector_site.data.dao;
 
 
+import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Image;
+import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.proxy.ImageProxy;
 import org.webeng.framework.data.DAO;
 import org.webeng.framework.data.DataException;
+import org.webeng.framework.data.DataItemProxy;
 import org.webeng.framework.data.DataLayer;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImageDAO_MySQL extends DAO implements ImageDAO {
-    private PreparedStatement sImageByID, sImageByDisco, sImageByFileName, sImages;
+    private PreparedStatement sImageByID, sImageByDisco, sImageByFileName, sImages, iImages;
 
     public ImageDAO_MySQL(DataLayer d) {
         super(d);
@@ -30,6 +32,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
             sImageByDisco = connection.prepareStatement("SELECT id FROM image WHERE disco_id=?");
             sImageByFileName = connection.prepareStatement("SELECT * FROM image WHERE filename=?");
             sImages = connection.prepareStatement("SELECT id FROM image");
+            iImages= connection.prepareStatement("INSERT INTO image (size, type, filename, disco_id, version) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException ex) {
             throw new DataException("Error initializing newspaper data layer", ex);
         }
@@ -145,7 +148,19 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
 
     @Override
     public void storeImages(List<Image> images) throws DataException {
-
+        try{
+        for(Image image: images){
+        iImages.setInt(1, (int) image.getImageSize());
+        iImages.setString(2, image.getImageType());
+        iImages.setString(3, image.getFileName());
+        iImages.setInt(4, image.getDisco().getKey());
+        iImages.setInt(5, 1);
+        iImages.executeUpdate();
+    }
+//
+    } catch (SQLException ex) {
+        throw new DataException("Unable to store images", ex);
+        }
     }
 
 }
