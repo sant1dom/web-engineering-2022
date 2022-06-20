@@ -3,6 +3,7 @@ package org.webeng.collector_site.controller.search;
 import com.google.gson.Gson;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
+import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,20 +32,25 @@ public class AjaxSearchResult extends CollectorsBaseController {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
             List<String> nomiUtenti = Utility.getUtenti(request, response);
-//            List<String> nomiDischi = getDischi(request, response);
+//            List<String> nomiDischi = Utility.getDischi(request, response);
             List<String> nomiCollezioni = Utility.getCollezioni(request, response);
 
+            String data = "[";
+
             if (!nomiUtenti.isEmpty()) {
-                out.print(gson.toJson(nomiUtenti));
+                data += "{ \"UTENTI\":  " + gson.toJson(nomiUtenti) + "},";
             }
 //            if (!nomiDischi.isEmpty()) {
-//                out.print(gson.toJson(nomiDischi));
+//               data += "{ \"DISCHI\":  " +  gson.toJson(nomiDischi) + "},";
 //            }
             //TODO devo trovare un modo per non far arrabbiare il parser del json
-//            if (!nomiCollezioni.isEmpty()) {
-//                out.print(gson.toJson(nomiCollezioni));
-//            }
+            if (!nomiCollezioni.isEmpty()) {
+                data += "{ \"COLLEZIONI\": " +  gson.toJson(nomiCollezioni ) + "}";
+            }
 
+            data += "]";
+
+            out.println(data);
             out.flush();
             out.close();
         } catch (IOException | DataException ex) {
@@ -52,6 +58,12 @@ public class AjaxSearchResult extends CollectorsBaseController {
         }
     }
 
+    /**
+     * Imposta e stampa il json per la risposta ad una richiesta di ricerca da parte di ajax
+     */
+    private void setGson(List<String> suggestions, PrintWriter out) {
+
+    }
 
     /**
      * Returns a short description of the servlet.

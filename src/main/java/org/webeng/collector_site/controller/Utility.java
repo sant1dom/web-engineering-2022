@@ -43,7 +43,7 @@ public class Utility {
         //ottengo il DAO dell'utente
         UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
         //ottengo l'utente tramite la sua id nella sessione
-        nomiUtenti = utenteDAO.getUtenti(keyword);
+        nomiUtenti = utenteDAO.getUtentiByKeyword(keyword);
 
         return nomiUtenti;
     }
@@ -75,7 +75,6 @@ public class Utility {
         //ottengo l'utente tramite la sua id nella sessione
         nomiCollezioni = collezioneDAO.getCollezioni(keyword);
 
-        System.out.println(nomiCollezioni.toString());
         return nomiCollezioni;
     }
 }

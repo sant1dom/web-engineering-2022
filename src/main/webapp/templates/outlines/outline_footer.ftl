@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <!-- AUTOCOMPLETE -->
-    <script src="/assets/js/autocomplete.js"></script>
+    <script src="/assets/js/search_suggestions.js"></script>
 
     <!-- END SCRIPT -->
 </footer>
