@@ -20,11 +20,12 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
     private PreparedStatement uAutore;
     private PreparedStatement iAutore;
     private PreparedStatement dAutore;
+    private PreparedStatement fAutoriByNameArtistico;
 
     public AutoreDAO_MySQL(DataLayer d) {
         super(d);
     }
-    
+
     @Override
     public void init() throws DataException {
         try {
@@ -38,8 +39,9 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             uAutore = connection.prepareStatement("UPDATE autore SET nome = ?, cognome = ?, nome_artistico = ?, tipologia_autore = ?, version = ? WHERE id = ? AND version = ?");
             iAutore = connection.prepareStatement("INSERT INTO autore (nome, cognome, nome_artistico, tipologia_autore) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dAutore = connection.prepareStatement("DELETE FROM autore WHERE id = ?");
+            fAutoriByNameArtistico = connection.prepareStatement("SELECT * FROM autore WHERE nome_artistico LIKE CONCAT('%', ?, '%') OR nome LIKE CONCAT('%', ?, '%')");
         } catch (SQLException ex) {
-                throw new DataException("Error initializing authors data layer", ex);
+            throw new DataException("Error initializing authors data layer", ex);
         }
     }
 
@@ -54,6 +56,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             uAutore.close();
             iAutore.close();
             dAutore.close();
+            fAutoriByNameArtistico.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying authors data layer", ex);
         }
@@ -68,7 +71,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
 
     private AutoreProxy createAutore(ResultSet rs) throws DataException {
         try {
-            AutoreProxy a = (AutoreProxy)createAutore();
+            AutoreProxy a = (AutoreProxy) createAutore();
             a.setKey(rs.getInt("id"));
             a.setNome(rs.getString("nome"));
             a.setCognome(rs.getString("cognome"));
@@ -220,6 +223,25 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load authors", ex);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Autore> getAutoriByKeyword(String keyword) throws DataException {
+        List<Autore> result = new ArrayList<>();
+        try {
+            fAutoriByNameArtistico.setString(1, keyword);
+            fAutoriByNameArtistico.setString(2, keyword);
+            try (ResultSet rs = fAutoriByNameArtistico.executeQuery()) {
+                while (rs.next()) {
+                    result.add(createAutore(rs));
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load authors", ex);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to set keyword", ex);
         }
         return result;
     }

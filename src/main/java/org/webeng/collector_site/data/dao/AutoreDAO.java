@@ -18,6 +18,7 @@ public interface AutoreDAO {
 
     List<Autore> getAutori() throws DataException;
 
+    List<Autore> getAutoriByKeyword(String keyword) throws DataException;
     List<Autore> getAutori(Disco disco) throws DataException;
 
     List<Autore> getAutori(Traccia traccia) throws DataException;

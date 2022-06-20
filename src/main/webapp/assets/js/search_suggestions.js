@@ -14,22 +14,32 @@ $('#search-box').keyup(function () {
                     if (data.length > 0) {
                         let obj = $.parseJSON(data);
                         suggestion_box.children().remove();
-                        console.log(obj);
-                        console.log(data);
                         $.each(obj, function (key) {
                             $.each(obj[key], function (nomeArray, conenutoArray) {
                                 suggestion_box.append($('<h3 class="dropdown-header">' + nomeArray + '</h3>'));
                                 suggestion_box.append($('<div class="dropdown-divider"></div>'));
-                                $.each(conenutoArray, function (chiave, valore) {
-                                    console.log(valore);
-                                    suggestion_box.append($('<a>',
-                                        {
-                                            class: "dropdown-item",
-                                            onclick: "selectSuggestion('" + valore + "')",
-                                            value: chiave,
-                                            text: valore
-                                        }));
-                                });
+                                console.log(obj)
+                                if (nomeArray === "AUTORI") {
+                                    $.each(conenutoArray, function (id, dati) {
+                                        suggestion_box.append($('<a>',
+                                            {
+                                                class: "dropdown-item",
+                                                onclick: "selectSuggestion('" + id + ", " + nomeArray + ", " + dati[0] + "')",
+                                                value: id,
+                                                text: dati[0] + " " + dati[1],
+                                            }));
+                                    });
+                                } else {
+                                    $.each(conenutoArray, function (chiave, valore) {
+                                        suggestion_box.append($('<a>',
+                                            {
+                                                class: "dropdown-item",
+                                                onclick: "selectSuggestion('" + valore + "')",
+                                                value: chiave,
+                                                text: valore
+                                            }));
+                                    });
+                                }
                             });
                             suggestion_box.append($('<div class="dropdown-divider"></div>'));
                             suggestion_box.show();
@@ -40,7 +50,7 @@ $('#search-box').keyup(function () {
                 },
                 minLength: 2,
                 cache: false,
-        });
+            });
         } else {
             suggestion_box.children().remove();
             suggestion_box.hide();
@@ -49,7 +59,10 @@ $('#search-box').keyup(function () {
 )
 ;
 
-function selectSuggestion(val) {
+function selectSuggestion(id, nomeArray, val) {
     $("#search-box").val(val);
     $("#suggestion-box").hide();
+    $("#item_id").val(id);
+    $("#item_type").val(nomeArray);
+    $("#search-form").submit()
 }

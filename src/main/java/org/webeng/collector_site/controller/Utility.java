@@ -1,9 +1,7 @@
 package org.webeng.collector_site.controller;
 
-import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.dao.CollezioneDAO;
-import org.webeng.collector_site.data.dao.DiscoDAO;
-import org.webeng.collector_site.data.dao.UtenteDAO;
+import org.webeng.collector_site.data.dao.*;
+import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.controller.AbstractBaseController;
 import org.webeng.framework.data.DataException;
@@ -63,6 +61,33 @@ public class Utility {
 //        return nomiDischi;
 //    }
 
+    public static List<Autore> getAutori(HttpServletRequest request, HttpServletResponse response) throws DataException {
+        List<Autore> autori;
+        //keyword inserita dall'utente
+        String keyword = request.getParameter("keyword");
+        //datalayer
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+        //ottengo il DAO dei dischi
+        AutoreDAO autoreDAO = dataLayer.getAutoreDAO();
+        //ottengo l'utente tramite la sua id nella sessione
+        autori = autoreDAO.getAutoriByKeyword(keyword);
+
+        return autori;
+    }
+
+    public static List<String> getTracce(HttpServletRequest request, HttpServletResponse response) throws DataException {
+        List<String> nomiTracce;
+        //keyword inserita dall'utente
+        String keyword = request.getParameter("keyword");
+        //datalayer
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+        //ottengo il DAO delle tracce
+        TracciaDAO tracciaDAO = dataLayer.getTracciaDAO();
+        //ottengo l'utente tramite la sua id nella sessione
+        nomiTracce = tracciaDAO.getTracceByKeyword(keyword);
+
+        return nomiTracce;
+    }
 
     public static List<String> getCollezioni(HttpServletRequest request, HttpServletResponse response) throws DataException {
         List<String> nomiCollezioni;
@@ -73,7 +98,7 @@ public class Utility {
         //ottengo il DAO dei dischi
         CollezioneDAO collezioneDAO = dataLayer.getCollezioneDAO();
         //ottengo l'utente tramite la sua id nella sessione
-        nomiCollezioni = collezioneDAO.getCollezioni(keyword);
+        nomiCollezioni = collezioneDAO.getCollezioniByKeyword(keyword);
 
         return nomiCollezioni;
     }

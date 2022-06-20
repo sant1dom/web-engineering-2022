@@ -59,7 +59,7 @@
     <!--  SEARCH  -->
     <servlet>
         <servlet-name>search</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.search.Search</servlet-class>
+        <servlet-class>org.webeng.collector_site.controller.search.ResultDispatcher</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>search</servlet-name>
@@ -96,14 +96,14 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
-    <!--CREA DISCO -->
+    <!--PAGINA PERSONALE UTENTE -->
     <servlet>
-        <servlet-name>crea-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.CreateDisco</servlet-class>
+        <servlet-name>profilo</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.utenti.Profilo</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>crea-disco</servlet-name>
-        <url-pattern>/crea-disco</url-pattern>
+        <servlet-name>profilo</servlet-name>
+        <url-pattern>/profilo</url-pattern>
     </servlet-mapping>
 
     <!--  LOGOUT  -->
@@ -114,6 +114,16 @@
     <servlet-mapping>
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <!--CREA DISCO -->
+    <servlet>
+        <servlet-name>crea-disco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.CreateDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>crea-disco</servlet-name>
+        <url-pattern>/crea-disco</url-pattern>
     </servlet-mapping>
 
     <!--  ERROR  -->

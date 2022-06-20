@@ -6,14 +6,14 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form>
+        <form method="GET" action="search" id="search-form">
             <div class="dropdown form-inline">
                 <input class="search-bar pr-5" type="search" placeholder="Search" aria-label="Search"
-                       id="search-box">
-                <a class="btn-search" href="search"><i class="fa fa-search"></i></a>
-
+                       id="search-box" name="keyword" autocomplete="off">
+                <input type="hidden" name="id" id="item_id">
+                <input type="hidden" name="type" id="item_type">
+                <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
                 <div class="dropdown-menu" id="suggestion-box"></div>
-
             </div>
         </form>
         <ul class="navbar-nav mr-auto">
@@ -32,9 +32,6 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
-            <li class="nav-item nav-square">
-                <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
         </ul>
         <#if (!(utente??))>
             <div class="nav-square-accedi">
@@ -43,14 +40,13 @@
             </div>
             <a href="register" class="bt-navbar-registrati resp991">Registrati</a>
         <#else>
-            <a href="profilo" class="bt-navbar-accedi resp991">Profilo (TODO)</a>
-            <div class="nav-square hidden">
-                <a href="profilo" class="bt-navbar-accedi hidden">Profilo (TODO)</a>
-            </div>
-            <div class="nav-square hidden">
+            <div class="nav-square hidden aligned">
+                <a href="profilo" class=" profile hidden"><img class="user_logo" src="/assets/images/users/user_icon.png" alt=""></a>
                 <a href="logout" class="bt-navbar-registrati hidden">Logout</a>
             </div>
+            <a href="profilo" class="resp991"><img class="user_logo" src="/assets/images/users/user_icon.png" alt=""></a>
             <a href="logout" class="bt-navbar-registrati resp991">Logout</a>
+
         </#if>
     </div>
 </nav>

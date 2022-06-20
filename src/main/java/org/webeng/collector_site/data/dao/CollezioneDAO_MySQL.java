@@ -209,7 +209,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     }
 
     @Override
-    public List<String> getCollezioni(String keyword) throws DataException {
+    public List<String> getCollezioniByKeyword(String keyword) throws DataException {
         List<String> result = new ArrayList<>();
         try {
             fCollezioniByTitolo.setString(1, keyword);
