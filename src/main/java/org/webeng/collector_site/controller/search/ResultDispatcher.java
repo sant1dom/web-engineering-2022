@@ -46,10 +46,8 @@ public class ResultDispatcher extends CollectorsBaseController {
 
     private void action_autori(HttpServletRequest request, HttpServletResponse response) {
         try {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/show-autore");
-            dispatcher.forward(request,response);
-
-        } catch (IOException | ServletException ex) {
+            response.sendRedirect("/show-autore?id=" + request.getParameter("item_id"));
+        } catch (IOException ex) {
             handleError(ex, request, response);
         }
     }

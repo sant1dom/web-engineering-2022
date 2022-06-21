@@ -45,7 +45,3 @@
 <#else>
     niente tracce<br>
 </#if>
-
-<script type='text/javascript'>
-    window.history.replaceState(null, document.title, sanitizedURL);
-</script>

@@ -21,13 +21,13 @@ public class ShowAutore extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
             CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
 
-            Autore autore = dataLayer.getAutoreDAO().getAutore(Integer.parseInt(request.getParameter("item_id")));
+            Autore autore = dataLayer.getAutoreDAO().getAutore(Integer.parseInt(request.getParameter("id")));
             List<Disco> dischi = dataLayer.getDiscoDAO().getDischi(autore);
             List<Traccia> tracce = dataLayer.getTracciaDAO().getTracce(autore);
 
@@ -41,27 +41,6 @@ public class ShowAutore extends CollectorsBaseController {
         }
     }
 
-    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-        try {
-            Utente utente = Utility.getUtente(request, response);
-
-            if (utente != null) {
-                TemplateResult result = new TemplateResult(getServletContext());
-                request.setAttribute(REFERRER, request.getParameter(REFERRER));
-                request.setAttribute("utente", utente);
-                result.activate("/autori/show.ftl", request, response);
-            } else {
-                TemplateResult result = new TemplateResult(getServletContext());
-                request.setAttribute(REFERRER, request.getParameter(REFERRER));
-                result.activate("/autori/show.ftl", request, response);
-            }
-        } catch (TemplateManagerException | DataException ex) {
-            handleError(ex, request, response);
-        }
-    }
-
-
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -72,14 +51,9 @@ public class ShowAutore extends CollectorsBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession s = SecurityHelpers.checkSession(request);
             String https_redirect_url = SecurityHelpers.checkHttps(request);
             request.setAttribute("https-redirect", https_redirect_url);
-            if (s == null) {
-                action_anonymous(request, response);
-            } else {
-                action_logged(request, response);
-            }
+            action_default(request, response);
         } catch (TemplateManagerException ex) {
             handleError(ex, request, response);
         }
