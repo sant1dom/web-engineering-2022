@@ -47,10 +47,12 @@ public class UpdateCollezione extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
+
         String titolo=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione"))).getTitolo();
         String privacy=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione"))).getPrivacy();
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
 
+        request.setAttribute("collezione", request.getParameter("id_collezione"));
         request.setAttribute("utente", Utility.getUtente(request, response));
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
         request.setAttribute("titolo", titolo);
