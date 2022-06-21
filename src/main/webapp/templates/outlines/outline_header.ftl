@@ -6,12 +6,12 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form method="GET" action="search" id="search-form">
+        <form method="GET" action="resultdispatcher" id="search-form" name="search-form">
             <div class="dropdown form-inline">
                 <input class="search-bar pr-5" type="search" placeholder="Search" aria-label="Search"
-                       id="search-box" name="keyword" autocomplete="off">
-                <input type="hidden" name="id" id="item_id">
-                <input type="hidden" name="type" id="item_type">
+                       id="search-box" name="keyword" autocomplete="off" form="search-form">
+                <input type="hidden" name="item_id" id="item_id" form="search-form">
+                <input type="hidden" name="item_type" id="item_type" form="search-form">
                 <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
                 <div class="dropdown-menu" id="suggestion-box"></div>
             </div>

@@ -96,10 +96,6 @@
         <label for="anno">Anno</label>
         <input type="text" class="form-control" required id="anno" name="anno" placeholder="anno">
     </div>
-    <div class="form-group col-7">
-        <label for="doppioni">Doppioni</label>
-        <input type="number" class="form-control" required id="doppioni" name="doppioni" placeholder="doppioni">
-    </div>
 
     <div class="form-group col-7">
         <label for="barcode">Barcode</label>

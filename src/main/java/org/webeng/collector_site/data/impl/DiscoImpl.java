@@ -41,7 +41,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.doppioni=0;
     }
 
-    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce, Disco padre, int doppioni) {
+    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce, Disco padre) {
         super();
         this.titolo = titolo;
         this.anno = anno;

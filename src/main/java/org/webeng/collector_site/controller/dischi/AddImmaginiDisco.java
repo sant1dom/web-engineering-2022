@@ -14,6 +14,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,17 +56,14 @@ public class AddImmaginiDisco extends CollectorsBaseController {
 
     private void addImmagini(HttpServletRequest request, HttpServletResponse response) {
         try {
-            System.out.println("hello");
             HttpSession s= SecurityHelpers.checkSession(request);
             Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt((String) s.getAttribute("idDisco")));
-            System.out.println("hello");
             if (request.getParts() != null) {
-                List<Part> files_to_upload = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList());
-                if(files_to_upload!=null) {
+                List<Part> files_to_upload = request.getParts().stream().filter(p -> p.getContentType() != null).collect(Collectors.toList());
+                if(!files_to_upload.isEmpty()) {
                     Collection<File> files_uploaded = new ArrayList<>();
-                    System.out.println("hello");
                     for (Part image : files_to_upload) {
-                        File uploaded_file =  File.createTempFile("upload_", "", new File(getServletContext().getInitParameter("uploads.directory")));
+                        File uploaded_file =  File.createTempFile("upload_", "." + image.getContentType().split("/")[1], new File(getServletContext().getInitParameter("uploads.directory")));
                         try (InputStream is = image.getInputStream();
                              OutputStream os = new FileOutputStream(uploaded_file);) {
                             byte[] buffer = new byte[1024];
@@ -76,18 +74,18 @@ public class AddImmaginiDisco extends CollectorsBaseController {
                         }
                         files_uploaded.add(uploaded_file);
                     }
-                    System.out.println("hi");
+
+                    Iterator<File> it = files_uploaded.iterator();
                     for (Part file_to_upload : files_to_upload) {
-                        for (File file_uploaded : files_uploaded) {
+                        if(it.hasNext()) {
+                            File file_uploaded = it.next();
                             Image immagine = new ImageImpl();
                             immagine.setImageSize(file_to_upload.getSize());
                             immagine.setImageType(file_to_upload.getContentType());
                             immagine.setFileName(file_uploaded.getName());
                             immagine.setDisco(disco);
-                            System.out.println(immagine.getFileName());
                             disco.getImmagini().add(immagine);
                         }
-
                     }
                     ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().storeImages(disco.getImmagini());
                 }

@@ -64,7 +64,6 @@ public class FailureResult {
         try {
             //Scriviamo il messaggio di errore nel log del server
             //Log the error message in the server log
-            System.err.println(message);
 
             request.setAttribute("error", message);
             request.setAttribute(REFERRER, request.getParameter(REFERRER));

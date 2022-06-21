@@ -89,7 +89,6 @@ public class CreateDisco extends CollectorsBaseController {
                String anno = request.getParameter("anno");
                String barcode = request.getParameter("barcode");
                String etichetta = request.getParameter("etichetta");
-               int doppioni= Integer.parseInt(request.getParameter("doppioni"));
 
                Genere genere = Genere.valueOf(request.getParameter("genere"));
                Utente utente = Utility.getUtente(request, response);
@@ -111,7 +110,7 @@ public class CreateDisco extends CollectorsBaseController {
                    padre_id = request.getParameter("padre");
                }
                Disco padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(padre_id));
-               Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre,doppioni);
+               Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
 
               String idDisco= String.valueOf(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco));
               List<Collezione> collezioni= new ArrayList<>();

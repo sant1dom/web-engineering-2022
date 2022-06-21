@@ -18,13 +18,13 @@ $('#search-box').keyup(function () {
                             $.each(obj[key], function (nomeArray, conenutoArray) {
                                 suggestion_box.append($('<h3 class="dropdown-header">' + nomeArray + '</h3>'));
                                 suggestion_box.append($('<div class="dropdown-divider"></div>'));
-                                console.log(obj)
+
                                 if (nomeArray === "AUTORI") {
                                     $.each(conenutoArray, function (id, dati) {
                                         suggestion_box.append($('<a>',
                                             {
                                                 class: "dropdown-item",
-                                                onclick: "selectSuggestion('" + id + ", " + nomeArray + ", " + dati[0] + "')",
+                                                onclick: "selectSuggestion('" + id + "', '" + nomeArray + "', '" + dati[0] + "')",
                                                 value: id,
                                                 text: dati[0] + " " + dati[1],
                                             }));
@@ -59,10 +59,10 @@ $('#search-box').keyup(function () {
 )
 ;
 
-function selectSuggestion(id, nomeArray, val) {
-    $("#search-box").val(val);
+function selectSuggestion(id, nomeArray, input) {
+    $("#search-box").val(input);
     $("#suggestion-box").hide();
     $("#item_id").val(id);
     $("#item_type").val(nomeArray);
-    $("#search-form").submit()
+    $("#search-form").submit();
 }

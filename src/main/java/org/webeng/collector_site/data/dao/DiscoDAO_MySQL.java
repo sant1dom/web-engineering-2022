@@ -53,7 +53,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
             sDischiPadri = connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
-            iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione,doppioni, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
             dDiscoCollezione = connection.prepareStatement("DELETE FROM collezione_disco WHERE collezione_id = ? AND disco_id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
@@ -189,11 +189,11 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 iDisco.setDate(7, Date.valueOf(disco.getDataInserimento()));
                 iDisco.setInt(8, disco.getUtente().getKey());
                 iDisco.setString(9, disco.getStatoConservazione().toString());
-                iDisco.setInt(10,disco.getDoppioni());
+
                 if (disco.getPadre() != null) {
-                    iDisco.setInt(11, disco.getPadre().getKey());
+                    iDisco.setInt(10, disco.getPadre().getKey());
                 } else
-                    iDisco.setNull(11, Types.INTEGER);
+                    iDisco.setNull(10, Types.INTEGER);
                 if (iDisco.executeUpdate() == 1) {
                     try (ResultSet rs = iDisco.getGeneratedKeys()) {
                         if (rs.next()) {
@@ -278,8 +278,6 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
         }
         return dischi;
     }
-
-
 
     @Override
     public List<Disco> getDischi(Autore autore) throws DataException {

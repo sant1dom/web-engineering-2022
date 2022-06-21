@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <context-param>
-        <param-name>images.directory</param-name>
-        <!-- Tomcat must have write permissions on this folder -->
-        <param-value>C:/Users/Raluc/Documents/Workspace</param-value>
-
-    </context-param>
-    <context-param>
         <param-name>uploads.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
-        <param-value>d:/didattica/teaching_workspace</param-value>
+        <param-value>C:\Users\david\Desktop\Immagini</param-value>
 
     </context-param>
     <context-param>
@@ -63,14 +57,14 @@
     </servlet-mapping>
 
     <!--  SEARCH  -->
-    <servlet>
-        <servlet-name>search</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.search.Search</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>search</servlet-name>
-        <url-pattern>/search</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>search</servlet-name>-->
+<!--        <servlet-class>org.webeng.collector_site.controller.search.Search</servlet-class>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>search</servlet-name>-->
+<!--        <url-pattern>/search</url-pattern>-->
+<!--    </servlet-mapping>-->
 
     <!--  RESULT FOR SEARCH  -->
     <servlet>
@@ -116,7 +110,7 @@
         <servlet-name>add-immagini</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.dischi.AddImmaginiDisco</servlet-class>
         <multipart-config>
-            <location>C:\Users\Raluc\Documents\workspace\apache-tomcat-9.0.62\temp</location>
+            <location>C:\Users\david\Desktop\apache-tomcat-9.0.60\temp</location>
             <max-file-size>20848820</max-file-size>
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>
@@ -166,6 +160,17 @@
         <url-pattern>/profilo</url-pattern>
     </servlet-mapping>
 
+    <!-- RICERCA -->
+    <servlet>
+        <servlet-name>ResultDispatcher</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.search.ResultDispatcher</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResultDispatcher</servlet-name>
+        <url-pattern>/resultdispatcher</url-pattern>
+    </servlet-mapping>
+
+
     <!-- TRACCE -->
     <servlet>
         <servlet-name>CreateTraccia</servlet-name>
@@ -177,6 +182,14 @@
     </servlet-mapping>
 
     <!-- AUTORI -->
+    <servlet>
+        <servlet-name>ShowAutore</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.autori.ShowAutore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowAutore</servlet-name>
+        <url-pattern>/show-autore</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>CreateAutore</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.autori.CreateAutore</servlet-class>
