@@ -111,6 +111,30 @@
         <servlet-name>crea-disco</servlet-name>
         <url-pattern>/crea-disco</url-pattern>
     </servlet-mapping>
+    <!-- ADD-IMMAGINI-->
+    <servlet>
+        <servlet-name>add-immagini</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.AddImmaginiDisco</servlet-class>
+        <multipart-config>
+            <location>C:\Users\Raluc\Documents\workspace\apache-tomcat-9.0.62\temp</location>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>add-immagini</servlet-name>
+        <url-pattern>/add-immagini</url-pattern>
+    </servlet-mapping>
+    <!--LISTA DISCHI UTENTE-->
+    <servlet>
+        <servlet-name>lista-dischi</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.ListaDischiUtente</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>lista-dischi</servlet-name>
+        <url-pattern>/i-tuoi-dischi</url-pattern>
+    </servlet-mapping>
 
     <!--  LOGOUT  -->
     <servlet>

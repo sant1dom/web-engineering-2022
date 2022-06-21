@@ -12,7 +12,7 @@ public interface DiscoDAO {
 
     Disco getDisco(int disco_key) throws DataException;
 
-    void storeDisco(Disco disco) throws DataException;
+    int storeDisco(Disco disco) throws DataException;
 
     void deleteDisco(Disco disco) throws DataException;
     void deleteDisco(Collezione collezione,Disco disco) throws DataException;
@@ -37,5 +37,7 @@ public interface DiscoDAO {
 
     void addDisco(Collezione collezione, Disco disco) throws DataException;
 
-    int ultimoDisco() throws DataException;
+    void addDiscoToCollezioni(List<Collezione> collezioni, Disco disco) throws DataException;
+
+
 }

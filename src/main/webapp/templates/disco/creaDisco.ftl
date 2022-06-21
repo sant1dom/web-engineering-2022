@@ -20,7 +20,7 @@
     <div class="form-group col-7">
         <label for="autore">Tracce:</label>
         <#if tracce??>
-            <select id="tracce" name="tracce" class="selectpicker" required multiple data-live-search="true">
+            <select id="tracce" name="tracce" class="selectpicker" multiple data-live-search="true">
                 <#list tracce as traccia>
                     <option value="${traccia.key}">${traccia.titolo} | ${traccia.durata} | ${traccia.ISWC}</option>
                 </#list>
@@ -32,9 +32,9 @@
         </#if>
     </div>
     <div class="form-group col-7">
-        <label for="collezione_id">Collezione:</label>
+        <label for="collezioni">Collezione:</label>
         <#if collezioni??>
-            <select id="collezione_id" name="collezione_id" class="selectpicker" required data-live-search="true">
+            <select id="collezioni" name="collezioni" class="selectpicker" multiple data-live-search="true">
                 <#list collezioni as collezione>
                     <option value="${collezione.key}">${collezione.titolo}</option>
                 </#list>
@@ -95,6 +95,10 @@
     <div class="form-group col-7">
         <label for="anno">Anno</label>
         <input type="text" class="form-control" required id="anno" name="anno" placeholder="anno">
+    </div>
+    <div class="form-group col-7">
+        <label for="doppioni">Doppioni</label>
+        <input type="number" class="form-control" required id="doppioni" name="doppioni" placeholder="doppioni">
     </div>
 
     <div class="form-group col-7">

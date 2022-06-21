@@ -12,6 +12,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     private String anno;
     private String etichetta;
     private String barcode;
+    private int doppioni;
     private Genere genere;
     private StatoConservazione statoConservazione;
     private Formato formato;
@@ -37,9 +38,10 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.autori = null;
         this.immagini = null;
         this.tracce = null;
+        this.doppioni=0;
     }
 
-    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce, Disco padre) {
+    public DiscoImpl(String titolo, String anno, String etichetta, String barcode, Genere genere, StatoConservazione statoConservazione, Formato formato, LocalDate dataInserimento,Utente utente, List<Autore> autori, List<Image> immagini, List<Traccia> tracce, Disco padre, int doppioni) {
         super();
         this.titolo = titolo;
         this.anno = anno;
@@ -54,6 +56,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.immagini = immagini;
         this.tracce = tracce;
         this.padre= padre;
+        this.doppioni=doppioni;
     }
 
     @Override
@@ -74,6 +77,16 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     @Override
     public void setAnno(String anno) {
         this.anno = anno;
+    }
+
+    @Override
+    public void setDoppioni(int doppioni) {
+        this.doppioni=doppioni;
+    }
+
+    @Override
+    public int getDoppioni() {
+        return doppioni;
     }
 
     @Override

@@ -22,6 +22,9 @@ public interface Disco extends DataItem<Integer> {
 
     void setAnno(String anno);
 
+    void setDoppioni(int doppioni);
+    int getDoppioni();
+
     Genere getGenere();
 
     void setGenere(Genere genere);
