@@ -5,6 +5,7 @@ import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
+import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 
@@ -30,6 +31,11 @@ public class DeleteCollezione extends CollectorsBaseController {
             if (s == null) {
                 action_anonymous(request, response);
             } else {
+                //Ottengo l'utente loggato
+                Utente utente = Utility.getUtente(request, response);
+                if (utente != null) {
+                    request.setAttribute("utente", utente);
+                }
                 action_logged(request, response);
             }
         } catch (TemplateManagerException | DataException | IOException ex) {

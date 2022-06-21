@@ -22,23 +22,19 @@ public class Home extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
+            //Ottengo l'utente loggato
             Utente utente = Utility.getUtente(request, response);
-
             if (utente != null) {
-                TemplateResult result = new TemplateResult(getServletContext());
-                request.setAttribute(REFERRER, request.getParameter(REFERRER));
                 request.setAttribute("utente", utente);
-                result.activate("index.ftl", request, response);
-            } else {
-                TemplateResult result = new TemplateResult(getServletContext());
-                request.setAttribute(REFERRER, request.getParameter(REFERRER));
-                result.activate("index.ftl", request, response);
             }
+
+            TemplateResult result = new TemplateResult(getServletContext());
+            request.setAttribute(REFERRER, request.getParameter(REFERRER));
+            result.activate("index.ftl", request, response);
         } catch (TemplateManagerException | DataException ex) {
             handleError(ex, request, response);
         }
     }
-
 
 
     /**

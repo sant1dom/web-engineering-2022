@@ -25,12 +25,18 @@ public class Login extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
 
+    /**
+     * Caricamento della pagina di login
+     */
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         result.activate("auth/login.ftl", request, response);
     }
 
+    /**
+     * Gestione della richiesta di login
+     */
     private void action_login(HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateManagerException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -107,6 +113,6 @@ public class Login extends CollectorsBaseController {
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet per la gestione della login di un utente";
     }
 }

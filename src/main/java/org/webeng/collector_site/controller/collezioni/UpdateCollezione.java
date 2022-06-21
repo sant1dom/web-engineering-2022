@@ -37,6 +37,11 @@ public class UpdateCollezione extends CollectorsBaseController {
                 if (s == null) {
                     action_anonymous(request, response);
                 } else {
+                    //Ottengo l'utente loggato
+                    Utente utente = Utility.getUtente(request, response);
+                    if (utente != null) {
+                        request.setAttribute("utente", utente);
+                    }
                     action_logged(request, response);
                 }
             } catch (TemplateManagerException | DataException | IOException ex) {
@@ -53,7 +58,6 @@ public class UpdateCollezione extends CollectorsBaseController {
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
 
         request.setAttribute("collezione", request.getParameter("id_collezione"));
-        request.setAttribute("utente", Utility.getUtente(request, response));
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
         request.setAttribute("titolo", titolo);
         request.setAttribute("privacy", privacy);

@@ -51,10 +51,16 @@ public class ShowAutore extends CollectorsBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
+            //Ottengo l'utente loggato
+            Utente utente = Utility.getUtente(request, response);
+            if (utente != null) {
+                request.setAttribute("utente", utente);
+            }
+
             String https_redirect_url = SecurityHelpers.checkHttps(request);
             request.setAttribute("https-redirect", https_redirect_url);
             action_default(request, response);
-        } catch (TemplateManagerException ex) {
+        } catch (TemplateManagerException | DataException ex) {
             handleError(ex, request, response);
         }
     }

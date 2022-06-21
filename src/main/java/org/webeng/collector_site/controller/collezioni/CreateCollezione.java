@@ -35,6 +35,11 @@ public class CreateCollezione extends CollectorsBaseController {
                 if (s == null) {
                     action_anonymous(request, response);
                 } else {
+                    //Ottengo l'utente loggato
+                    Utente utente = Utility.getUtente(request, response);
+                    if (utente != null) {
+                        request.setAttribute("utente", utente);
+                    }
                     action_logged(request, response);
                 }
             } catch (TemplateManagerException | DataException | IOException ex) {
@@ -46,7 +51,6 @@ public class CreateCollezione extends CollectorsBaseController {
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
-        request.setAttribute("utente", Utility.getUtente(request, response));
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
 
         result.activate("collezioni/create_collezione.ftl", request, response);

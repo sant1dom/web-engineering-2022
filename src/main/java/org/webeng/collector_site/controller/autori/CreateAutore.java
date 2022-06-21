@@ -5,6 +5,7 @@ import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.impl.AutoreImpl;
 import org.webeng.collector_site.data.model.TipologiaAutore;
+import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
@@ -29,6 +30,11 @@ public class CreateAutore extends CollectorsBaseController {
                 if (s == null) {
                     action_anonymous(request, response);
                 } else {
+                    //Ottengo l'utente loggato
+                    Utente utente = Utility.getUtente(request, response);
+                    if (utente != null) {
+                        request.setAttribute("utente", utente);
+                    }
                     action_logged(request, response);
                 }
             } catch (TemplateManagerException | DataException | IOException ex) {
@@ -40,7 +46,6 @@ public class CreateAutore extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
-        request.setAttribute("utente", Utility.getUtente(request, response));
         request.setAttribute("tipologie", TipologiaAutore.values());
         result.activate("autori/create_autore.ftl", request, response);
     }

@@ -6,6 +6,7 @@ import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.impl.TracciaImpl;
 import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Traccia;
+import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
@@ -32,6 +33,11 @@ public class CreateTraccia extends CollectorsBaseController {
                 if (s == null) {
                     action_anonymous(request, response);
                 } else {
+                    //Ottengo l'utente loggato
+                    Utente utente = Utility.getUtente(request, response);
+                    if (utente != null) {
+                        request.setAttribute("utente", utente);
+                    }
                     action_logged(request, response);
                 }
             } catch (TemplateManagerException | DataException | IOException ex) {
@@ -44,7 +50,6 @@ public class CreateTraccia extends CollectorsBaseController {
         TemplateResult result = new TemplateResult(getServletContext());
         List<Autore> autori = ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori();
         List<Traccia> tracce = ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccePadri();
-        request.setAttribute("utente", Utility.getUtente(request, response));
         request.setAttribute("authors", Objects.requireNonNullElse(autori, ""));
         request.setAttribute("tracce", Objects.requireNonNullElse(tracce, ""));
         result.activate("tracce/create_traccia.ftl", request, response);

@@ -29,6 +29,11 @@ public class ListaDischiUtente extends CollectorsBaseController {
             if (s == null) {
                 action_anonymous(request, response);
             }else{
+                //Ottengo l'utente loggato
+                Utente utente = Utility.getUtente(request, response);
+                if (utente != null) {
+                    request.setAttribute("utente", utente);
+                }
                 action_logged(request, response);
             }
         } catch (TemplateManagerException | DataException | IOException ex) {
@@ -37,8 +42,8 @@ public class ListaDischiUtente extends CollectorsBaseController {
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        Utente utente = Utility.getUtente(request, response);
         TemplateResult result = new TemplateResult(getServletContext());
-        Utente utente= Utility.getUtente(request, response);
         List<Disco> dischiByUtente= ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(utente);
         request.setAttribute("dischiByUtente", Objects.requireNonNull(dischiByUtente));
         result.activate("disco/lista-dischi.ftl", request,response );

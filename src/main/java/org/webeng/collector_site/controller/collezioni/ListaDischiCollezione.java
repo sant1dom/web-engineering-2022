@@ -34,6 +34,11 @@ public class ListaDischiCollezione extends CollectorsBaseController {
             if (s == null) {
                 action_anonymous(request, response);
             } else {
+                //Ottengo l'utente loggato
+                Utente utente = Utility.getUtente(request, response);
+                if (utente != null) {
+                    request.setAttribute("utente", utente);
+                }
                 action_logged(request, response);
             }
         } catch (TemplateManagerException | DataException | IOException ex) {

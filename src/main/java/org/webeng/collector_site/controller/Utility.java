@@ -15,21 +15,23 @@ import java.util.List;
 public class Utility {
     private Utility() {
     }
-
     public static Utente getUtente(HttpServletRequest request, HttpServletResponse response) throws DataException {
-        Utente utente;
+        Utente utente = null;
         //sessione dell'utente
         HttpSession s = request.getSession(false);
         //id dell'utente
-        int userid = (int) s.getAttribute("userid");
-        //datalayer
-        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-        //ottengo il DAO dell'utente
-        UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
-        //ottengo l'utente tramite la sua id nella sessione
-        utente = utenteDAO.getUtente(userid);
-
-        return utente;
+        if (s != null) {
+            int userid = (int) s.getAttribute("userid");
+            //datalayer
+            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+            //ottengo il DAO dell'utente
+            UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
+            //ottengo l'utente tramite la sua id nella sessione
+            utente = utenteDAO.getUtente(userid);
+            return utente;
+        } else {
+            return null;
+        }
     }
 
     public static List<String> getUtenti(HttpServletRequest request, HttpServletResponse response) throws DataException {
