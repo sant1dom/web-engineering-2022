@@ -18,9 +18,12 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
     <!-- JQuery va messo prima sennò non si può usare -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <link href="/assets/css/navbar.css" rel="stylesheet"/>
     <link href="/assets/css/auth.css" rel="stylesheet"/>
+    <link href="/assets/css/utenti.css" rel="stylesheet"/>
+    <link href="/assets/css/search.css" rel="stylesheet"/>
     <!-- CSS -->
 </head>

@@ -10,6 +10,7 @@
         <param-name>uploads.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
         <param-value>d:/didattica/teaching_workspace</param-value>
+
     </context-param>
     <context-param>
         <param-name>view.outline_template</param-name>
@@ -104,27 +105,13 @@
     <!--CREA DISCO -->
     <servlet>
         <servlet-name>crea-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.disco.CreateDisco</servlet-class>
+        <servlet-class>org.webeng.collector_site.controller.CreateDisco</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>crea-disco</servlet-name>
         <url-pattern>/crea-disco</url-pattern>
     </servlet-mapping>
-    <!-- ADD IMMAGINI -->
-    <servlet>
-        <servlet-name>add-immagini</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.disco.AddImmaginiDisco</servlet-class>
-       <multipart-config>
-            <location>C:\Users\Raluc\AppData\Local\JetBrains\IntelliJIdea2021.3\tomcat\uploads</location>
-            <max-file-size>20848820</max-file-size>
-            <max-request-size>418018841</max-request-size>
-            <file-size-threshold>1048576</file-size-threshold>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>add-immagini</servlet-name>
-        <url-pattern>/add-immagini</url-pattern>
-    </servlet-mapping>
+
     <!--  LOGOUT  -->
     <servlet>
         <servlet-name>logout</servlet-name>

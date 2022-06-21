@@ -25,6 +25,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     private PreparedStatement dTraccia;
     private PreparedStatement addTracciaAutore;
     private PreparedStatement addTracciaDisco;
+    private PreparedStatement fTracceByTitle;
     public TracciaDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -46,6 +47,8 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             dTraccia = connection.prepareStatement("DELETE FROM traccia WHERE id = ? AND version = ?");
             addTracciaAutore = connection.prepareStatement("INSERT INTO traccia_autore (traccia_id, autore_id) VALUES (?,?)");
             addTracciaDisco = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?, ?)");
+
+            fTracceByTitle = connection.prepareStatement("SELECT titolo FROM traccia WHERE titolo LIKE CONCAT('%', ?, '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer",ex);
         }
@@ -67,6 +70,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             dTraccia.close();
             addTracciaAutore.close();
             addTracciaDisco.close();
+            fTracceByTitle.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing tracks data layer",ex);
         }
@@ -247,6 +251,24 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     }
 
     @Override
+    public List<String> getTracceByKeyword(String keyword) throws DataException {
+        List<String> result = new ArrayList<>();
+        try {
+            fTracceByTitle.setString(1, keyword);
+            try (ResultSet rs = fTracceByTitle.executeQuery()) {
+                while (rs.next()) {
+                    result.add(rs.getString("titolo"));
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load traccia", ex);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to set keyword", ex);
+        }
+        return result;
+    }
+
+    @Override
     public List<Traccia> getTracce(Disco disco) throws DataException {
         List<Traccia> tracce = new ArrayList<>();
         try {
@@ -355,4 +377,6 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             throw new DataException("Error setting track", ex);
         }
     }
+
+
 }

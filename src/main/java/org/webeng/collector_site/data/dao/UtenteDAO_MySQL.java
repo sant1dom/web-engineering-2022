@@ -108,26 +108,6 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         }
     }
 
-    private List<Utente> createUtenti(ResultSet rs) throws DataException {
-        if (rs == null) {
-            return null;
-        }
-        UtenteProxy u = (UtenteProxy) createUtente();
-        try {
-            List<Utente> lu = new ArrayList<>();
-            do {
-                u.setKey(rs.getInt("id"));
-                u.setNome(rs.getString("nome"));
-                u.setCognome(rs.getString("cognome"));
-                u.setUsername(rs.getString("username"));
-                lu.add((Utente) u);
-            } while (rs.next());
-            return lu;
-        } catch (SQLException ex) {
-            throw new DataException("Unable to create user object form ResultSet", ex);
-        }
-    }
-
     @Override
     public Utente getUtente(String username) throws DataException {
         Utente u;
@@ -275,15 +255,14 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     }
 
     @Override
-    public List<String> getUtenti(String keyword) throws DataException {
+    public List<String> getUtentiByKeyword(String keyword) throws DataException {
         List<String> result = new ArrayList<>();
         try {
             fUtentiByUsername.setString(1, keyword);
             try (ResultSet rs = fUtentiByUsername.executeQuery()) {
-                while (rs.next()) {
-                    System.out.println("utenti: " + rs.getString("username"));
-                    result.add(rs.getString("username"));
-                }
+              while (rs.next()) {
+                  result.add(rs.getString("username"));
+              }
             } catch (SQLException ex) {
                 throw new DataException("Unable to load users", ex);
             }

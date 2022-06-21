@@ -37,4 +37,6 @@ public interface TracciaDAO {
     void addTracce(Autore autore, List<Traccia> tracce) throws DataException;
 
     void addTraccia(Autore autore, Traccia traccia) throws DataException;
+
+    List<String> getTracceByKeyword(String keyword) throws DataException;
 }

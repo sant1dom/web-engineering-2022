@@ -19,6 +19,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     private PreparedStatement uCollezione;
     private PreparedStatement iCollezione;
     private PreparedStatement dCollezione;
+    private PreparedStatement fCollezioniByTitolo;
     public CollezioneDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -36,6 +37,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
+            fCollezioniByTitolo = connection.prepareStatement("SELECT titolo FROM collezione WHERE titolo LIKE CONCAT('%', ? , '%') AND privacy != 'PRIVATO'");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
         }
@@ -51,6 +53,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             uCollezione.close();
             iCollezione.close();
             dCollezione.close();
+            fCollezioniByTitolo.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying collections data layer", ex);
         }
@@ -203,6 +206,24 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             throw new DataException("Unable to load collections", ex);
         }
         return collezione;
+    }
+
+    @Override
+    public List<String> getCollezioniByKeyword(String keyword) throws DataException {
+        List<String> result = new ArrayList<>();
+        try {
+            fCollezioniByTitolo.setString(1, keyword);
+            try (ResultSet rs = fCollezioniByTitolo.executeQuery()) {
+                while (rs.next()) {
+                    result.add(rs.getString("titolo"));
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load collections", ex);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to set keyword", ex);
+        }
+        return result;
     }
 
     @Override
