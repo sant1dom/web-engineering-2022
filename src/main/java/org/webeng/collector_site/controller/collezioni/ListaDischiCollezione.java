@@ -48,6 +48,7 @@ public class ListaDischiCollezione extends CollectorsBaseController {
         Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
 
+        request.setAttribute("collezione",collezione);
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
         result.activate("collezioni/listaDischi_collezione.ftl", request, response);
     }

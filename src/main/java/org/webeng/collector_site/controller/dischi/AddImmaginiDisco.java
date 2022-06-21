@@ -1,11 +1,10 @@
-package org.webeng.collector_site.controller.disco;
+package org.webeng.collector_site.controller.dischi;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.impl.ImageImpl;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Image;
-import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;

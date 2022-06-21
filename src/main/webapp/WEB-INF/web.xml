@@ -105,7 +105,7 @@
     <!--CREA DISCO -->
     <servlet>
         <servlet-name>crea-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.CreateDisco</servlet-class>
+        <servlet-class>org.webeng.collector_site.controller.dischi.CreateDisco</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>crea-disco</servlet-name>
@@ -131,6 +131,7 @@
         <servlet-name>error</servlet-name>
         <url-pattern>/error</url-pattern>
     </servlet-mapping>
+
     <!-- TRACCE -->
     <servlet>
         <servlet-name>CreateTraccia</servlet-name>
@@ -139,6 +140,16 @@
     <servlet-mapping>
         <servlet-name>CreateTraccia</servlet-name>
         <url-pattern>/create-traccia</url-pattern>
+    </servlet-mapping>
+
+    <!-- AUTORI -->
+    <servlet>
+        <servlet-name>CreateAutore</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.autori.CreateAutore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateAutore</servlet-name>
+        <url-pattern>/create-autore</url-pattern>
     </servlet-mapping>
 
 
@@ -151,6 +162,35 @@
         <servlet-name>CreateCollezione</servlet-name>
         <url-pattern>/create-collezione</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ListaCollezioniUtente</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.ListaCollezioniUtente</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListaCollezioniUtente</servlet-name>
+        <url-pattern>/lista-collezioni</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ListaDischiCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.ListaDischiCollezione</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListaDischiCollezione</servlet-name>
+        <url-pattern>/listaDischi-collezione</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.DeleteCollezione</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteCollezione</servlet-name>
+        <url-pattern>/delete-collezione</url-pattern>
+    </servlet-mapping>
+
+
 
     <!--  END SERVLET  -->
 

@@ -47,10 +47,14 @@ public class UpdateCollezione extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
+        String titolo=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione"))).getTitolo();
+        String privacy=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione"))).getPrivacy();
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
+
         request.setAttribute("utente", Utility.getUtente(request, response));
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
-        request.setAttribute("collezione",request.getParameter("collezione_id"));
+        request.setAttribute("titolo", titolo);
+        request.setAttribute("privacy", privacy);
         result.activate("collezioni/update_collezione.ftl", request, response);
     }
 
@@ -63,7 +67,6 @@ public class UpdateCollezione extends CollectorsBaseController {
         try {
             String titolo = request.getParameter("titolo");
             String privacy = String.valueOf(request.getParameter("privacy"));
-            /*Utente utente= Utility.getUtente(request, response);*/
             List<Disco> dischi = new ArrayList<>();
 
             for (String disco : request.getParameterValues("disco")) {
@@ -71,19 +74,19 @@ public class UpdateCollezione extends CollectorsBaseController {
             }
 
             LocalDate dataCreazione= LocalDate.now();
-            Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("collezione_id")));
+            Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
             collezione.setTitolo(titolo);
             collezione.setPrivacy(privacy);
             collezione.setDataCreazione(dataCreazione);
-            collezione.setDischi(dischi);
+
 
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
-            for (Disco disco : dischi) {
+           /* for (Disco disco : dischi) {
                 ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
-            }
+            }*/
 
-            response.sendRedirect("/lista-collezioni");
+            response.sendRedirect("/home");
         } catch (Exception e) {
             handleError(e, request, response);
         }

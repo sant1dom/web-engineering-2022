@@ -22,7 +22,7 @@
                     <td>${collezione.dataCreazione}</td>
                     <td><a href="listaDischi-collezione?id_collezione=${collezione.key}">visualizza dischi</a></td>
                     <td><a href="update-collezione?id_collezione=${collezione.key}">modifica</a></td>
-                    <td><a href="delete-collezione?id_collezione=${collezione.key}" >elimina</a></td>
+                    <td><a href="delete-collezione?id_collezione=${collezione.key}">elimina</a></td>
                 </tr>
             </#list>
         </#if>

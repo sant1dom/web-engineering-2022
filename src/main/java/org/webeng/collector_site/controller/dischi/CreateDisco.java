@@ -1,27 +1,22 @@
-package org.webeng.collector_site.controller.disco;
+package org.webeng.collector_site.controller.dischi;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.dao.DiscoDAO;
 import org.webeng.collector_site.data.impl.DiscoImpl;
 import org.webeng.collector_site.data.impl.ImageImpl;
-import org.webeng.collector_site.data.impl.TracciaImpl;
 import org.webeng.collector_site.data.model.*;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.*;
-import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.*;
 
