@@ -76,7 +76,7 @@ public class AddImmaginiDisco extends CollectorsBaseController {
                         }
                         files_uploaded.add(uploaded_file);
                     }
-                    System.out.println("hello");
+                    System.out.println("hi");
                     for (Part file_to_upload : files_to_upload) {
                         for (File file_uploaded : files_uploaded) {
                             Image immagine = new ImageImpl();
