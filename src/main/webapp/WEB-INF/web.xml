@@ -266,16 +266,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>ShowCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.ShowCollezione</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ShowCollezione</servlet-name>
-        <url-pattern>/show-collezione</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
         <servlet-name>ShowDiscoCollezione</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.collezioni.ShowDiscoCollezione</servlet-class>
     </servlet>

@@ -17,8 +17,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <!-- lineicons -->
+    <link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet">
     <!-- JQuery va messo prima sennò non si può usare -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 
     <link href="/assets/css/navbar.css" rel="stylesheet"/>

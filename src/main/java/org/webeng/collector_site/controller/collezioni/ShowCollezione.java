@@ -45,20 +45,6 @@ public class ShowCollezione extends CollectorsBaseController {
         }
     }
 
-    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        TemplateResult result = new TemplateResult(getServletContext());
-        Collezione  collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
-        List <Disco> dischi=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
-        request.setAttribute("collezione", collezione);
-        request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
-        result.activate("collezioni/show_collezione.ftl", request, response);
-    }
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        response.sendRedirect("/login");
-    }
-
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

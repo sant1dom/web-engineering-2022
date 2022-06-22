@@ -36,6 +36,20 @@
     padding-right: 2rem;
 }
 
+.bt-action{
+    background-color: #f5df2b;
+    border-color: #f5df2b;
+    border-radius: 3px;
+    border-style: hidden;
+    padding: 3px 10px;
+    color: black;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+}
+
 @media (max-width: 991px) {
     .tabelle-filtro-container {
         display: block;

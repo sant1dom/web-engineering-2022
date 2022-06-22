@@ -7,15 +7,25 @@
         <div class="info">
             <h3>${collezione.getTitolo()}</h3>
             <#if (proprietario??)>
-                <div class="labels">
-                    <span class="label-info">Proprietario: </span>
-                    <br>
-                </div>
-                <div class="testi">
+                <#if (utente?? && proprietario.getKey() == utente.getKey())>
+                    <div class="labels">
+                        <span class="label-info">Privacy: </span>
+                        <br>
+                    </div>
+                    <div class="testi">
+                        <span class="testo-info">${collezione.getPrivacy()}</span>
+                    </div>
+                <#else>
+                    <div class="labels">
+                        <span class="label-info">Proprietario: </span>
+                        <br>
+                    </div>
+                    <div class="testi">
                     <span class="testo-info">
                         <a class="link" href="profilo?id=${proprietario.getKey()}">${proprietario.getUsername()}</a>
                     </span>
-                </div>
+                    </div>
+                </#if>
             </#if>
         </div>
     </#if>
@@ -63,6 +73,9 @@
                             <th scope="col">Anno</th>
                             <th scope="col">Etichetta</th>
                             <th scope="col">Genere</th>
+                            <#if (utente?? && proprietario.getKey() == utente.getKey())>
+                                <th scope="col" style="text-align: center">Azioni</th>
+                            </#if>
                         </tr>
                         </thead>
                         <tbody id="tbody-dischi">
@@ -73,6 +86,21 @@
                                 <td>${disco.getAnno()}</td>
                                 <td>${disco.getEtichetta()}</td>
                                 <td>${disco.getGenere()}</td>
+                                <#if (utente?? && proprietario.getKey() == utente.getKey())>
+                                    <td class="actions">
+                                        <div>
+                                            <a class="btn btn-success"
+                                               href="update-collezione?id_collezione=${collezione.getKey()}">
+                                                Modifica</a>
+                                            <a class="btn btn-warning"
+                                               href="update-dischiCollezione?id_collezione=${collezione.getKey()}">
+                                                Aggiungi disco</a>
+                                            <a class="btn btn-danger"
+                                               href="delete-discoCollezione?id_disco=${disco.getKey()}&id_collezione=${collezione.getKey()}">
+                                                <i class="lni lni-trash-can"></i></a>
+                                        </div>
+                                    </td>
+                                </#if>
                             </tr>
                         </#list>
                     </table>
