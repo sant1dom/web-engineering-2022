@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.model.Autore;
+import org.webeng.collector_site.data.model.Disco;
 import org.webeng.framework.data.DataException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Servlet per la creazione del json per la richiesta ajax della ricerca.
+ * @author Davide De Acetis
+ */
 public class AjaxSearchResult extends CollectorsBaseController {
 
     public AjaxSearchResult() {
@@ -30,21 +35,38 @@ public class AjaxSearchResult extends CollectorsBaseController {
         try {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
+            //Vengono eseguite le query per ottenere i risultati attraverso la keyword
             List<String> utenti = Utility.getUtenti(request, response);
-//            List<String> dischi = Utility.getDischi(request, response);
+            List<String> collezioni = Utility.getCollezioni(request, response);
+            List<Disco> dischi = Utility.getDischi(request, response);
             List<String> tracce = Utility.getTracce(request, response);
             List<Autore> autori = Utility.getAutori(request, response);
-            List<String> collezioni = Utility.getCollezioni(request, response);
 
+            //Viene costruita la stringa che verrà poi convertita in json
+            //La stringa è costruita in modo da risultare un array di oggetti, ognuno corrispondente a una tipologia
+            //di risultato. Ogni tipologia conterrà una lista di oggetti, ognuno corrispondente a un risultato.
             String data = "[";
 
             if (!utenti.isEmpty()) {
                 data += "{ \"UTENTI\":  " + gson.toJson(utenti) + "}";
             }
 
-//            if (!dischi.isEmpty()) {
-//               data += "{ \"DISCHI\":  " +  gson.toJson(dischi) + "}";
-//            }
+            if (!collezioni.isEmpty()) {
+                data += "{ \"COLLEZIONI\": " + gson.toJson(collezioni) + "}";
+            }
+
+            if (!dischi.isEmpty()) {
+                data += "{ \"DISCHI\":  {";
+                for (Disco disco : dischi) {
+                    data += gson.toJson(disco.getKey().toString()) + ": [" +
+                            gson.toJson(disco.getTitolo()) + "," +
+                            gson.toJson(disco.getEtichetta()) + "," +
+                            gson.toJson(disco.getAnno()) + "," +
+                            gson.toJson(disco.getGenere()) + "," +
+                            "] ,";
+                }
+                data += "}}";
+            }
 
             if (!tracce.isEmpty()) {
                 data += "{ \"TRACCE\":  " + gson.toJson(tracce) + "}";
@@ -59,19 +81,17 @@ public class AjaxSearchResult extends CollectorsBaseController {
                             "] ,";
                 }
                 data += "}}";
-
-            }
-
-            if (!collezioni.isEmpty()) {
-                data += "{ \"COLLEZIONI\": " + gson.toJson(collezioni) + "}";
             }
 
             data += "]";
+
+            //Vengono individuati e rimosse eventuali virgole finali e anomalie
             data = data.replace("}{", "},{");
             data = data.replace("][", "],[");
             data = data.replace(",}", "}");
             data = data.replace(",]", "]");
 
+            //Viene stampato il json e inviato al client
             out.println(data);
             out.flush();
             out.close();
@@ -84,6 +104,6 @@ public class AjaxSearchResult extends CollectorsBaseController {
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet che costruisce il json per la ricerca ajax";
     }
 }

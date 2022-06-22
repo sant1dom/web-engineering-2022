@@ -1,11 +1,3 @@
-/*
- * Login.java
- *
- * Questo esempio mostra come utilizzare le sessioni per autenticare un utente
- *
- * This example shows how to use sessions to authenticate the user
- *
- */
 package org.webeng.collector_site.controller.auth;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
@@ -21,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Servlet per l'autenticazione dell'utente.
+ * @author Davide De Acetis
+ */
 public class Login extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
@@ -42,11 +38,11 @@ public class Login extends CollectorsBaseController {
         String password = request.getParameter("password");
 
         if (username.isBlank() || password.isBlank()) {
-            //se mancano dei campi
-            //torniamo a pagina di login
+            //se mancano dei campi torniamo alla pagina di login
             request.setAttribute("error", "Inserire username e password");
             action_default(request, response);
         } else {
+            //se i campi sono presenti controlliamo se l'utente esiste
             password = SecurityHelpers.encryptPassword(password);
             CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
 
@@ -58,21 +54,19 @@ public class Login extends CollectorsBaseController {
             }
 
             if (utente != null) {
+                //se l'utente esiste lo autentichiamo
                 if (utente.getKey() != null) {
-                    //se la validazione ha successo
                     //carichiamo lo userid dal database utenti
                     int userid = utente.getKey();
                     SecurityHelpers.createSession(request, username, userid);
                     //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
-                    //if an origin URL has been transmitted, return to it
                     if (request.getParameter(REFERRER) != null) {
                         response.sendRedirect(request.getParameter(REFERRER));
                     } else {
                         response.sendRedirect("/");
                     }
                 } else {
-                    //se la validazione non ha successo
-                    //torniamo a pagina di login
+                    //se la validazione non ha successo si torna alla pagina di login
                     request.setAttribute("error", "Username o password errati");
                     action_default(request, response);
                 }
@@ -91,15 +85,17 @@ public class Login extends CollectorsBaseController {
      * @throws ServletException if a servlet-specific error occurs
      */
     @Override
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
+            //se l'utente è già autenticato torniamo alla home
             if (SecurityHelpers.checkSession(request) != null) {
                 response.sendRedirect("/");
             }
-            if (request.getParameter("username") != null && request.getParameter("password") != null) {
+            //se i campi username e password sono presenti effettuiamo il login
+            if (!request.getParameter("username").isBlank() && !request.getParameter("password").isBlank()) {
                 action_login(request, response);
             } else {
+                //altrimenti carichiamo la pagina di login
                 String https_redirect_url = SecurityHelpers.checkHttps(request);
                 request.setAttribute("https-redirect", https_redirect_url);
                 action_default(request, response);

@@ -1,8 +1,7 @@
-.page_container {
-    width: 100%;
-    height: 100%;
-    padding: 2rem;
-}
+/**
+ * CSS per la pagina degli autori
+ * @author Davide De Acetis
+ */
 
 .autore_bg {
     width: 100%;

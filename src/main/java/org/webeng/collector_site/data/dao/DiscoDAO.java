@@ -27,6 +27,8 @@ public interface DiscoDAO {
 
     List<Disco> getDischi(Utente utente) throws DataException;
 
+    List<Disco> getDischiByKeyword(String keyword) throws DataException;
+
     List<Disco> getFigli(Disco disco) throws DataException;
 
     Disco getPadre(Disco disco) throws DataException;

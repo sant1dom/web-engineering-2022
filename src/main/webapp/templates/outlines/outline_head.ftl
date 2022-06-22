@@ -22,9 +22,10 @@
 
 
     <link href="/assets/css/navbar.css" rel="stylesheet"/>
-    <link href="/assets/css/auth.css" rel="stylesheet"/>
-    <link href="/assets/css/utenti.css" rel="stylesheet"/>
+
+    <link href="/assets/css/style.css" rel="stylesheet"/>
+
     <link href="/assets/css/search.css" rel="stylesheet"/>
-    <link href="/assets/css/autori.css" rel="stylesheet"/>
+
     <!-- CSS -->
 </head>

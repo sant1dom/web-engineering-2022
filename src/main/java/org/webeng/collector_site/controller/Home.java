@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Servlet per la visualizzazione della home page.
+ * @author Davide De Acetis
+ */
 public class Home extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
@@ -35,7 +39,6 @@ public class Home extends CollectorsBaseController {
             handleError(ex, request, response);
         }
     }
-
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -65,6 +68,6 @@ public class Home extends CollectorsBaseController {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet per la visualizzazione della home page.";
     }
 }

@@ -11,9 +11,13 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Servlet che gestisce la registrazione di un nuovo utente.
+ *
+ * @author Davide De Acetis
+ */
 public class Register extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
@@ -32,25 +36,18 @@ public class Register extends CollectorsBaseController {
         String password = request.getParameter("password");
 
         if (username.isBlank() || email.isBlank() || password.isBlank()) {
-            //se mancano dei campi
-            //torniamo a pagina di registrazione
+            //se mancano dei campi obbligatori, ritorna alla pagina di registrazione
             request.setAttribute("error", "Inserire tutti i campi obbligatori");
             action_default(request, response);
         } else {
-            Utente utente = null;
-            UtenteDAO utenteDAO = null;
-            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
             try {
-                utenteDAO = dataLayer.getUtenteDAO();
-                utente = utenteDAO.createUtente();
-            } catch (DataException ex) {
-                handleError(ex, request, response);
-            }
+                CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+                UtenteDAO utenteDAO = dataLayer.getUtenteDAO();
+                Utente utente = utenteDAO.createUtente();
 
-            if (utente != null) {
-                //se la validazione ha successo
-                //carichiamo l'utente sul db
-                try {
+                if (utente != null) {
+                    //se la validazione ha successo carichiamo l'utente sul db
+
                     if (nome != null && !(nome.equals(""))) {
                         utente.setNome(nome);
                     } else {
@@ -70,18 +67,16 @@ public class Register extends CollectorsBaseController {
                     int userid = utente.getKey();
                     SecurityHelpers.createSession(request, username, userid);
                     //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
-                    //if an origin URL has been transmitted, return to it
                     if (request.getParameter(REFERRER) != null) {
                         response.sendRedirect(request.getParameter(REFERRER));
                     } else {
                         response.sendRedirect("/");
                     }
-                } catch (DataException ex) {
-                    handleError(ex, request, response);
+                } else {
+                    handleError("Login fallito", request, response);
                 }
-
-            } else {
-                handleError("Login fallito", request, response);
+            } catch (DataException ex) {
+                handleError(ex, request, response);
             }
         }
     }
@@ -96,12 +91,15 @@ public class Register extends CollectorsBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
+            //se l'utente è già autenticato torniamo alla home
             if (SecurityHelpers.checkSession(request) != null) {
                 response.sendRedirect("/");
             }
-            if (request.getParameter("username") != null && request.getParameter("email") != null && request.getParameter("password") != null) {
+            //se i campi username, email e password sono presenti effettuiamo la registrazione
+            if (!request.getParameter("username").isBlank() && !request.getParameter("email").isBlank() && !request.getParameter("password").isBlank()) {
                 action_register(request, response);
             } else {
+                //altrimenti carichiamo la pagina di registrazione
                 String https_redirect_url = SecurityHelpers.checkHttps(request);
                 request.setAttribute("https-redirect", https_redirect_url);
                 action_default(request, response);

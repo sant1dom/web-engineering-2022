@@ -1,4 +1,7 @@
 <#include "../outlines/outline_header.ftl">
+
+<link href="/assets/css/autori.css" rel="stylesheet"/>
+
 <div class="page_container">
     <div class="autore_bg">
         <#if (autore??)>

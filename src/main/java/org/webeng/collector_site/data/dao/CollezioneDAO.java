@@ -25,5 +25,4 @@ public interface CollezioneDAO {
     List<Collezione> getCollezioni(Utente utente) throws DataException;
 
     void deleteCollezione(Collezione collezione) throws DataException;
-
 }

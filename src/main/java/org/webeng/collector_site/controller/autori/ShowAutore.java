@@ -14,9 +14,12 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Servlet per la visualizzazione del singolo autore.
+ * @author Davide De Acetis
+ */
 public class ShowAutore extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
@@ -31,6 +34,7 @@ public class ShowAutore extends CollectorsBaseController {
             List<Disco> dischi = dataLayer.getDiscoDAO().getDischi(autore);
             List<Traccia> tracce = dataLayer.getTracciaDAO().getTracce(autore);
 
+            //Ogni autore ha una lista di dischi e tracce
             request.setAttribute("autore", autore);
             request.setAttribute("dischi", dischi);
             request.setAttribute("tracce", tracce);
@@ -70,6 +74,6 @@ public class ShowAutore extends CollectorsBaseController {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet per la visualizzazione del singolo autore.";
     }
 }

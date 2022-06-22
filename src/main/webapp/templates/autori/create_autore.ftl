@@ -1,6 +1,9 @@
 <#-- @ftlvariable name="tipologie" type="org.webeng.collector_site.data.model.TipologiaAutore[]" -->
 
 <#include "../outlines/outline_header.ftl">
+
+<link href="/assets/css/autori.css" rel="stylesheet"/>
+
 <h2 class="ml-5 mt-3">Crea un nuovo autore</h2>
 
 <form method="post" action="create-autore" class="ml-5 mt-3">

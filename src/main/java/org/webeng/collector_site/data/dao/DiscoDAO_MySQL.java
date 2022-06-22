@@ -9,27 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
-    PreparedStatement sDiscoByID;
-    PreparedStatement sDiscoByBarcode;
-    PreparedStatement sDischiByAnno;
-    PreparedStatement sDischiByGenere;
-    PreparedStatement sDischiByEtichetta;
-    PreparedStatement sDischi;
-    PreparedStatement sDischiByCollezione;
-    PreparedStatement sDischiByAutore;
-    PreparedStatement sDischiByTraccia;
-    PreparedStatement sDischiByUtente;
-    PreparedStatement sFigliDisco;
-    PreparedStatement sPadreDisco;
-    PreparedStatement sDischiPadri;
-    PreparedStatement uDisco;
-    PreparedStatement iDisco;
-    PreparedStatement dDisco;
-    PreparedStatement dDiscoCollezione;
-    PreparedStatement addDiscoCollezione;
-    PreparedStatement addDiscoAutore;
-    PreparedStatement addDiscoTraccia;
-    PreparedStatement ultimoDisco;
+    private PreparedStatement sDiscoByID;
+    private PreparedStatement sDiscoByBarcode;
+    private PreparedStatement sDischiByAnno;
+    private PreparedStatement sDischiByGenere;
+    private PreparedStatement sDischiByEtichetta;
+    private PreparedStatement sDischi;
+    private PreparedStatement sDischiByCollezione;
+    private PreparedStatement sDischiByAutore;
+    private PreparedStatement sDischiByTraccia;
+    private PreparedStatement sDischiByUtente;
+    private PreparedStatement sFigliDisco;
+    private PreparedStatement sPadreDisco;
+    private PreparedStatement sDischiPadri;
+    private PreparedStatement uDisco;
+    private PreparedStatement iDisco;
+    private PreparedStatement dDisco;
+    private PreparedStatement dDiscoCollezione;
+    private PreparedStatement addDiscoCollezione;
+    private PreparedStatement addDiscoAutore;
+    private PreparedStatement addDiscoTraccia;
+    private PreparedStatement ultimoDisco;
+    private PreparedStatement fDischiByKeyword;
 
     public DiscoDAO_MySQL(DataLayer d) {
         super(d);
@@ -59,6 +60,8 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addDiscoAutore = connection.prepareStatement("INSERT INTO disco_autore (disco_id, autore_id) VALUES (?,?)");
             addDiscoTraccia = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?,?)");
+
+            fDischiByKeyword = connection.prepareStatement("SELECT id FROM disco WHERE padre IS NULL AND (titolo LIKE CONCAT('%', ?, '%') OR barcode LIKE CONCAT('%', ?, '%') OR anno LIKE CONCAT('%', ?, '%') OR genere LIKE CONCAT('%', ?, '%') OR etichetta LIKE CONCAT('%', ?, '%')) LIMIT 4");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer", ex);
         }
@@ -84,6 +87,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             dDisco.close();
             dDiscoCollezione.close();
             addDiscoCollezione.close();
+            fDischiByKeyword.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing disks data layer", ex);
         }
@@ -258,6 +262,26 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 }
             }
         } catch (SQLException ex) {
+            throw new DataException("Error getting disks", ex);
+        }
+        return dischi;
+    }
+
+    @Override
+    public List<Disco> getDischiByKeyword(String keyword) throws DataException {
+        List<Disco> dischi = new ArrayList<>();
+        try {
+            fDischiByKeyword.setString(1, keyword);
+            fDischiByKeyword.setString(2, keyword);
+            fDischiByKeyword.setString(3, keyword);
+            fDischiByKeyword.setString(4, keyword);
+            fDischiByKeyword.setString(5, keyword);
+            try (ResultSet rs = fDischiByKeyword.executeQuery()) {
+                while (rs.next()) {
+                    dischi.add(getDisco(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException | DataException ex) {
             throw new DataException("Error getting disks", ex);
         }
         return dischi;

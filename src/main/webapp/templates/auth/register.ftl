@@ -1,3 +1,4 @@
+<link href="/assets/css/auth.css" rel="stylesheet"/>
 <!-- BACKGROUND-IMAGE -->
 <div class="bg-image">
     <div class="container register_container">

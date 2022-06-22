@@ -16,16 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *
+ * Servlet per la logout dell'utente.
  * @author Ingegneria del Web
- * @version
+ *
  */
 public class Logout extends CollectorsBaseController {
 
     private void action_logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SecurityHelpers.disposeSession(request);
         //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
-        //if an origin URL has been transmitted, return to it
         if (request.getParameter("referrer") != null) {
             response.sendRedirect(request.getParameter("referrer"));
         } else {
