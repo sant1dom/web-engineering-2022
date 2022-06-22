@@ -3,7 +3,6 @@ package org.webeng.collector_site.controller.collezioni;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.impl.CollezioneImpl;
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
@@ -17,13 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ListaDischiCollezione extends CollectorsBaseController {
+public class DeleteDiscoCollezione extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
+
+
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
@@ -47,20 +46,18 @@ public class ListaDischiCollezione extends CollectorsBaseController {
 
     }
 
-    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        TemplateResult result = new TemplateResult(getServletContext());
-
+    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, IOException {
         Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
-        List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
-
+        Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
         request.setAttribute("collezione",collezione);
-        request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
-        result.activate("collezioni/listaDischi_collezione.ftl", request, response);
+        request.setAttribute("disco",disco);
+        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
+
+        response.sendRedirect(request.getHeader("Referer"));
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }
-
 }

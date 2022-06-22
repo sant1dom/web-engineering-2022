@@ -25,6 +25,8 @@ public interface Collezione extends DataItem<Integer> {
      List<Disco> getDischi();
     
      void setDischi(List<Disco> dischi);
+
+     void addDischi(List<Disco> dischi);
     
      List<Utente> getUtentiCondivisi();
 

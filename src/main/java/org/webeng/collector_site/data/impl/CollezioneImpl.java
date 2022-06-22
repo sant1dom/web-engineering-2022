@@ -87,6 +87,11 @@ import java.util.List;
     }
 
     @Override
+    public void addDischi(List<Disco> dischi) {
+        this.dischi.addAll(dischi);
+    }
+
+    @Override
     public List<Utente> getUtentiCondivisi() {
         return this.utentiCondivisione;
     }

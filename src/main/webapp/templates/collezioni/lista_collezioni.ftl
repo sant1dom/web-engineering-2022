@@ -7,9 +7,8 @@
         <tr>
             <th scope="col">ID Collezione</th>
             <th scope="col">Titolo</th>
-            <th scope="col">Data ultima modifica</th>
-            <th scope="col">Dettagli dischi</th>
-            <th scope="col">Gestisci collezione</th>
+            <th scope="col">Data creazione</th>
+            <th scope="col">Dettagli</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -20,15 +19,14 @@
                     <th scope="row">${collezione.key}</th>
                     <td>${collezione.titolo}</td>
                     <td>${collezione.dataCreazione}</td>
-                    <td><a href="listaDischi-collezione?id_collezione=${collezione.key}">visualizza dischi</a></td>
-                    <td><a href="update-collezione?id_collezione=${collezione.key}">modifica</a></td>
-                    <td><a href="delete-collezione?id_collezione=${collezione.key}">elimina</a></td>
+                    <td><a href="show-collezione?id_collezione=${collezione.key}" class="bt-navbar-registrati">visualizza</a></td>
+                    <td><a href="delete-collezione?id_collezione=${collezione.key}" class="bt-navbar-registrati">elimina collezione</a></td>
                 </tr>
             </#list>
         </#if>
         </tbody>
         </table>
-        <a href="create-collezione" >Crea una nuova collezione</a>
+        <a href="create-collezione" class="btn btn-primary">Crea una nuova collezione</a>
 
 </div>
 

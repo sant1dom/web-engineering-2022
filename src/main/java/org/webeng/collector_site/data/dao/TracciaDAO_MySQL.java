@@ -273,7 +273,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         List<Traccia> tracce = new ArrayList<>();
         try {
             sTracceByDisco.setInt(1, disco.getKey());
-            ResultSet rs = sTracce.executeQuery();
+            ResultSet rs = sTracceByDisco.executeQuery();
             while(rs.next()){
                 tracce.add(getTraccia(rs.getInt("id")));
             }

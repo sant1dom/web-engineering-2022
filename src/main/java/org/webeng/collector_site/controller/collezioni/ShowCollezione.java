@@ -11,7 +11,9 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Servlet per la visualizzazione del singolo autore.
@@ -42,6 +44,20 @@ public class ShowCollezione extends CollectorsBaseController {
             handleError(ex, request, response);
         }
     }
+
+    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        TemplateResult result = new TemplateResult(getServletContext());
+        Collezione  collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
+        List <Disco> dischi=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
+        request.setAttribute("collezione", collezione);
+        request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
+        result.activate("collezioni/show_collezione.ftl", request, response);
+    }
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        response.sendRedirect("/login");
+    }
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
