@@ -1,9 +1,6 @@
 package org.webeng.collector_site.controller.search;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
-import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.framework.result.TemplateManagerException;
-import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +21,13 @@ public class ResultDispatcher extends CollectorsBaseController {
      * @param request servlet request
      * @param response servlet response
      */
-    private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-        TemplateResult result = new TemplateResult(getServletContext());
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-        result.activate("search/search.ftl", request, response);
+    private void action_default(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.sendRedirect("/search?keyword=" + request.getParameter("keyword"));
+        } catch (IOException ex) {
+            handleError(ex, request, response);
+        }
+
     }
 
     /**
@@ -140,27 +139,23 @@ public class ResultDispatcher extends CollectorsBaseController {
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String https_redirect_url = SecurityHelpers.checkHttps(request);
-            request.setAttribute("https-redirect", https_redirect_url);
-            String type = request.getParameter("item_type");
+        String https_redirect_url = SecurityHelpers.checkHttps(request);
+        request.setAttribute("https-redirect", https_redirect_url);
+        String type = request.getParameter("item_type");
 
-            // controllo se il tipo di item è stato impostato, se si lo gestisco in base al tipo,
-            // altrimenti mostro la pagina di ricerca generica
-            if (!type.isBlank()) {
-                switch (type) {
-                    case ("UTENTI") -> action_utente(request, response);
-                    case ("COLLEZIONI") -> action_collezioni(request, response);
-                    case ("DISCHI") -> action_disco(request, response);
-                    case ("TRACCE") -> action_traccia(request, response);
-                    case ("AUTORI") -> action_autori(request, response);
-                    default -> action_default(request, response);
-                }
-            } else {
-                action_default(request, response);
+        // controllo se il tipo di item è stato impostato, se si lo gestisco in base al tipo,
+        // altrimenti mostro la pagina di ricerca generica
+        if (!type.isBlank()) {
+            switch (type) {
+                case ("UTENTI") -> action_utente(request, response);
+                case ("COLLEZIONI") -> action_collezioni(request, response);
+                case ("DISCHI") -> action_disco(request, response);
+                case ("TRACCE") -> action_traccia(request, response);
+                case ("AUTORI") -> action_autori(request, response);
+                default -> action_default(request, response);
             }
-        } catch (TemplateManagerException ex) {
-            handleError(ex, request, response);
+        } else {
+            action_default(request, response);
         }
     }
 

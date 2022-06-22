@@ -1,11 +1,9 @@
-package org.webeng.collector_site.controller.collezioni;
+package org.webeng.collector_site.controller.search;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.model.Collezione;
-import org.webeng.collector_site.data.model.Disco;
-import org.webeng.collector_site.data.model.Utente;
+import org.webeng.collector_site.data.model.*;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
@@ -16,31 +14,41 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Servlet per la visualizzazione del singolo autore.
+ * Servlet per la gestione dei risultati di ricerca.
+ *
  * @author Davide De Acetis
  */
-public class ShowCollezione extends CollectorsBaseController {
+public class Search extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
 
-    private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    /**
+     * Gestisce il caso base in cui viene inserita una keyword da ricercare senza selezionare tra i suggerimenti
+     *
+     * @param request  servlet request
+     * @param response servlet response
+     */
+    private void action_default(HttpServletRequest request, HttpServletResponse response) {
         try {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
             CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
 
-            Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
-            Utente proprietario = collezione.getUtente();
-            List<Disco> dischi = collezione.getDischi();
+            List<Utente> utenti = Utility.getUtenti(request, response);
+            List<Collezione> collezioni = Utility.getCollezioni(request, response);
+            List<Disco> dischi = Utility.getDischi(request, response);
+            List<Traccia> tracce = Utility.getTracce(request, response);
+            List<Autore> autori = Utility.getAutori(request, response);
 
-
-            //Ogni collezione ha una lista di dischi e il suo proprietario.
-            request.setAttribute("collezione", collezione);
+            request.setAttribute("keyword", request.getParameter("keyword"));
+            request.setAttribute("utenti", utenti);
+            request.setAttribute("collezioni", collezioni);
             request.setAttribute("dischi", dischi);
-            request.setAttribute("proprietario", proprietario);
+            request.setAttribute("tracce", tracce);
+            request.setAttribute("autori", autori);
 
-            result.activate("/collezioni/show.ftl", request, response);
-        } catch (DataException | TemplateManagerException ex) {
+            result.activate("search/search.ftl", request, response);
+        }catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
     }
@@ -64,7 +72,7 @@ public class ShowCollezione extends CollectorsBaseController {
             String https_redirect_url = SecurityHelpers.checkHttps(request);
             request.setAttribute("https-redirect", https_redirect_url);
             action_default(request, response);
-        } catch (TemplateManagerException | DataException ex) {
+        } catch (DataException ex) {
             handleError(ex, request, response);
         }
     }
@@ -72,8 +80,7 @@ public class ShowCollezione extends CollectorsBaseController {
     /**
      * Returns a short description of the servlet.
      */
-    @Override
     public String getServletInfo() {
-        return "Servlet per la visualizzazione del singolo autore.";
+        return "Servlet per la gestione dei risultati di ricerca";
     }
 }

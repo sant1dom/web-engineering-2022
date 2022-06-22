@@ -1,15 +1,15 @@
 package org.webeng.collector_site.controller;
 
+import com.google.gson.Gson;
 import org.webeng.collector_site.data.dao.*;
-import org.webeng.collector_site.data.model.Autore;
-import org.webeng.collector_site.data.model.Collezione;
-import org.webeng.collector_site.data.model.Disco;
-import org.webeng.collector_site.data.model.Utente;
+import org.webeng.collector_site.data.model.*;
 import org.webeng.framework.data.DataException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -55,8 +55,8 @@ public class Utility {
      * @return la lista degli utenti i cui dati contengono la keyword passata come parametro nella request
      * @throws DataException segnalazione di errore
      */
-    public static List<String> getUtenti(HttpServletRequest request, HttpServletResponse response) throws DataException {
-        List<String> utenti;
+    public static List<Utente> getUtenti(HttpServletRequest request, HttpServletResponse response) throws DataException {
+        List<Utente> utenti;
         //keyword inserita dall'utente
         String keyword = request.getParameter("keyword");
         //datalayer
@@ -115,8 +115,8 @@ public class Utility {
      * @return la lista delle tracce i cui dati contengono la keyword passata come parametro nella request
      * @throws DataException segnalazione di errore
      */
-    public static List<String> getTracce(HttpServletRequest request, HttpServletResponse response) throws DataException {
-        List<String> tracce;
+    public static List<Traccia> getTracce(HttpServletRequest request, HttpServletResponse response) throws DataException {
+        List<Traccia> tracce;
         //keyword inserita dall'utente
         String keyword = request.getParameter("keyword");
         //datalayer

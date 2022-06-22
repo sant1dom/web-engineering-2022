@@ -2,6 +2,7 @@ package org.webeng.collector_site.data.dao;
 
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
+import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 
@@ -21,7 +22,7 @@ public interface UtenteDAO {
 
     List<Utente> getUtenti() throws DataException;
 
-    List<String> getUtentiByKeyword(String keyword) throws DataException;
+    List<Utente> getUtentiByKeyword(String keyword) throws DataException;
 
     List<Utente> getUtenti(Collezione collezione) throws DataException;
 

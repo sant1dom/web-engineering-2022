@@ -57,14 +57,14 @@
     </servlet-mapping>
 
     <!--  SEARCH  -->
-<!--    <servlet>-->
-<!--        <servlet-name>search</servlet-name>-->
-<!--        <servlet-class>org.webeng.collector_site.controller.search.Search</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>search</servlet-name>-->
-<!--        <url-pattern>/search</url-pattern>-->
-<!--    </servlet-mapping>-->
+    <servlet>
+        <servlet-name>search</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.search.Search</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
 
     <!--  RESULT FOR SEARCH  -->
     <servlet>

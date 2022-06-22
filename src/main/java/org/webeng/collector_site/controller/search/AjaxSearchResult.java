@@ -3,9 +3,7 @@ package org.webeng.collector_site.controller.search;
 import com.google.gson.Gson;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
-import org.webeng.collector_site.data.model.Autore;
-import org.webeng.collector_site.data.model.Collezione;
-import org.webeng.collector_site.data.model.Disco;
+import org.webeng.collector_site.data.model.*;
 import org.webeng.framework.data.DataException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,10 +35,10 @@ public class AjaxSearchResult extends CollectorsBaseController {
             Gson gson = new Gson();
             PrintWriter out = response.getWriter();
             //Vengono eseguite le query per ottenere i risultati attraverso la keyword
-            List<String> utenti = Utility.getUtenti(request, response);
+            List<Utente> utenti = Utility.getUtenti(request, response);
             List<Collezione> collezioni = Utility.getCollezioni(request, response);
             List<Disco> dischi = Utility.getDischi(request, response);
-            List<String> tracce = Utility.getTracce(request, response);
+            List<Traccia> tracce = Utility.getTracce(request, response);
             List<Autore> autori = Utility.getAutori(request, response);
 
             //Viene costruita la stringa che verrà poi convertita in json
@@ -49,7 +47,12 @@ public class AjaxSearchResult extends CollectorsBaseController {
             String data = "[";
 
             if (!utenti.isEmpty()) {
-                data += "{ \"UTENTI\":  " + gson.toJson(utenti) + "}";
+                data += "{ \"UTENTI\":  {";
+                for (Utente utente : utenti) {
+                    data += gson.toJson(utente.getKey().toString()) + ": [" +
+                            gson.toJson(utente.getUsername()) + "] ,";
+                }
+                data += "}}";
             }
 
             if (!collezioni.isEmpty()) {
@@ -61,29 +64,29 @@ public class AjaxSearchResult extends CollectorsBaseController {
                 data += "}}";
             }
 
-
             if (!dischi.isEmpty()) {
                 data += "{ \"DISCHI\":  {";
                 for (Disco disco : dischi) {
                     data += gson.toJson(disco.getKey().toString()) + ": [" +
-                            gson.toJson(disco.getTitolo()) + "," +
-                            gson.toJson(disco.getEtichetta()) + "," +
-                            gson.toJson(disco.getAnno()) + "," +
-                            gson.toJson(disco.getGenere()) + "] ,";
+                            gson.toJson(disco.getTitolo()) + "] ,";
                 }
                 data += "}}";
             }
 
             if (!tracce.isEmpty()) {
-                data += "{ \"TRACCE\":  " + gson.toJson(tracce) + "}";
+                data += "{ \"TRACCE\":  {";
+                for (Traccia traccia : tracce) {
+                    data += gson.toJson(traccia.getKey().toString()) + ": [" +
+                            gson.toJson(traccia.getTitolo()) +  "] ,";
+                }
+                data += "}}";
             }
 
             if (!autori.isEmpty()) {
                 data += "{ \"AUTORI\":  {";
                 for (Autore autore : autori) {
                     data += gson.toJson(autore.getKey().toString()) + ": [" +
-                            gson.toJson(autore.getNomeArtistico()) + "," +
-                            gson.toJson(autore.getNome()) + "] ,";
+                            gson.toJson(autore.getNomeArtistico()) +  "] ,";
                 }
                 data += "}}";
             }

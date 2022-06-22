@@ -48,7 +48,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             addTracciaAutore = connection.prepareStatement("INSERT INTO traccia_autore (traccia_id, autore_id) VALUES (?,?)");
             addTracciaDisco = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?, ?)");
 
-            fTracceByTitle = connection.prepareStatement("SELECT titolo FROM traccia WHERE titolo LIKE CONCAT('%', ?, '%')");
+            fTracceByTitle = connection.prepareStatement("SELECT * FROM traccia WHERE titolo LIKE CONCAT('%', ?, '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer",ex);
         }
@@ -251,13 +251,13 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     }
 
     @Override
-    public List<String> getTracceByKeyword(String keyword) throws DataException {
-        List<String> result = new ArrayList<>();
+    public List<Traccia> getTracceByKeyword(String keyword) throws DataException {
+        List<Traccia> result = new ArrayList<>();
         try {
             fTracceByTitle.setString(1, keyword);
             try (ResultSet rs = fTracceByTitle.executeQuery()) {
                 while (rs.next()) {
-                    result.add(rs.getString("titolo"));
+                    result.add(createTraccia(rs));
                 }
             } catch (SQLException ex) {
                 throw new DataException("Unable to load traccia", ex);

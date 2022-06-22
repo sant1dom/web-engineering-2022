@@ -44,7 +44,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
             addUtenteCollezione = connection.prepareStatement("INSERT INTO collezione_condivisa_con (utente_id, collezione_id) VALUES (?,?)");
             //query per auto completamento ricerca
-            fUtentiByUsername = connection.prepareStatement("SELECT username from utente WHERE username LIKE CONCAT('%', ? ,'%')");
+            fUtentiByUsername = connection.prepareStatement("SELECT * from utente WHERE username LIKE CONCAT('%', ? ,'%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing users data layer", ex);
         }
@@ -255,13 +255,15 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     }
 
     @Override
-    public List<String> getUtentiByKeyword(String keyword) throws DataException {
-        List<String> result = new ArrayList<>();
+    public List<Utente> getUtentiByKeyword(String keyword) throws DataException {
+        List<Utente> result = new ArrayList<>();
         try {
             fUtentiByUsername.setString(1, keyword);
             try (ResultSet rs = fUtentiByUsername.executeQuery()) {
               while (rs.next()) {
-                  result.add(rs.getString("username"));
+                  Utente utente = createUtente(rs);
+                  utente.setPassword("");
+                  result.add(utente);
               }
             } catch (SQLException ex) {
                 throw new DataException("Unable to load users", ex);

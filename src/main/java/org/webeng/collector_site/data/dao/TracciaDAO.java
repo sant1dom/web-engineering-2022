@@ -20,6 +20,8 @@ public interface TracciaDAO {
 
     List<Traccia> getTracce() throws DataException;
 
+    List<Traccia> getTracceByKeyword(String keyword) throws DataException;
+
     List<Traccia> getTracce(Disco disco) throws DataException;
 
     List<Traccia> getTracce(Autore autore) throws DataException;
@@ -37,6 +39,4 @@ public interface TracciaDAO {
     void addTracce(Autore autore, List<Traccia> tracce) throws DataException;
 
     void addTraccia(Autore autore, Traccia traccia) throws DataException;
-
-    List<String> getTracceByKeyword(String keyword) throws DataException;
 }
