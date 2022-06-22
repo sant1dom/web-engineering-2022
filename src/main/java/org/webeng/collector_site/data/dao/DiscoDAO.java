@@ -6,6 +6,7 @@ import org.webeng.framework.data.DataException;
 import java.util.List;
 
 public interface DiscoDAO {
+
     Disco getDisco(String barcode) throws DataException;
 
     Disco createDisco();
@@ -42,4 +43,5 @@ public interface DiscoDAO {
     void addDiscoToCollezioni(List<Collezione> collezioni, Disco disco) throws DataException;
 
 
+    List<String> getEtichette() throws DataException;
 }

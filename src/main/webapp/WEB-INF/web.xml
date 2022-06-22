@@ -199,6 +199,15 @@
         <url-pattern>/create-autore</url-pattern>
     </servlet-mapping>
 
+    <!-- STATS -->
+    <servlet>
+        <servlet-name>StatsView</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.stats.StatsView</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StatsView</servlet-name>
+        <url-pattern>/stats</url-pattern>
+    </servlet-mapping>
 
     <!-- COLLEZIONI -->
     <servlet>

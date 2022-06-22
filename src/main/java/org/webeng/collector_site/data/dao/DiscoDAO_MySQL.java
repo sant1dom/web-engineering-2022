@@ -30,6 +30,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     private PreparedStatement addDiscoAutore;
     private PreparedStatement addDiscoTraccia;
     private PreparedStatement ultimoDisco;
+    private PreparedStatement sEtichette;
     private PreparedStatement fDischiByKeyword;
 
     public DiscoDAO_MySQL(DataLayer d) {
@@ -53,6 +54,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sFigliDisco = connection.prepareStatement("SELECT d.id FROM disco d WHERE padre = ?");
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
             sDischiPadri = connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
+            sEtichette = connection.prepareStatement("SELECT DISTINCT etichetta FROM disco");
             uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
@@ -82,6 +84,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sDischiByUtente.close();
             sFigliDisco.close();
             sPadreDisco.close();
+            sEtichette.close();
             uDisco.close();
             iDisco.close();
             dDisco.close();
@@ -410,6 +413,20 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     }
 
     @Override
+    public List<String> getEtichette() throws DataException {
+        List<String> etichette = new ArrayList<>();
+        try {
+            ResultSet rs = sEtichette.executeQuery();
+            while (rs.next()) {
+                etichette.add(rs.getString("etichetta"));
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting labels", ex);
+        }
+        return etichette;
+    }
+
+    @Override
     public void addDisco(Collezione collezione, Disco disco) throws DataException {
         try {
             addDiscoCollezione.setInt(1, collezione.getKey());
@@ -419,5 +436,4 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             throw new DataException("Error setting disk in collection", ex);
         }
     }
-
 }

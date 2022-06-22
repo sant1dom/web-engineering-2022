@@ -31,7 +31,7 @@ public abstract class AbstractBaseController extends HttpServlet {
     private DataSource ds;
     private Pattern protect;
 
-    protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException;
+    protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 
     //creare la propria classe derivata da DataLayer
     //create your own datalayer derived class
