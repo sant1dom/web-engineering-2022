@@ -92,7 +92,7 @@ public class Login extends CollectorsBaseController {
                 response.sendRedirect("/");
             }
             //se i campi username e password sono presenti effettuiamo il login
-            if (!request.getParameter("username").isBlank() && !request.getParameter("password").isBlank()) {
+            if (request.getParameter("username") != null && request.getParameter("password") != null) {
                 action_login(request, response);
             } else {
                 //altrimenti carichiamo la pagina di login

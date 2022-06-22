@@ -96,7 +96,7 @@ public class Register extends CollectorsBaseController {
                 response.sendRedirect("/");
             }
             //se i campi username, email e password sono presenti effettuiamo la registrazione
-            if (!request.getParameter("username").isBlank() && !request.getParameter("email").isBlank() && !request.getParameter("password").isBlank()) {
+            if (request.getParameter("username") != null && request.getParameter("email") != null && request.getParameter("password") != null)  {
                 action_register(request, response);
             } else {
                 //altrimenti carichiamo la pagina di registrazione
