@@ -2,36 +2,37 @@
 
 <h2 class="ml-5 mt-3">Modifica collezione</h2>
 
- <!-- NON FUNZIONA -->
-<form method="post" action="update-collezione" class="ml-5 mt-3">
-<div class="form-group col-7">
-    <label for="disco">Dischi</label>
-    <input type="hidden" name="k" value="${collezione.key!0}"/>
-    <div class="twelve columns"><select name="disco">
-            <#list dischi as disco>
-                <option value="${disco.key}"
-                        <#if (collezione.disco?? && disco.key=collezione.disco.key)>
-                            selected="selected"
-                        </#if>
-                >${disco.titolo}</option>
-            </#list>
-        </select>
-    </div>
 
+<form method="post" action="update-collezione?id_collezione=${collezione.key}" class="ml-5 mt-3">
+<div class="form-group col-7">
     <div class="form-group col-5">
         <label for="titolo">Titolo</label>
-        <input type="text" class="form-control" value="" id="titolo" name="titolo" placeholder="Titolo">
+        <input type="text" class="form-control" value="${collezione.titolo}" id="titolo" name="titolo">
     </div>
 
     <div class="form-group col-7">
         <label for="privacy">Privacy</label>
         <select id="privacy" name="privacy" class="selectpicker" >
-            <option selected="" value="">Scegli un'opzione</option>
-            <option value="PRIVATA">PRIVATA</option>
-            <option value="PUBBLICA">PUBBLICA</option>
-            <option value="CONDIVISA">CONDIVISA</option>
+
+            <#if (collezione.privacy="PRIVATA")>
+            <option selected="selected" value="PRIVATA">PRIVATA</option>
+            <#else>
+                <option value="PRIVATA">PRIVATA</option>
+            </#if>
+            <#if (collezione.privacy="PUBBLICA")>
+                <option selected="selected" value="PUBBLICA">PUBBLICA</option>
+            <#else>
+                <option value="PUBBLICA">PUBBLICA</option>
+            </#if>
+            <#if (collezione.privacy="CONDIVISA")>
+                <option selected="selected" value="CONDIVISA">CONDIVISA</option>
+            <#else>
+                <option value="CONDIVISA">CONDIVISA</option>
+            </#if>
+
         </select>
     </div>
+
 
     <div class="form-group col-3">
         <button type="submit" class="btn btn-primary">Salva</button>

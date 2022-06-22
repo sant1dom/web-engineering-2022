@@ -222,7 +222,7 @@ INSERT INTO `disco_autore` (`disco_id`, `autore_id`) VALUES (19, 5);
 INSERT INTO `disco_autore` (`disco_id`, `autore_id`) VALUES (19, 10);
 INSERT INTO `disco_autore` (`disco_id`, `autore_id`) VALUES (20, 2);
 
-INSERT INTO `disco_traccia` (`disco_id`, `traccia_id`) VALUES (1, 6);
+INSERT INTO `disco_traccia` (`disco_id`, `traccia_id`) VALUES (1, 5);
 INSERT INTO `disco_traccia` (`disco_id`, `traccia_id`) VALUES (1, 21);
 INSERT INTO `disco_traccia` (`disco_id`, `traccia_id`) VALUES (2, 1);
 INSERT INTO `disco_traccia` (`disco_id`, `traccia_id`) VALUES (2, 19);

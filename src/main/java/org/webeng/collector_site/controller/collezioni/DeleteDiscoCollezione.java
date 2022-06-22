@@ -8,7 +8,7 @@ import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
-
+import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.ServletException;
@@ -17,10 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
-
-public class DeleteCollezione extends CollectorsBaseController {
+public class DeleteDiscoCollezione extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
+
+
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
@@ -46,11 +48,10 @@ public class DeleteCollezione extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, IOException {
         Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
-        List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
-        for(Disco disco:dischi){
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
-        }
-        ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().deleteCollezione(collezione);
+        Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
+        request.setAttribute("collezione",collezione);
+        request.setAttribute("disco",disco);
+        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
 
         response.sendRedirect(request.getHeader("Referer"));
     }
