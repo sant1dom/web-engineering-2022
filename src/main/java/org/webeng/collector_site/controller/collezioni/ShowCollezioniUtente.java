@@ -4,7 +4,6 @@ import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.Collezione;
-import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -15,12 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class ListaCollezioniUtente extends CollectorsBaseController {
+public class ShowCollezioniUtente extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {

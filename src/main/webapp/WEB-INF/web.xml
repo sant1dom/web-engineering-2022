@@ -212,20 +212,11 @@
 
     <servlet>
         <servlet-name>ListaCollezioniUtente</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.ListaCollezioniUtente</servlet-class>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.ShowCollezioniUtente</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListaCollezioniUtente</servlet-name>
-        <url-pattern>/lista-collezioni</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ListaDischiCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.ListaDischiCollezione</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ListaDischiCollezione</servlet-name>
-        <url-pattern>/listaDischi-collezione</url-pattern>
+        <url-pattern>/show-collezioni</url-pattern>
     </servlet-mapping>
 
     <servlet>
