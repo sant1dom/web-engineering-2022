@@ -82,16 +82,19 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
             }
             Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-            collezione.setTitolo(collezione.getTitolo());
-            collezione.setPrivacy(collezione.getPrivacy());
+            if(Utility.getUtente(request,response).equals(collezione.getUtente())) {
+                collezione.setTitolo(collezione.getTitolo());
+                collezione.setPrivacy(collezione.getPrivacy());
 
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
-            for (Disco disco : dischi) {
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
+                for (Disco disco : dischi) {
+                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
+                }
+                response.sendRedirect("/show-collezioni");
             }
-
-            response.sendRedirect("/home");
+            else
+                response.sendRedirect("/home");
         } catch (Exception e) {
             handleError(e, request, response);
         }
