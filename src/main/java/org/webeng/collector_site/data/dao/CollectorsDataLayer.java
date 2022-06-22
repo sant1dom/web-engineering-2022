@@ -21,6 +21,7 @@ public class CollectorsDataLayer extends DataLayer {
         registerDAO(Traccia.class, new TracciaDAO_MySQL(this));
         registerDAO(Disco.class, new DiscoDAO_MySQL(this));
         registerDAO(Image.class, new ImageDAO_MySQL(this));
+        registerDAO(Stats.class, new StatsDAO_MySQL(this));
     }
 
     //helpers
@@ -47,4 +48,6 @@ public class CollectorsDataLayer extends DataLayer {
     public ImageDAO getImageDAO() {
         return (ImageDAO) getDAO(Image.class);
     }
+
+    public StatsDAO getStatsDAO() { return (StatsDAO) getDAO(Stats.class); }
 }
