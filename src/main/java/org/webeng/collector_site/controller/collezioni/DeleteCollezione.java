@@ -47,12 +47,19 @@ public class DeleteCollezione extends CollectorsBaseController {
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, IOException {
         Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
-        for(Disco disco:dischi){
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
-        }
-        ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().deleteCollezione(collezione);
 
-        response.sendRedirect(request.getHeader("Referer"));
+        if(Utility.getUtente(request,response).equals(collezione.getUtente())){
+            for(Disco disco:dischi){
+                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
+            }
+            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().deleteCollezione(collezione);
+            response.sendRedirect(request.getHeader("Referer"));
+        }
+        else {
+            response.sendRedirect("/home");
+        }
+
+
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
