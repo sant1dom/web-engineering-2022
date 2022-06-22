@@ -2,6 +2,7 @@ package org.webeng.collector_site.controller;
 
 import org.webeng.collector_site.data.dao.*;
 import org.webeng.collector_site.data.model.Autore;
+import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
@@ -74,8 +75,8 @@ public class Utility {
      * @return la lista delle collezioni i cui dati contengono la keyword passata come parametro nella request
      * @throws DataException segnalazione di errore
      */
-    public static List<String> getCollezioni(HttpServletRequest request, HttpServletResponse response) throws DataException {
-        List<String> collezioni;
+    public static List<Collezione> getCollezioni(HttpServletRequest request, HttpServletResponse response) throws DataException {
+        List<Collezione> collezioni;
         //keyword inserita dall'utente
         String keyword = request.getParameter("keyword");
         //datalayer

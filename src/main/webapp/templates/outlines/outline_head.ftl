@@ -24,6 +24,8 @@
     <link href="/assets/css/navbar.css" rel="stylesheet"/>
 
     <link href="/assets/css/style.css" rel="stylesheet"/>
+    <link href="/assets/css/table.css" rel="stylesheet"/>
+    <link href="/assets/css/filtro.css" rel="stylesheet"/>
 
     <link href="/assets/css/search.css" rel="stylesheet"/>
 

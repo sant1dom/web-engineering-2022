@@ -76,7 +76,7 @@
         <url-pattern>/result</url-pattern>
     </servlet-mapping>
 
-    <!--  LOGIN  -->
+    <!--  REGISTER  -->
     <servlet>
         <servlet-name>register</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.auth.Register</servlet-class>
@@ -201,6 +201,15 @@
 
 
     <!-- COLLEZIONI -->
+    <servlet>
+        <servlet-name>ShowCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.ShowCollezione</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowCollezione</servlet-name>
+        <url-pattern>/show-collezione</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>CreateCollezione</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.collezioni.CreateCollezione</servlet-class>

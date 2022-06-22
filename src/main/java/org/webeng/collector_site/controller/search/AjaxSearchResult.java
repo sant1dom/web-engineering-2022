@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.model.Autore;
+import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.framework.data.DataException;
 
@@ -37,7 +38,7 @@ public class AjaxSearchResult extends CollectorsBaseController {
             PrintWriter out = response.getWriter();
             //Vengono eseguite le query per ottenere i risultati attraverso la keyword
             List<String> utenti = Utility.getUtenti(request, response);
-            List<String> collezioni = Utility.getCollezioni(request, response);
+            List<Collezione> collezioni = Utility.getCollezioni(request, response);
             List<Disco> dischi = Utility.getDischi(request, response);
             List<String> tracce = Utility.getTracce(request, response);
             List<Autore> autori = Utility.getAutori(request, response);
@@ -52,8 +53,14 @@ public class AjaxSearchResult extends CollectorsBaseController {
             }
 
             if (!collezioni.isEmpty()) {
-                data += "{ \"COLLEZIONI\": " + gson.toJson(collezioni) + "}";
+                data += "{ \"COLLEZIONI\":  {";
+                for (Collezione collezione : collezioni) {
+                    data += gson.toJson(collezione.getKey().toString()) + ": [" +
+                            gson.toJson(collezione.getTitolo()) + "] ,";
+                }
+                data += "}}";
             }
+
 
             if (!dischi.isEmpty()) {
                 data += "{ \"DISCHI\":  {";
@@ -62,8 +69,7 @@ public class AjaxSearchResult extends CollectorsBaseController {
                             gson.toJson(disco.getTitolo()) + "," +
                             gson.toJson(disco.getEtichetta()) + "," +
                             gson.toJson(disco.getAnno()) + "," +
-                            gson.toJson(disco.getGenere()) + "," +
-                            "] ,";
+                            gson.toJson(disco.getGenere()) + "] ,";
                 }
                 data += "}}";
             }
@@ -77,8 +83,7 @@ public class AjaxSearchResult extends CollectorsBaseController {
                 for (Autore autore : autori) {
                     data += gson.toJson(autore.getKey().toString()) + ": [" +
                             gson.toJson(autore.getNomeArtistico()) + "," +
-                            gson.toJson(autore.getNome()) +
-                            "] ,";
+                            gson.toJson(autore.getNome()) + "] ,";
                 }
                 data += "}}";
             }

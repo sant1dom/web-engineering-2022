@@ -9,6 +9,8 @@
 
     <!-- AUTOCOMPLETE -->
     <script src="/assets/js/search_suggestions.js"></script>
+    <!-- FILTRO -->
+    <script src="/assets/js/filtro.js"></script>
 
     <!-- END SCRIPT -->
 </footer>

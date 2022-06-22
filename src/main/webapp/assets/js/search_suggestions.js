@@ -16,7 +16,7 @@ $(document).ready(function () {
 });
 
 //nasconde il box di suggerimenti quando si clicca fuori dalla barra di ricerca
-$('.page_container').click(function () {
+$('.page-container').click(function () {
     suggestion_box.hide();
 });
 

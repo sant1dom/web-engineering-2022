@@ -37,7 +37,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
-            fCollezioniByTitolo = connection.prepareStatement("SELECT titolo FROM collezione WHERE titolo LIKE CONCAT('%', ? , '%') AND privacy != 'PRIVATO'");
+            fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy != 'PRIVATO' AND titolo LIKE CONCAT('%', ? , '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
         }
@@ -209,13 +209,13 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     }
 
     @Override
-    public List<String> getCollezioniByKeyword(String keyword) throws DataException {
-        List<String> result = new ArrayList<>();
+    public List<Collezione> getCollezioniByKeyword(String keyword) throws DataException {
+        List<Collezione> result = new ArrayList<>();
         try {
             fCollezioniByTitolo.setString(1, keyword);
             try (ResultSet rs = fCollezioniByTitolo.executeQuery()) {
                 while (rs.next()) {
-                    result.add(rs.getString("titolo"));
+                    result.add(createCollezione(rs));
                 }
             } catch (SQLException ex) {
                 throw new DataException("Unable to load collections", ex);
