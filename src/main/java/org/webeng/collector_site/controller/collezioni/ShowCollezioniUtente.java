@@ -47,7 +47,7 @@ public class ShowCollezioniUtente extends CollectorsBaseController {
         TemplateResult result = new TemplateResult(getServletContext());
         List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
         request.setAttribute("collezioni", Objects.requireNonNullElse(collezioni, ""));
-        result.activate("collezioni/lista_collezioni.ftl", request, response);
+        result.activate("collezioni/show_collezioni.ftl", request, response);
     }
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
