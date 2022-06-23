@@ -5,7 +5,7 @@
  */
 
 //filtro per il tipo di tabella
-function filtroTipo(tabella){
+function filtroTipo(tabella) {
     let utenti = $('#utenti-container')
     let collezioni = $("#collezioni-container");
     let dischi = $("#dischi-container");
@@ -61,22 +61,21 @@ function filtroTipo(tabella){
 }
 
 //filtro per i dischi
-function filtroDischi(val){
+function filtroDischi(val) {
     let value = val.toLowerCase();
     if (value === "tutti") {
         value = "";
     }
-    $("#table-tbody-dischi tr").filter(function() {
+    $("#table-tbody-dischi tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
 }
 
 //barra di ricerca
-function ricerca (tabella) {
-    $("#input-filtro").on("keyup", function (tabella) {
-        var value = $(this).val().toLowerCase();
-        $(tabella + " tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
+function ricerca(val, tabella) {
+    val = val.toLowerCase();
+    tabella = "#" + tabella;
+    $(tabella + " tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1)
     });
 }

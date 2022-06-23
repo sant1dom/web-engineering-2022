@@ -23,7 +23,12 @@
     border: none;
     border-bottom: 1px solid grey;
     outline: none;
+}
 
+.input-filtro.inner-table {
+    border-bottom: none;
+
+    width: 20rem;
 }
 
 .filtro-info {
@@ -63,5 +68,9 @@
         width: 100%;
         padding: 0 0 2rem;
         display: block;
+    }
+
+    .input-filtro, .input-filtro:focus {
+        border-bottom: none;
     }
 }

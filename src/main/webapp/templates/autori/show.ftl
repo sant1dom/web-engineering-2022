@@ -22,17 +22,29 @@
         <div class="side-bar-container">
             <div class="title">FILTRO</div>
             <div class="filtro">
-                <input id="input-filtro" type="text" placeholder="Search.." class="input-filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
+                        <dt class="filtro-subtitle">TIPO:</dt>
+
+                        <div class="horizontal-separator filtro-horizontal-separator"></div>
+
+                        <dd><span class="filtro-link" onclick="filtroTipo('TUTTI')">TUTTI</span></dd>
+                        <dd><span class="filtro-link" onclick="filtroTipo('DISCHI' )">DISCHI</span></dd>
+                        <dd><span class="filtro-link" onclick="filtroTipo('TRACCE' )">TRACCE</span></dd>
+
+                        <div class="horizontal-separator filtro-horizontal-separator"></div>
+
                         <#include "../outlines/filtro/outline_generi.ftl">
                     </dl>
                 </div>
             </div>
         </div>
         <div class="tables-container">
-            <div class="table-container">
-                <div class="title">DISCHI</div>
+            <div class="table-container" id="dischi-container">
+                <div class="title flex justify-between align-items-center">
+                    DISCHI
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-dischi')" type="text" placeholder="Search.." class="input-filtro inner-table">
+                </div>
                 <#if (dischi??)>
                 <div class="table-scrollable">
                     <table class="table table-borderless table-striped overflow-auto">
@@ -45,7 +57,7 @@
                             <th scope="col">Genere</th>
                         </tr>
                         </thead>
-                        <tbody id="table-tbody">
+                        <tbody id="table-tbody-dischi">
                         <#list dischi as disco>
                             <tr>
                                 <td>${disco.getBarCode()}</td>
@@ -61,8 +73,11 @@
                     </#if>
                 </div>
             </div>
-            <div class="table-container">
-                <div class="title">TRACCE</div>
+            <div class="table-container" id="tracce-container">
+                <div class="title flex justify-between align-items-center">
+                    TRACCE
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-tracce')" type="text" placeholder="Search.." class="input-filtro inner-table">
+                </div>
                 <#if (tracce??)>
                 <div class="table-scrollable">
                     <table class="table table-borderless table-striped">
@@ -73,7 +88,7 @@
                             <th scope="col">Durata</th>
                         </tr>
                         </thead>
-                        <tbody id="tbody-dischi">
+                        <tbody id="table-tbody-tracce">
                         <#list tracce as traccia>
                             <tr>
                                 <td>${traccia.getISWC()}</td>

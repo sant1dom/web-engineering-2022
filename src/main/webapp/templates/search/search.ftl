@@ -32,11 +32,9 @@
         <div class="tables-container">
             <!-- TABELLA UTENTI -->
             <div class="table-container" id="utenti-container">
-                <div class="title flex justify-between">
+                <div class="title flex justify-between align-items-center">
                     UTENTI
-                    <div>
-                        <input id="input-filtro-utente" onkeyup="" type="text" placeholder="Search.." class="input-filtro">
-                    </div>
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-utenti')" type="text" placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (utenti?? && utenti?size > 0)>
                     <div class="table-scrollable">
@@ -65,7 +63,10 @@
             </div>
             <!-- TABELLA COLLEZIONI -->
             <div class="table-container" id="collezioni-container">
-                <div class="title">COLLEZIONI</div>
+                <div class="title flex justify-between align-items-center">
+                    COLLEZIONI
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-collezioni')" type="text" placeholder="Search.." class="input-filtro inner-table">
+                </div>
                 <#if (collezioni?? && collezioni?size > 0)>
                     <div class="table-scrollable">
                         <table class="table table-borderless table-striped overflow-auto">
@@ -75,7 +76,7 @@
                                 <th scope="col">Proprietario</th>
                             </tr>
                             </thead>
-                            <tbody id="table-tbody">
+                            <tbody id="table-tbody-collezioni">
                             <#list collezioni as collezione>
                                 <tr>
                                     <td><a class="link"
@@ -94,7 +95,10 @@
             </div>
 
             <div class="table-container" id="dischi-container">
-                <div class="title">DISCHI</div>
+                <div class="title flex justify-between align-items-center">
+                    DISCHI
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-dischi')" type="text" placeholder="Search.." class="input-filtro inner-table">
+                </div>
                 <#if (dischi?? && dischi?size > 0)>
                     <div class="table-scrollable">
                         <table class="table table-borderless table-striped overflow-auto">
@@ -125,7 +129,10 @@
                 </#if>
             </div>
             <div class="table-container" id="tracce-container">
-                <div class="title">TRACCE</div>
+                <div class="title flex justify-between align-items-center">
+                    TRACCE
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-tracce')" type="text" placeholder="Search.." class="input-filtro inner-table">
+                </div>
                 <#if (tracce?? && tracce?size > 0)>
                 <div class="table-scrollable">
                     <table class="table table-borderless table-striped">
@@ -136,7 +143,7 @@
                             <th scope="col">Durata</th>
                         </tr>
                         </thead>
-                        <tbody id="table-tbody">
+                        <tbody id="table-tbody-tracce">
                         <#list tracce as traccia>
                             <tr>
                                 <td>${traccia.getISWC()}</td>
@@ -156,7 +163,10 @@
             </div>
 
             <div class="table-container" id="autori-container">
-                <div class="title">AUTORI</div>
+                <div class="title flex justify-between align-items-center">
+                    AUTORI
+                    <input id="input-filtro" onkeyup="ricerca(this.value, 'table-tbody-autori')" type="text" placeholder="Search.." class="input-filtro inner-table">
+                </div>
                 <#if (autori?? && autori?size > 0)>
                 <div class="table-scrollable">
                     <table class="table table-borderless table-striped">
@@ -167,7 +177,7 @@
                             <th scope="col">Durata</th>
                         </tr>
                         </thead>
-                        <tbody id="table-tbody">
+                        <tbody id="table-tbody-autori">
                         <#list autori as autore>
                             <tr>
                                 <td><a class="link"

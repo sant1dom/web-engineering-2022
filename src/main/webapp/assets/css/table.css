@@ -15,8 +15,7 @@
     font-weight: bold;
     color: black;
     background-color: #e7e6e4;
-    padding: 0.5rem 0.5rem 0.5rem 1rem;
-
+    padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
 .table-empty {
@@ -32,7 +31,7 @@
 }
 
 .table-scrollable {
-    max-height: 30rem;
+    max-height: 40rem;
     overflow-x: auto;
     overflow-y: auto;
     margin-bottom: 2rem;
