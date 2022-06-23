@@ -73,9 +73,12 @@ public class CreateCollezione extends CollectorsBaseController {
             }
 
             LocalDate dataCreazione= LocalDate.now();
+
+            //creo una collezione passandogli tutti i parametri e faccio la store della collezione
             Collezione collezione=new CollezioneImpl(titolo,privacy,utente,dataCreazione,dischi,null);
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
+            //per ogni disco selezionato per la collezione aggiungo il disco alla collezione in questione
             for (Disco disco : dischi) {
                 ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
             }

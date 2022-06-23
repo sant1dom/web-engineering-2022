@@ -48,10 +48,12 @@ public class DeleteCollezione extends CollectorsBaseController {
         Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
 
+        //cancellazione di ogni disco nella collezione da eliminare
         if(Utility.getUtente(request,response).equals(collezione.getUtente())){
             for(Disco disco:dischi){
                 ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
             }
+            //cancellazione della collezione
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().deleteCollezione(collezione);
             response.sendRedirect(request.getHeader("Referer"));
         }

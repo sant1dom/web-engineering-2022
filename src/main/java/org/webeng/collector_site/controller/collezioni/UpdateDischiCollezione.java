@@ -55,7 +55,7 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
         List<Disco> dischiCollezione=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
         List <Disco> allDischi=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
 
-        /* la lista dischi conterrà tutti i dischi che non sono già nella collezione */
+        // la lista dischi conterrà tutti i dischi che non sono già nella collezione
         List<Disco> dischi=new ArrayList<>();
         dischi.addAll(allDischi);
         dischi.removeAll(dischiCollezione);
@@ -82,19 +82,14 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
             }
             Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-            if(Utility.getUtente(request,response).equals(collezione.getUtente())) {
-                collezione.setTitolo(collezione.getTitolo());
-                collezione.setPrivacy(collezione.getPrivacy());
+            //richiamo il metodo storeCollezione per aggiornare la collezione
+            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
-
-                for (Disco disco : dischi) {
+            //aggiunta di ogni disco selezionato nella collezione in questione
+            for (Disco disco : dischi) {
                     ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
-                }
-                response.sendRedirect("/show-collezioni");
             }
-            else
-                response.sendRedirect("/home");
+            response.sendRedirect("/show-collezioni");
         } catch (Exception e) {
             handleError(e, request, response);
         }

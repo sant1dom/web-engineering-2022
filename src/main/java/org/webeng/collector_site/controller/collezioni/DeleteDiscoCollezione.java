@@ -51,14 +51,10 @@ public class DeleteDiscoCollezione extends CollectorsBaseController {
         Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
         request.setAttribute("collezione",collezione);
         request.setAttribute("disco",disco);
-        if(Utility.getUtente(request,response).equals(collezione.getUtente())){
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
-            response.sendRedirect(request.getHeader("Referer"));
-        }
-        else {
-            response.sendRedirect("/home");
-        }
 
+        //eliminazione del disco in questione dalla collezione
+        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
+        response.sendRedirect(request.getHeader("Referer"));
 
     }
 

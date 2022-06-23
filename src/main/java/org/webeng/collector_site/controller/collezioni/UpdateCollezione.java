@@ -67,16 +67,15 @@ public class UpdateCollezione extends CollectorsBaseController {
 
             Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-            if(Utility.getUtente(request,response).equals(collezione.getUtente())) {
-                collezione.setTitolo(titolo);
-                collezione.setPrivacy(privacy);
+            //chiamata dei metodi setTitolo e setPrivacy sui valori di titolo e privacy inseriti dall'utente
+            collezione.setTitolo(titolo);
+            collezione.setPrivacy(privacy);
 
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+            //chiamata metodo storeCollezione per aggiornare la collezione
+            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
-                response.sendRedirect("/show-collezioni");
-            }
-            else
-                response.sendRedirect("/home");
+            response.sendRedirect("/show-collezioni");
+
         } catch (Exception e) {
             handleError(e, request, response);
         }
