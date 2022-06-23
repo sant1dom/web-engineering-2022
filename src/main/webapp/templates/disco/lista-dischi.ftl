@@ -12,17 +12,16 @@
             <th scope="col">Genere</th>
             <th scope="col">Formato</th>
             <th scope="col">Stato di conservazione</th>
-            <th scope="col">Doppioni</th>
         </tr>
         </thead>
         <tbody>
         <#if (dischiByUtente?size>0)>
             <#list dischiByUtente as disco>
                 <tr>
-                    <td>${disco.titolo}</td>
+                    <td><a href="show-disco?id_disco=${disco.key}">${disco.titolo}</a></td>
                     <td>${disco.anno}</td>
-                    <#if (disco.barcode??)>
-                    <td>${disco.barcode}</td>
+                    <#if (disco.getBarCode()??)>
+                    <td>${disco.getBarCode()}</td>
                     <#else>
                     <td><i class="fa-solid fa-xmark"></i></td>
                     </#if>
@@ -30,8 +29,6 @@
                     <td>${disco.genere}</td>
                     <td>${disco.formato}</td>
                     <td>${disco.statoConservazione}</td>
-                    <td>${disco.doppioni}</td>
-                    <td><a href="update-disco?id_disco=${disco.key}">modifica</a></td>
 
             </#list>
         </#if>

@@ -1,0 +1,103 @@
+package org.webeng.collector_site.controller.dischi;
+
+import org.webeng.collector_site.controller.CollectorsBaseController;
+import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.model.*;
+import org.webeng.framework.data.DataException;
+import org.webeng.framework.result.TemplateManagerException;
+import org.webeng.framework.result.TemplateResult;
+import org.webeng.framework.security.SecurityHelpers;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class UpdateDisco extends CollectorsBaseController {
+    public static final String REFERRER = "referrer";
+    @Override
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        if(request.getMethod().equals("POST")){
+            updateDisco(request,response);
+        }else {
+            try {
+                HttpSession s = SecurityHelpers.checkSession(request);
+                String https_redirect_url = SecurityHelpers.checkHttps(request);
+                request.setAttribute("https-redirect", https_redirect_url);
+                if (s == null) {
+                    action_anonymous(request, response);
+                } else {
+                    action_logged(request, response);
+                }
+            } catch (TemplateManagerException | DataException | IOException ex) {
+                handleError(ex, request, response);
+            }
+        }
+    }
+
+    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        TemplateResult result = new TemplateResult(getServletContext());
+
+        Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
+        Genere[] genere = Genere.values();
+        List<String> generi = new ArrayList<String>();
+        for (Genere g : genere) {
+            generi.add(g.name());
+        }
+        Formato[] formato = Formato.values();
+        List<String> formati = new ArrayList<String>();
+        for (Formato f : formato) {
+            formati.add(f.name());
+        }
+        StatoConservazione[] stato_conservazione = StatoConservazione.values();
+        List<String> statoConservazione = new ArrayList<String>();
+        for (StatoConservazione s : stato_conservazione) {
+            statoConservazione.add(s.name());
+        }
+        request.setAttribute("disco", disco);
+        request.setAttribute("generi", Objects.requireNonNull(generi));
+        request.setAttribute("formati", Objects.requireNonNull(formati));
+        request.setAttribute("statoConservazione", Objects.requireNonNull(statoConservazione));
+        result.activate("disco/update_disco.ftl", request, response);
+
+    }
+
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        response.sendRedirect("/login");
+    }
+
+    private void updateDisco(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String titolo = request.getParameter("titolo");
+            String anno = request.getParameter("anno");
+            String barcode = request.getParameter("barcode");
+            String etichetta = request.getParameter("etichetta");
+            Genere genere= Genere.valueOf(request.getParameter("genere"));
+            StatoConservazione statoConservazione= StatoConservazione.valueOf(request.getParameter("statoConservazione"));
+            Formato formato= Formato.valueOf(request.getParameter("formato"));
+            int id_disco= Integer.parseInt(request.getParameter("id_disco"));
+            Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
+            disco.setTitolo(titolo);
+            disco.setAnno(anno);
+            disco.setBarCode(barcode);
+            disco.setEtichetta(etichetta);
+
+
+            //chiamata dei metodi setTitolo e setPrivacy sui valori di titolo e privacy inseriti dall'utente
+
+
+            //chiamata metodo storeCollezione per aggiornare la collezione
+            //((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+
+            response.sendRedirect("/show-collezioni");
+
+        } catch (Exception e) {
+            handleError(e, request, response);
+        }
+    }
+}

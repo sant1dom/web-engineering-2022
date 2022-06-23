@@ -78,17 +78,6 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
     public void setAnno(String anno) {
         this.anno = anno;
     }
-
-    @Override
-    public void setDoppioni(int doppioni) {
-        this.doppioni=doppioni;
-    }
-
-    @Override
-    public int getDoppioni() {
-        return doppioni;
-    }
-
     @Override
     public String getEtichetta() {
         return etichetta;
