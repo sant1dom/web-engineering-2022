@@ -16,7 +16,7 @@
                         <span class="testo-info">${collezione.getPrivacy()}</span>
                     </div>
 
-                    <div class="buttons">
+                    <div>
                         <a class="btn btn-success"
                            href="update-collezione?id_collezione=${collezione.getKey()}">
                             Modifica</a>

@@ -19,8 +19,8 @@
                     <th scope="row">${collezione.key}</th>
                     <td>${collezione.titolo}</td>
                     <td>${collezione.dataCreazione}</td>
-                    <td><a href="show-collezione?id=${collezione.key}" class="bt-navbar-registrati">visualizza</a></td>
-                    <td><a href="delete-collezione?id_collezione=${collezione.key}" class="bt-navbar-registrati">elimina collezione</a></td>
+                    <td><a href="show-collezione?id=${collezione.key}" class="btn btn-success">visualizza</a></td>
+                    <td><a href="delete-collezione?id_collezione=${collezione.key}" class="btn btn-danger">elimina collezione</a></td>
                 </tr>
             </#list>
         </#if>
