@@ -1,4 +1,5 @@
 package org.webeng.collector_site.data.dao;
+
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
@@ -10,7 +11,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
+
+public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement sCollezioni;
     private PreparedStatement sCollezioneByTitolo;
     private PreparedStatement sCollezioneByID;
@@ -19,7 +21,9 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
     private PreparedStatement uCollezione;
     private PreparedStatement iCollezione;
     private PreparedStatement dCollezione;
+    private PreparedStatement addUtenteCondiviso;
     private PreparedStatement fCollezioniByTitolo;
+
     public CollezioneDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -32,16 +36,18 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             sCollezioni = connection.prepareStatement("SELECT * FROM collezione");
             sCollezioneByID = connection.prepareStatement("SELECT * FROM collezione WHERE id = ?");
             sCollezioneByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE titolo = ?");
-            sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc on collezione.id = dhc.collezione_id JOIN disco d on d.id = dhc.disco_id WHERE d.id = ?");
+            sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc ON collezione.id = dhc.collezione_id JOIN disco d ON d.id = dhc.disco_id WHERE d.id = ?");
             sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ?");
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
-            fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy != 'PRIVATO' AND titolo LIKE CONCAT('%', ? , '%')");
+            addUtenteCondiviso = connection.prepareStatement("INSERT INTO collezione_condivisa_con (collezione_id, utente_id) VALUES (?, ?)");
+            fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy != 'PRIVATO' AND privacy != 'CONDIVISO' AND titolo LIKE CONCAT('%', ? , '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
         }
     }
+
     @Override
     public void destroy() throws DataException {
         try {
@@ -53,12 +59,14 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             uCollezione.close();
             iCollezione.close();
             dCollezione.close();
+            addUtenteCondiviso.close();
             fCollezioniByTitolo.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying collections data layer", ex);
         }
         super.destroy();
     }
+
     @Override
     public Collezione createCollezione() {
         return new CollezioneProxy(getDataLayer());
@@ -142,9 +150,12 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
                 } else {
                     collezione.setVersion(next_version);
                 }
+
+                addUtenteCondiviso(collezione);
+
             } else { //insert
                 iCollezione.setString(1, collezione.getTitolo());
-                iCollezione.setString(2,collezione.getPrivacy());
+                iCollezione.setString(2, collezione.getPrivacy());
                 iCollezione.setDate(3, Date.valueOf(collezione.getDataCreazione()));
                 iCollezione.setLong(4, collezione.getVersion());
                 iCollezione.setInt(5, collezione.getUtente().getKey());
@@ -172,6 +183,9 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
                         }
                     }
                 }
+
+                //Condivisione della collezione
+                addUtenteCondiviso(collezione);
             }
 
 //            //se possibile, restituiamo l'oggetto appena inserito RICARICATO
@@ -192,6 +206,18 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             }
         } catch (SQLException | OptimisticLockException ex) {
             throw new DataException("Unable to store collezione", ex);
+        }
+    }
+
+    //Condivisione della collezione
+    private void addUtenteCondiviso(Collezione collezione) throws SQLException {
+        int id = collezione.getKey();
+        for (Utente u : collezione.getUtentiCondivisi()) {
+            if (u.getKey() != null && u.getKey() > 0) {
+                addUtenteCondiviso.setInt(1, id);
+                addUtenteCondiviso.setInt(2, u.getKey());
+                addUtenteCondiviso.executeUpdate();
+            }
         }
     }
 
@@ -244,7 +270,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
 
     @Override
     public List<Collezione> getCollezioni(Utente utente) throws DataException {
-        List<Collezione> collezioni= new ArrayList<>();
+        List<Collezione> collezioni = new ArrayList<>();
         try {
             sCollezioniByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sCollezioniByUtente.executeQuery()) {
@@ -271,6 +297,5 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO{
             throw new DataException("Unable to delete collezione", ex);
         }
     }
-
 }
 

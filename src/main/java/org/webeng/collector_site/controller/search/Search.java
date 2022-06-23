@@ -32,7 +32,6 @@ public class Search extends CollectorsBaseController {
         try {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
-            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
 
             List<Utente> utenti = Utility.getUtenti(request, response);
             List<Collezione> collezioni = Utility.getCollezioni(request, response);

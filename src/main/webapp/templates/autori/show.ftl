@@ -25,24 +25,7 @@
                 <input id="input-filtro" type="text" placeholder="Search.." class="input-filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <dt class="filtro-subtitle">GENERE:</dt>
-
-                        <div class="horizontal-separator filtro-horizontal-separator"></div>
-
-                        <dd><span class="filtro-link" onclick="filtro('TUTTI')">TUTTI</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('POP')">POP</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('ROCK')">ROCK</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('JAZZ')">JAZZ</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('CLASSIC')">CLASSIC</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('METAL')">METAL</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('RAP')">RAP</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('BLUES')">BLUES</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('PUNK')">PUNK</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('RAGGAE')">REGGAE</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('COUNTRY')">COUNTRY</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('HIPHOP')">HIPHOP</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('ELECTRONIC')">ELECTRONIC</span></dd>
-                        <dd><span class="filtro-link" onclick="filtro('OTHER')">OTHER</span></dd>
+                        <#include "../outlines/filtro/outline_generi.ftl">
                     </dl>
                 </div>
             </div>
@@ -62,7 +45,7 @@
                             <th scope="col">Genere</th>
                         </tr>
                         </thead>
-                        <tbody id="tbody-dischi">
+                        <tbody id="table-tbody">
                         <#list dischi as disco>
                             <tr>
                                 <td>${disco.getBarCode()}</td>

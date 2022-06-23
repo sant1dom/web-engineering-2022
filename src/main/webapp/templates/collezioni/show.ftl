@@ -15,15 +15,15 @@
                     <div class="testi">
                         <span class="testo-info">${collezione.getPrivacy()}</span>
                     </div>
-
-                    <div>
-                        <a class="btn btn-success"
+                    <div class="actions">
+                        <a class="btn btn-success btn-wd-fixed"
                            href="update-collezione?id_collezione=${collezione.getKey()}">
                             Modifica</a>
-                        <a class="btn btn-warning"
+                        <a class="btn btn-warning btn-wd-fixed"
                            href="update-dischiCollezione?id_collezione=${collezione.getKey()}">
                             Aggiungi disco</a>
                     </div>
+
                 <#else>
                     <div class="labels">
                         <span class="label-info">Proprietario: </span>
@@ -97,12 +97,10 @@
                                 <td>${disco.getEtichetta()}</td>
                                 <td>${disco.getGenere()}</td>
                                 <#if (utente?? && proprietario.getKey() == utente.getKey())>
-                                    <td class="actions">
-                                        <div>
+                                    <td class="table-actions">
                                             <a class="btn btn-danger"
                                                href="delete-discoCollezione?id_disco=${disco.getKey()}&id_collezione=${collezione.getKey()}">
                                                 <i class="lni lni-trash-can"></i></a>
-                                        </div>
                                     </td>
                                 </#if>
                             </tr>

@@ -21,20 +21,20 @@
                     <td><a href="show-disco?id_disco=${disco.key}">${disco.titolo}</a></td>
                     <td>${disco.anno}</td>
                     <#if (disco.getBarCode()??)>
-                    <td>${disco.getBarCode()}</td>
+                        <td>${disco.getBarCode()}</td>
                     <#else>
-                    <td><i class="fa-solid fa-xmark"></i></td>
+                        <td><i class="fa-solid fa-xmark"></i></td>
                     </#if>
-                    <td>${disco.etichetta}</td>
-                    <td>${disco.genere}</td>
-                    <td>${disco.formato}</td>
-                    <td>${disco.statoConservazione}</td>
-
+                    <td>${disco.etichetta?cap_first}</td>
+                    <td>${disco.genere?lower_case?cap_first}</td>
+                    <td>${disco.formato?lower_case?cap_first}</td>
+                    <td>${disco.statoConservazione?lower_case?cap_first}</td>
+                </tr>
             </#list>
         </#if>
         </tbody>
     </table>
-    <a href="crea-disco" >Crea un nuovo disco </a>
+    <a href="crea-disco">Crea un nuovo disco </a>
 
 </div>
 

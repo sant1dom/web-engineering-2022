@@ -17,6 +17,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     private PreparedStatement sUtenteByUsername;
     private PreparedStatement sUtentiByCollezione;
     private PreparedStatement sUtentiByDisco;
+    private PreparedStatement sUtentiCondivisi;
     private PreparedStatement uUtente;
     private PreparedStatement iUtente;
     private PreparedStatement dUtente;
@@ -39,6 +40,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             sUtenteByUsername = connection.prepareStatement("SELECT * from utente WHERE username=?");
             sUtentiByCollezione = connection.prepareStatement("SELECT utente.id FROM utente JOIN collezione_condivisa_con ccc on utente.id = ccc.utente_id JOIN collezione c on ccc.collezione_id = c.id WHERE c.id=?");
             sUtentiByDisco = connection.prepareStatement("SELECT utente.id FROM utente JOIN disco d on utente.id = d.utente_id WHERE d.id=?");
+            sUtentiCondivisi = connection.prepareStatement("SELECT utente.id FROM utente JOIN collezione_condivisa_con ccc ON utente.id = ccc.utente_id WHERE ccc.collezione_id = ?");
             uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, username=?, email=?, password=? WHERE id=?");
             iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, username, email, password) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
@@ -59,6 +61,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             sUtenteByUsername.close();
             sUtentiByCollezione.close();
             sUtentiByDisco.close();
+            sUtentiCondivisi.close();
             uUtente.close();
             iUtente.close();
             dUtente.close();
@@ -77,7 +80,12 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             sLogin.setString(1, username);
             sLogin.setString(2, password);
             ResultSet rs = sLogin.executeQuery();
-            return createUtente(rs);
+            if (rs.next()) {
+                return createUtente(rs);
+            } else {
+                throw new SQLException("Login failed");
+            }
+
         } catch (SQLException ex) {
             throw new DataException("Error logging in user", ex);
         }
@@ -88,20 +96,20 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         return new UtenteProxy(getDataLayer());
     }
 
-    private UtenteProxy createUtente(ResultSet rs) throws DataException {
+    public UtenteProxy createUtente(ResultSet rs) throws DataException {
         if (rs == null) {
             return null;
         }
         try {
             UtenteProxy u = (UtenteProxy) createUtente();
-            if (rs.next()) {
-                u.setKey(rs.getInt("id"));
-                u.setNome(rs.getString("nome"));
-                u.setCognome(rs.getString("cognome"));
-                u.setEmail(rs.getString("email"));
-                u.setUsername(rs.getString("username"));
-                u.setPassword(rs.getString("password"));
-            }
+
+            u.setKey(rs.getInt("id"));
+            u.setNome(rs.getString("nome"));
+            u.setCognome(rs.getString("cognome"));
+            u.setEmail(rs.getString("email"));
+            u.setUsername(rs.getString("username"));
+            u.setPassword(rs.getString("password"));
+
             return u;
         } catch (SQLException ex) {
             throw new DataException("Unable to create user object form ResultSet", ex);
@@ -114,8 +122,12 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         try {
             sUtenteByUsername.setString(1, username);
             try (ResultSet rs = sUtenteByUsername.executeQuery()) {
-                u = createUtente(rs);
-                dataLayer.getCache().add(Utente.class, u);
+                if (rs.next()) {
+                    u = createUtente(rs);
+                    dataLayer.getCache().add(Utente.class, u);
+                } else {
+                    throw new SQLException();
+                }
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load user by username", ex);
@@ -136,15 +148,34 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             try {
                 sUtenteByID.setInt(1, utente_key);
                 try (ResultSet rs = sUtenteByID.executeQuery()) {
-                    u = createUtente(rs);
-                    dataLayer.getCache().add(Utente.class, u);
-
+                    if (rs.next()) {
+                        u = createUtente(rs);
+                        dataLayer.getCache().add(Utente.class, u);
+                    } else {
+                        throw new SQLException();
+                    }
                 }
             } catch (SQLException ex) {
                 throw new DataException("Unable to load user by ID", ex);
             }
         }
         return u;
+    }
+
+    @Override
+    public List<Utente> getUtentiCondivisi(Collezione collezione) throws DataException {
+        try {
+            List<Utente> utenti = new ArrayList<>();
+            sUtentiCondivisi.setInt(1, collezione.getKey());
+            try (ResultSet rs = sUtentiCondivisi.executeQuery()) {
+                while (rs.next()) {
+                    utenti.add(getUtente(rs.getInt("id")));
+                }
+            }
+            return utenti;
+        } catch (SQLException ex) {
+            throw new DataException("Unable to delete collezione", ex);
+        }
     }
 
     @Override
@@ -240,7 +271,6 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         }
     }
 
-
     @Override
     public List<Utente> getUtenti() throws DataException {
         List<Utente> result = new ArrayList<>();
@@ -258,17 +288,18 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     public List<Utente> getUtentiByKeyword(String keyword) throws DataException {
         List<Utente> result = new ArrayList<>();
         try {
-            fUtentiByUsername.setString(1, keyword);
-            try (ResultSet rs = fUtentiByUsername.executeQuery()) {
-              while (rs.next()) {
-                  Utente utente = createUtente(rs);
-                  utente.setPassword("");
-                  result.add(utente);
-              }
-            } catch (SQLException ex) {
-                throw new DataException("Unable to load users", ex);
+            if (keyword.isBlank()) {
+                result = getUtenti();
+            } else {
+                fUtentiByUsername.setString(1, keyword);
+                ResultSet rs = fUtentiByUsername.executeQuery();
+                while (rs.next()) {
+                    Utente utente = createUtente(rs);
+                    utente.setPassword("");
+                    result.add(utente);
+                }
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | DataException ex) {
             throw new DataException("Unable to set keyword", ex);
         }
         return result;

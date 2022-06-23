@@ -3,7 +3,7 @@
     <context-param>
         <param-name>uploads.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
-        <param-value>C:\Users\feder\Desktop\Immagini</param-value>
+        <param-value>C:\Users\david\Desktop\Immagini</param-value>
 
     </context-param>
     <context-param>
@@ -134,7 +134,7 @@
         <servlet-name>add-immagini</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.dischi.AddImmaginiDisco</servlet-class>
         <multipart-config>
-            <location>C:\Users\Raluc\Documents\workspace\apache-tomcat-9.0.62\temp</location>
+            <location>C:\Users\david\Desktop\apache-tomcat-9.0.62\temp</location>
             <max-file-size>20848820</max-file-size>
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>

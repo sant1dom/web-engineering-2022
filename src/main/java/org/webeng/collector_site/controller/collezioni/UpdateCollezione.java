@@ -3,6 +3,7 @@ package org.webeng.collector_site.controller.collezioni;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.dao.UtenteDAO;
 import org.webeng.collector_site.data.impl.CollezioneImpl;
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
@@ -47,10 +48,13 @@ public class UpdateCollezione extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
-
-        Collezione collezione=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
+        var collezioneDAO = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO();
+        var utenteDAO = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO();;
+        Collezione collezione = collezioneDAO.getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
         request.setAttribute("collezione", collezione);
+
+        request.setAttribute("utenti_condivisi", utenteDAO.getUtentiCondivisi(collezione));
         result.activate("collezioni/update_collezione.ftl", request, response);
 
     }
@@ -63,6 +67,18 @@ public class UpdateCollezione extends CollectorsBaseController {
     private void updateCollezione(HttpServletRequest request, HttpServletResponse response) {
         try {
             String titolo = request.getParameter("titolo");
+            List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
+            List<Utente> utenti = new ArrayList<>();
+
+            for(String username: utenti_usernames){
+                try {
+                    Utente utente = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
+                    utenti.add(utente);
+                } catch (DataException ignored) {}
+            }
+
+
+
             String privacy = String.valueOf(request.getParameter("privacy"));
 
             Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
@@ -70,6 +86,7 @@ public class UpdateCollezione extends CollectorsBaseController {
             //chiamata dei metodi setTitolo e setPrivacy sui valori di titolo e privacy inseriti dall'utente
             collezione.setTitolo(titolo);
             collezione.setPrivacy(privacy);
+            collezione.setUtentiCondivisi(utenti);
 
             //chiamata metodo storeCollezione per aggiornare la collezione
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
@@ -78,6 +95,7 @@ public class UpdateCollezione extends CollectorsBaseController {
 
         } catch (Exception e) {
             handleError(e, request, response);
+            e.printStackTrace();
         }
     }
 
