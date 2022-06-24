@@ -1,19 +1,21 @@
 <#include "../outlines/outline_header.ftl">
+<link href="/assets/css/page.css" rel="stylesheet"/>
 
 <div class="card-body">
-    <h2>Le tue collezioni</h2>
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">ID Collezione</th>
-            <th scope="col">Titolo</th>
-            <th scope="col">Data creazione</th>
-            <th scope="col">Dettagli</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
+
         <#if (collezioni?size>0)>
+        <h2>Le tue collezioni</h2>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID Collezione</th>
+                <th scope="col">Titolo</th>
+                <th scope="col">Data creazione</th>
+                <th scope="col">Dettagli</th>
+                <th scope="col">Azioni</th>
+            </tr>
+            </thead>
+            <tbody>
             <#list collezioni as collezione>
                 <tr>
                     <th scope="row">${collezione.key}</th>
@@ -23,10 +25,12 @@
                     <td><a href="delete-collezione?id_collezione=${collezione.key}" class="btn btn-danger">elimina collezione</a></td>
                 </tr>
             </#list>
+            </tbody>
+            </table>
+            <#else>
+                <div class="table-empty">Non hai ancora nessuna collezione!</div>
         </#if>
-        </tbody>
-        </table>
-        <a href="create-collezione" class="btn btn-primary">Crea una nuova collezione</a>
+        <a href="create-collezione" class="btn btn-warning">Crea una nuova collezione</a>
 
 </div>
 
