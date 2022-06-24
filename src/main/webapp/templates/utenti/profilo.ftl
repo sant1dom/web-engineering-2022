@@ -45,10 +45,10 @@
         <#if (utente?? && utente_generico?? && utente.getKey() == utente_generico.getKey())>
             <div class="actions">
                 <a class="btn btn-success btn-wd-fixed"
-                   href="create-traccia">
+                   href="create-collezione">
                     Aggiungi collezione</a>
                 <a class="btn btn-warning btn-wd-fixed"
-                   href="edit-profile?id=${utente.getKey()}">
+                   href="edit-utente?id=${utente.getKey()}">
                     Modifica profilo</a>
             </div>
         </#if>

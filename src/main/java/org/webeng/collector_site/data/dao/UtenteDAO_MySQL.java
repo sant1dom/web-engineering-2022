@@ -42,11 +42,11 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             sUtentiByCollezione = connection.prepareStatement("SELECT utente.id FROM utente JOIN collezione_condivisa_con ccc on utente.id = ccc.utente_id JOIN collezione c on ccc.collezione_id = c.id WHERE c.id=?");
             sUtentiByDisco = connection.prepareStatement("SELECT utente.id FROM utente JOIN disco d on utente.id = d.utente_id WHERE d.id=?");
             sUtentiCondivisi = connection.prepareStatement("SELECT utente.id FROM utente JOIN collezione_condivisa_con ccc ON utente.id = ccc.utente_id WHERE ccc.collezione_id = ?");
-            uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, username=?, email=?, password=? WHERE id=?");
+            uUtente = connection.prepareStatement("UPDATE utente SET nome=?, cognome=?, username=?, email=?, password=?, version=? WHERE id=?");
             iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, username, email, password) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
             addUtenteCollezione = connection.prepareStatement("INSERT INTO collezione_condivisa_con (utente_id, collezione_id) VALUES (?,?)");
-            dUtenteCollezione= connection.prepareStatement("DELETE FROM collezione_condivisa_con WHERE collezione_id=? AND utente_id=?");
+            dUtenteCollezione = connection.prepareStatement("DELETE FROM collezione_condivisa_con WHERE collezione_id=? AND utente_id=?");
 
             //query per auto completamento ricerca
             fUtentiByUsername = connection.prepareStatement("SELECT * from utente WHERE username LIKE CONCAT('%', ? ,'%') OR (nome IS NOT NULL AND nome LIKE CONCAT('%' ,? ,'%')) OR (cognome IS NOT NULL AND cognome LIKE CONCAT('%' ,? ,'%'))");
@@ -207,9 +207,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 long current_version = utente.getVersion();
                 long next_version = current_version + 1;
 
-                uUtente.setLong(5, next_version);
-                uUtente.setInt(6, utente.getKey());
-                uUtente.setLong(7, current_version);
+                uUtente.setLong(6, next_version);
+                uUtente.setLong(7, utente.getKey());
 
                 if (uUtente.executeUpdate() == 0) {
                     throw new OptimisticLockException(utente);
@@ -217,13 +216,17 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                     utente.setVersion(next_version);
                 }
             } else { //insert
-                iUtente.setString(1, utente.getNome());
-                iUtente.setString(2, utente.getCognome());
-                if (utente.getUsername() != null) {
-                    iUtente.setString(3, utente.getUsername());
+                if (utente.getNome() != null) {
+                    iUtente.setString(1, utente.getNome());
                 } else {
-                    iUtente.setNull(3, Types.VARCHAR);
+                    iUtente.setString(1, null);
                 }
+                if (utente.getCognome() != null) {
+                    iUtente.setString(2, utente.getCognome());
+                } else {
+                    iUtente.setString(2, null);
+                }
+                iUtente.setString(3, utente.getUsername());
                 iUtente.setString(4, utente.getEmail());
                 iUtente.setString(5, utente.getPassword());
 
@@ -270,8 +273,9 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 ((DataItemProxy) utente).setModified(false);
             }
         } catch (SQLException | OptimisticLockException ex) {
-            throw new DataException("Unable to store utente", ex);
+            throw new DataException("Unable to store user", ex);
         }
+
     }
 
     @Override
@@ -358,11 +362,11 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     }
 
     @Override
-    public void deleteUtenteCondiviso(Collezione collezione,Utente utente) throws DataException {
+    public void deleteUtenteCondiviso(Collezione collezione, Utente utente) throws DataException {
         try {
             dUtenteCollezione.setInt(1, collezione.getKey());
             dUtenteCollezione.setInt(2, utente.getKey());
-            if(dUtenteCollezione.executeUpdate() == 1){
+            if (dUtenteCollezione.executeUpdate() == 1) {
                 dataLayer.getCache().delete(Utente.class, utente.getKey());
             }
         } catch (SQLException ex) {

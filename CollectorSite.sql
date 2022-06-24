@@ -226,7 +226,7 @@ CREATE TABLE `utente` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) DEFAULT NULL,
   `cognome` varchar(45) DEFAULT NULL,
-  `username` varchar(45) DEFAULT NULL,
+  `username` varchar(45) DEFAULT NULL UNIQUE,
   `email` varchar(45) DEFAULT NULL,
   `password` varchar(64) DEFAULT NULL,
   `version` int unsigned DEFAULT '1',

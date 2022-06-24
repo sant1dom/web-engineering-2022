@@ -175,6 +175,14 @@
         <servlet-name>Profilo</servlet-name>
         <url-pattern>/profilo</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>EditUtente</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.utenti.EditUtente</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditUtente</servlet-name>
+        <url-pattern>/edit-utente</url-pattern>
+    </servlet-mapping>
 
     <!-- RICERCA -->
     <servlet>
