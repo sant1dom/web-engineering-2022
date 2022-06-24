@@ -144,6 +144,42 @@
         <servlet-name>add-immagini</servlet-name>
         <url-pattern>/add-immagini</url-pattern>
     </servlet-mapping>
+   <!--DELATE TRACCIA-DISCO -->
+    <servlet>
+        <servlet-name>delate-tracciaDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.DelateTraccia</servlet-class>
+    </servlet>
+   <servlet-mapping>
+       <servlet-name>delate-tracciaDisco</servlet-name>
+       <url-pattern>/delate-tracciaDisco</url-pattern>
+   </servlet-mapping>
+    <!--AGGIUNGI TRACCIA-DISCO -->
+    <servlet>
+        <servlet-name>aggiungiTracce-disco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.AggiungiTraccia</servlet-class>
+    </servlet>
+<servlet-mapping>
+        <servlet-name>aggiungiTracce-disco</servlet-name>
+        <url-pattern>/aggiungiTracce-disco</url-pattern>
+    </servlet-mapping>
+    <!--ELIMINA AUTORE DAL DISCO-->
+    <servlet>
+        <servlet-name>delate-autoreDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.EliminaAutoreDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delate-autoreDisco</servlet-name>
+        <url-pattern>/delate-autoreDisco</url-pattern>
+    </servlet-mapping>
+    <!--AGGIUNGI AUTORE AL DISCO-->
+    <servlet>
+        <servlet-name>aggiungiAutore-disco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.AggiungiAutoreDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>aggiungiAutore-disco</servlet-name>
+        <url-pattern>/aggiungiAutore-disco</url-pattern>
+    </servlet-mapping>
 
     <!--  LOGOUT  -->
     <servlet>

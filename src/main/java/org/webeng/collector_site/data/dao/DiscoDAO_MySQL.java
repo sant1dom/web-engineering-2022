@@ -29,9 +29,11 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     private PreparedStatement addDiscoCollezione;
     private PreparedStatement addDiscoAutore;
     private PreparedStatement addDiscoTraccia;
-    private PreparedStatement ultimoDisco;
     private PreparedStatement sEtichette;
     private PreparedStatement fDischiByKeyword;
+    private PreparedStatement dTracciaDisco;
+    private PreparedStatement dAutoreDisco;
+
 
     public DiscoDAO_MySQL(DataLayer d) {
         super(d);
@@ -55,14 +57,15 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
             sDischiPadri = connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             sEtichette = connection.prepareStatement("SELECT DISTINCT etichetta FROM disco");
-            uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, padre = ?, version = ? WHERE id = ? AND version = ?");
+            uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, stato_conservazione = ?, version = ? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
             dDiscoCollezione = connection.prepareStatement("DELETE FROM collezione_disco WHERE collezione_id = ? AND disco_id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addDiscoAutore = connection.prepareStatement("INSERT INTO disco_autore (disco_id, autore_id) VALUES (?,?)");
             addDiscoTraccia = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?,?)");
-
+            dTracciaDisco= connection.prepareStatement("DELETE FROM disco_traccia WHERE disco_id = ? AND traccia_id = ?");
+            dAutoreDisco= connection.prepareStatement("DELETE FROM disco_autore WHERE disco_id = ? AND autore_id = ?");
             fDischiByKeyword = connection.prepareStatement("SELECT id FROM disco WHERE padre IS NULL AND (titolo LIKE CONCAT('%', ?, '%') OR barcode LIKE CONCAT('%', ?, '%') OR anno LIKE CONCAT('%', ?, '%') OR genere LIKE CONCAT('%', ?, '%') OR etichetta LIKE CONCAT('%', ?, '%')) LIMIT 4");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer", ex);
@@ -90,6 +93,8 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             dDisco.close();
             dDiscoCollezione.close();
             addDiscoCollezione.close();
+            dTracciaDisco.close();
+            dAutoreDisco.close();
             fDischiByKeyword.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing disks data layer", ex);
@@ -114,6 +119,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             d.setStatoConservazione(StatoConservazione.valueOf(rs.getString("stato_conservazione")));
             d.setUtenteKey(rs.getInt("utente_id"));
             d.setPadreKey(rs.getInt("padre"));
+            d.setVersion(rs.getInt("version"));
         } catch (SQLException ex) {
             throw new DataException("Error creating disk", ex);
         }
@@ -163,7 +169,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     public int storeDisco(Disco disco) throws DataException {
         try {
             if (disco.getKey() != null && disco.getKey() > 0) {
-                if (disco instanceof DiscoProxy && ((DiscoProxy) disco).isModified()) {
+                if (disco instanceof DiscoProxy && !((DiscoProxy) disco).isModified()) {
                     return 0;
                 }
                 uDisco.setString(1, disco.getTitolo());
@@ -172,7 +178,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 uDisco.setString(4, disco.getGenere().toString());
                 uDisco.setString(5, disco.getEtichetta());
                 uDisco.setString(6, disco.getFormato().toString());
-                uDisco.setInt(7, disco.getPadre().getKey());
+                uDisco.setString(7,disco.getStatoConservazione().toString());
 
                 long current_version = disco.getVersion();
                 long next_version = current_version + 1;
@@ -413,6 +419,30 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     }
 
     @Override
+    public void delateDiscoTraccia(Disco disco, Traccia traccia) throws DataException {
+        try {
+            dTracciaDisco.setInt(1, disco.getKey());
+            dTracciaDisco.setInt(2, traccia.getKey());
+            dTracciaDisco.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Error deleting disk track", ex);
+        }
+    }
+
+    @Override
+    public void addDiscoTraccia(Disco disco, List<Traccia> tracce) throws DataException {
+        try {
+            for (Traccia traccia : tracce) {
+                addDiscoTraccia.setInt(1, disco.getKey());
+                addDiscoTraccia.setInt(2, traccia.getKey());
+                addDiscoTraccia.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error adding traccia to disco", ex);
+        }
+    }
+
+        @Override
     public List<String> getEtichette() throws DataException {
         List<String> etichette = new ArrayList<>();
         try {
@@ -425,6 +455,31 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
         }
         return etichette;
     }
+
+    @Override
+    public void deleteDiscoAutore(Disco disco, Autore autore) throws DataException {
+        try {
+            dAutoreDisco.setInt(1, disco.getKey());
+            dAutoreDisco.setInt(2, autore.getKey());
+            dAutoreDisco.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Errore nell'eliminare un autore di un disco", ex);
+        }
+        }
+
+    @Override
+    public void addDiscoAutore(Disco disco, List<Autore> autore) throws DataException {
+        try {
+            for (Autore aut : autore) {
+                addDiscoAutore.setInt(1, disco.getKey());
+                addDiscoAutore.setInt(2, aut.getKey());
+                addDiscoAutore.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Errore nell'aggiungere un autore a un disco", ex);
+        }
+    }
+
 
     @Override
     public void addDisco(Collezione collezione, Disco disco) throws DataException {

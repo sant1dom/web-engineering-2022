@@ -74,6 +74,8 @@ public class UpdateDisco extends CollectorsBaseController {
     private void updateDisco(HttpServletRequest request, HttpServletResponse response) {
         try {
             String titolo = request.getParameter("titolo");
+            System.out.println(request.getParameter("titolo"));
+            System.out.println(request.getParameter("anno"));
             String anno = request.getParameter("anno");
             String barcode = request.getParameter("barcode");
             String etichetta = request.getParameter("etichetta");
@@ -81,20 +83,18 @@ public class UpdateDisco extends CollectorsBaseController {
             StatoConservazione statoConservazione= StatoConservazione.valueOf(request.getParameter("statoConservazione"));
             Formato formato= Formato.valueOf(request.getParameter("formato"));
             int id_disco= Integer.parseInt(request.getParameter("id_disco"));
-            Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
+            Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(id_disco);
+            disco.setKey(id_disco);
             disco.setTitolo(titolo);
             disco.setAnno(anno);
             disco.setBarCode(barcode);
             disco.setEtichetta(etichetta);
+            disco.setGenere(genere);
+            disco.setStatoConservazione(statoConservazione);
+            disco.setFormato(formato);
+            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco);
 
-
-            //chiamata dei metodi setTitolo e setPrivacy sui valori di titolo e privacy inseriti dall'utente
-
-
-            //chiamata metodo storeCollezione per aggiornare la collezione
-            //((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
-
-            response.sendRedirect("/show-collezioni");
+            response.sendRedirect("/lista-dischi");
 
         } catch (Exception e) {
             handleError(e, request, response);

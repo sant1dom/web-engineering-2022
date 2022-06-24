@@ -37,6 +37,7 @@
             <th scope="col">Titolo</th>
             <th scope="col">Durata</th>
             <th scope="col">ISWC</th>
+            <th scope="col">Elimina traccia</th>
         </tr>
         </thead>
         <tbody>
@@ -46,12 +47,47 @@
                     <th scope="row">${traccia.titolo}</th>
                     <td>${traccia.durata}</td>
                     <td>${traccia.ISWC}</td>
+                    <td><a href="delate-tracciaDisco?id_traccia=${traccia.key}&id_disco=${disco.key}" class="btn btn-danger"> elimina traccia</a></td>
                 </tr>
             </#list>
         </#if>
         </tbody>
     </table>
-    <a href="update-TracceDisco" >Modifica le tracce del disco </a>
+    <script type="text/javascript">
+        function showTracce() {
+            oDiv = document.getElementById('tracceSelect');
+            oDiv.style.display='block';
+            return false;
+        }
+    </script>
+    <style >
+    #tracceSelect {
+    display:none;
+    }
+    </style>
+    <div class="form-group">
+        <button onclick="showTracce()" class="btn btn-primary">Aggiungi tracce</button>
+    </div>
+    <div class="form-group col-7"  id="tracceSelect">
+        <form method="post" action="aggiungiTracce-disco" class="ml-5 mt-3">
+        <label for="tracce">Tracce:</label>
+        <#if tracceDaAggiungere??>
+            <select id="tracce" name="tracce" class="selectpicker" multiple data-live-search="true">
+                <#list tracceDaAggiungere as traccia>
+                    <option value="${traccia.key}">${traccia.titolo} | ${traccia.durata} | ${traccia.ISWC}</option>
+                </#list>
+            </select>
+        <#else>
+            <p>
+                Non ci sono tracce
+            </p>
+        </#if>
+        <input type="hidden" name="id_disco" value="${disco.key}">
+        <button type="submit" class="btn btn-primary">Aggiungi tracce</button>
+
+        </form>
+    </div>
+    <div class="form-group col-7">
     <h2>Autori disco</h2>
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -60,6 +96,7 @@
             <th scope="col">Cognome</th>
             <th scope="col">Nome d'arte</th>
             <th scope="col">Tipologia</th>
+            <th scope="col">Elimina Autore</th>
         </tr>
         </thead>
         <tbody>
@@ -70,10 +107,40 @@
                     <td>${autore.cognome}</td>
                     <td>${autore.nomeArtistico}</td>
                     <td>${autore.getTipologia()}</td>
+                    <td><a href="delate-autoreDisco?id_autore=${autore.key}&id_disco=${disco.key}" class="btn btn-danger"> elimina autore</a></td>
                 </tr>
             </#list>
         </#if>
-        <a href="update-AutoriDisco" >Modifica gli autori del disco </a>
         </tbody>
     </table>
+        <script type="text/javascript">
+            function showAutori() {
+                oDiv = document.getElementById('autoriSelect');
+                oDiv.style.display='block';
+                return false;
+            }
+        </script>
+        <style >
+            #autoriSelect {
+                display:none;
+            }
+        </style>
+        <div class="form-group">
+            <button onclick="showAutori()" class="btn btn-primary">Aggiungi autori al disco</button>
+        </div>
+        <div class="form-group col-7"  id="autoriSelect">
+        <form method="post" action="aggiungiAutore-disco" class="ml-5 mt-3">
+                <label for="autore">Autore:</label>
+                <#if autoriDaAggiungere??>
+                    <select id="autori" name="autori" class="selectpicker"  multiple data-live-search="true" >
+                        <#list autoriDaAggiungere as author>
+                            <option value="${author.key}">${author.nome} ${author.cognome}</option>
+                        </#list>
+                    </select>
+                </#if>
+            <input type="hidden" name="id_disco" value="${disco.key}">
+            <button type="submit" class="btn btn-primary">Aggiungi autori</button>
+        </form>
+        </div>
+</div>
 </div>

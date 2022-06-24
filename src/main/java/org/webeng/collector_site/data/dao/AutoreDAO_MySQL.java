@@ -20,6 +20,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
     private PreparedStatement uAutore;
     private PreparedStatement iAutore;
     private PreparedStatement dAutore;
+    private PreparedStatement sAutoriNonInDisco;
     private PreparedStatement fAutoriByNameArtistico;
 
     public AutoreDAO_MySQL(DataLayer d) {
@@ -39,6 +40,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             uAutore = connection.prepareStatement("UPDATE autore SET nome = ?, cognome = ?, nome_artistico = ?, tipologia_autore = ?, version = ? WHERE id = ? AND version = ?");
             iAutore = connection.prepareStatement("INSERT INTO autore (nome, cognome, nome_artistico, tipologia_autore) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dAutore = connection.prepareStatement("DELETE FROM autore WHERE id = ?");
+            sAutoriNonInDisco = connection.prepareStatement("SELECT a.id FROM autore a WHERE a.id NOT IN (SELECT autore_id FROM disco_autore WHERE disco_id = ?)");
             fAutoriByNameArtistico = connection.prepareStatement("SELECT * FROM autore WHERE nome_artistico LIKE CONCAT('%', ?, '%') OR nome LIKE CONCAT('%', ?, '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing authors data layer", ex);
@@ -56,6 +58,7 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             uAutore.close();
             iAutore.close();
             dAutore.close();
+            sAutoriNonInDisco.close();
             fAutoriByNameArtistico.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying authors data layer", ex);
@@ -291,4 +294,21 @@ public class AutoreDAO_MySQL extends DAO implements AutoreDAO {
             throw new DataException("Unable to delete autore", ex);
         }
     }
+
+    @Override
+    public List<Autore> getAutoriNonDisco(Disco disco) throws DataException {
+        List<Autore> result = new ArrayList<>();
+        try {
+            sAutoriNonInDisco.setInt(1, disco.getKey());
+            try (ResultSet rs = sAutoriNonInDisco.executeQuery()) {
+                while (rs.next()) {
+                    result.add(getAutore(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException | DataException ex) {
+            throw new DataException("Unable to load authors by disco", ex);
+        }
+        return result;
+    }
 }
+

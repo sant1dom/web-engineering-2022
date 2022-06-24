@@ -6,7 +6,7 @@
     <div class="form-group col-7">
         <label for="autore">Autore:</label>
         <#if authors??>
-            <select id="autore" name="autore" class="selectpicker" required multiple data-live-search="true" >
+            <select id="autore" name="autore" class="selectpicker" multiple data-live-search="true" required>
                 <#list authors as author>
                     <option value="${author.key}">${author.nome} ${author.cognome}</option>
                 </#list>
@@ -18,9 +18,9 @@
         </#if>
     </div>
     <div class="form-group col-7">
-        <label for="autore">Tracce:</label>
+        <label for="tracce">Tracce:</label>
         <#if tracce??>
-            <select id="tracce" name="tracce" class="selectpicker" multiple data-live-search="true">
+            <select id="tracce" name="tracce" class="selectpicker" multiple data-live-search="true" required>
                 <#list tracce as traccia>
                     <option value="${traccia.key}">${traccia.titolo} | ${traccia.durata} | ${traccia.ISWC}</option>
                 </#list>
@@ -99,7 +99,7 @@
 
     <div class="form-group col-7">
         <label for="barcode">Barcode</label>
-        <input type="text" class="form-control" required id="barcode" name="barcode" placeholder="Barcode">
+        <input type="text" class="form-control" value="" id="barcode" name="barcode" placeholder="Barcode">
     </div>
 
     <div class="form-group col-7">
@@ -117,10 +117,18 @@
 
         $('#padre').on('change', function () {
             let selected = $('#padre option:selected');
-            $("input[name='titolo']").val(selected.text().split(' | ')[0]);
-            $("input[name='anno']").val(selected.text().split(' | ')[1]);
-            $("input[name='etichetta']").val(selected.text().split(' | ')[2]);
-            $("select[name='genere']").val(selected.option().split(' | ')[3]);
+            $("input[name='titolo']").val(selected.text().split(' | ')[0])
+            $("input[name='titolo']").prop('readonly', true);
+            $("input[name='anno']").val(selected.text().split(' | ')[1])
+            $("input[name='anno']").prop('readonly', true);
+            $("input[name='etichetta']").val(selected.text().split(' | ')[2])
+            $("input[name='etichetta']").prop('readonly', true);
+            $("select[name='genere']").prop('disabled', true);
+            $("select[name='tracce']").prop('disabled', true);
+            $("select[name='autore']").prop('disabled', true);
+            $("select[name='genere']").prop('requiered', false);
+            $("select[name='tracce']").prop('required', false);
+            $("select[name='autore']").prop('required', false);
         });
     });
 </script>

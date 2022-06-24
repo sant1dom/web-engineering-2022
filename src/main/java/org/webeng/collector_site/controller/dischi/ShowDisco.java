@@ -43,9 +43,13 @@ public class ShowDisco extends CollectorsBaseController {
         System.out.println(request.getParameter("id_disco"));
         Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.valueOf(request.getParameter("id_disco")));
         List<Traccia> tracce= ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTracce(disco);
+        List<Traccia> tracceDaAggiungere= ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().tracciaNonInDisco(disco);
         List<Autore> autoriDisco= ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori(disco);
+        List<Autore> autoriDaAggiungere= ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutoriNonDisco(disco);
         request.setAttribute("disco", disco);
+        request.setAttribute("autoriDaAggiungere", Objects.requireNonNull(autoriDaAggiungere));
         request.setAttribute("tracce", Objects.requireNonNull(tracce));
+        request.setAttribute("tracceDaAggiungere", Objects.requireNonNull(tracceDaAggiungere));
         request.setAttribute("autoriDisco", Objects.requireNonNull(autoriDisco));
         request.setAttribute("utente", Objects.requireNonNull(Utility.getUtente(request,response)));
         result.activate("disco/show-disco.ftl", request,response );

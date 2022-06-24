@@ -25,6 +25,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     private PreparedStatement dTraccia;
     private PreparedStatement addTracciaAutore;
     private PreparedStatement addTracciaDisco;
+    private PreparedStatement sTracceNonInDisco;
     private PreparedStatement fTracceByTitle;
     public TracciaDAO_MySQL(DataLayer d) {
         super(d);
@@ -47,7 +48,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             dTraccia = connection.prepareStatement("DELETE FROM traccia WHERE id = ? AND version = ?");
             addTracciaAutore = connection.prepareStatement("INSERT INTO traccia_autore (traccia_id, autore_id) VALUES (?,?)");
             addTracciaDisco = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?, ?)");
-
+            sTracceNonInDisco= connection.prepareStatement("SELECT t.id FROM traccia t WHERE t.id NOT IN (SELECT traccia_id FROM disco_traccia WHERE disco_id = ?)");
             fTracceByTitle = connection.prepareStatement("SELECT * FROM traccia WHERE titolo LIKE CONCAT('%', ?, '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer",ex);
@@ -70,6 +71,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             dTraccia.close();
             addTracciaAutore.close();
             addTracciaDisco.close();
+            sTracceNonInDisco.close();
             fTracceByTitle.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing tracks data layer",ex);
@@ -376,6 +378,21 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         } catch (SQLException ex) {
             throw new DataException("Error setting track", ex);
         }
+    }
+
+    @Override
+    public List<Traccia> tracciaNonInDisco(Disco disco) throws DataException {
+        List<Traccia> tracce = new ArrayList<>();
+        try{
+            sTracceNonInDisco.setInt(1,disco.getKey());
+            ResultSet rs = sTracceNonInDisco.executeQuery();
+            while(rs.next()){
+                tracce.add(getTraccia(rs.getInt("id")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tracce;
     }
 
 

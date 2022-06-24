@@ -109,7 +109,6 @@ CREATE TABLE `disco` (
   `stato_conservazione` varchar(45) DEFAULT NULL,
   `data_inserimento` date DEFAULT NULL,
   `version` int unsigned DEFAULT '1',
-  `doppioni` int unsigned DEFAULT '0',
   `utente_id` int unsigned NOT NULL,
   `padre` int unsigned,
   PRIMARY KEY (`id`),

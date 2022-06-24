@@ -90,32 +90,38 @@ public class CreateDisco extends CollectorsBaseController {
 
     private void saveDisco(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List<Image> immagini = new ArrayList<>();
-            String titolo = request.getParameter("titolo");
-            String anno = request.getParameter("anno");
-            String barcode = request.getParameter("barcode");
-            String etichetta = request.getParameter("etichetta");
-
-            Genere genere = Genere.valueOf(request.getParameter("genere"));
+            List<Autore> autori = new ArrayList<>();
+            List<Traccia> tracce = new ArrayList<>();
+            Genere genere = null;
             Utente utente = Utility.getUtente(request, response);
 
             Formato formato = Formato.valueOf(request.getParameter("formato"));
             StatoConservazione statoConservazione = StatoConservazione.valueOf(request.getParameter("statoConservazione"));
 
             LocalDate dataInserimento = LocalDate.now();
-            List<Autore> autori = new ArrayList<>();
-            for (String autore : request.getParameterValues("autore")) {
-                autori.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutore(Integer.parseInt(autore)));
-            }
-            List<Traccia> tracce = new ArrayList<>();
-            for (String traccia : request.getParameterValues("tracce")) {
-                tracce.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.parseInt(traccia)));
-            }
+            String titolo = request.getParameter("titolo");
+            String anno = request.getParameter("anno");
+            String barcode = request.getParameter("barcode");
+            String etichetta = request.getParameter("etichetta");
+            Disco padre= new DiscoImpl();
             String padre_id = "0";
+            List<Image> immagini = new ArrayList<>();
             if (!(request.getParameter("padre").equals(""))) {
                 padre_id = request.getParameter("padre");
+                 padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(padre_id));
+                 genere= padre.getGenere();
+                autori=((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori(padre);
+                tracce=((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTracce(padre);
+            }else{
+                for (String autore : request.getParameterValues("autore")) {
+                    autori.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutore(Integer.parseInt(autore)));
+                }
+
+                for (String traccia : request.getParameterValues("tracce")) {
+                    tracce.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.parseInt(traccia)));
+                }
+                genere = Genere.valueOf(request.getParameter("genere"));
             }
-            Disco padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(padre_id));
             Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
 
             String idDisco = String.valueOf(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco));
