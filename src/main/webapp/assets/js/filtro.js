@@ -43,7 +43,7 @@ function filtroTipo(tabella) {
             tracce.show();
             autori.hide();
             break;
-        case "artisti":
+        case "autori":
             utenti.hide();
             collezioni.hide();
             dischi.hide();
@@ -60,22 +60,10 @@ function filtroTipo(tabella) {
     }
 }
 
-//filtro per i dischi
-function filtroDischi(val) {
-    let value = val.toLowerCase();
-    if (value === "tutti") {
-        value = "";
-    }
-    $("#table-tbody-dischi tr").filter(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-}
-
-//barra di ricerca
-function ricerca(val, tabella) {
+//filtro per le tabelle
+function ricerca(val, tabella_id) {
     val = val.toLowerCase();
-    tabella = "#" + tabella;
-    $(tabella + " tr").filter(function () {
+    $(tabella_id + " tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1)
     });
 }

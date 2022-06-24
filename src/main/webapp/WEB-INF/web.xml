@@ -207,6 +207,14 @@
         <url-pattern>/show-autore</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>IndexAutore</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.autori.IndexAutore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndexAutore</servlet-name>
+        <url-pattern>/index-autore</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>CreateAutore</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.autori.CreateAutore</servlet-class>
     </servlet>
