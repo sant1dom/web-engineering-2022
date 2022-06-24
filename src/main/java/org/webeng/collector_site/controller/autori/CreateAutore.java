@@ -47,7 +47,7 @@ public class CreateAutore extends CollectorsBaseController {
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
         request.setAttribute("tipologie", TipologiaAutore.values());
-        result.activate("autori/create_autore.ftl", request, response);
+        result.activate("autori/create.ftl", request, response);
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -65,7 +65,7 @@ public class CreateAutore extends CollectorsBaseController {
                             TipologiaAutore.valueOf(request.getParameter("tipologia_autore"))
                     )
             );
-            response.sendRedirect(Objects.requireNonNullElse(request.getParameter(REFERRER), "/"));
+            response.sendRedirect(Objects.requireNonNullElse(request.getParameter(REFERRER), "index-autore"));
         } catch (Exception e) {
             e.printStackTrace();
             handleError(e, request, response);

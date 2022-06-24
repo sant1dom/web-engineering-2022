@@ -1,6 +1,6 @@
 <#include "../outlines/outline_header.ftl">
 
-<link href="/assets/css/show.css" rel="stylesheet"/>
+<link href="/assets/css/page.css" rel="stylesheet"/>
 
 <div class="page-container">
     <#if (collezione??)>
@@ -78,10 +78,14 @@
 
             <div class="title">FILTRO</div>
             <div class="filtro">
-                <input id="input-filtro" type="text" onkeyup="ricerca(this.value, 'table-tbody-dischi')" placeholder="Search.." class="input-filtro">
+                <input id="input-filtro" type="text" onkeyup="ricerca(this.value, '#table-tbody-dischi')"
+                       placeholder="Search.." class="input-filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <#include "../outlines/filtro/outline_generi.ftl">
+                        <div class="resp991">
+                            <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            <#include "../outlines/filtro/outline_generi.ftl">
+                        </div>
                     </dl>
                 </div>
             </div>
@@ -114,9 +118,9 @@
                                 <td>${disco.getGenere()}</td>
                                 <#if (utente?? && proprietario.getKey() == utente.getKey())>
                                     <td class="table-actions">
-                                            <a class="btn btn-danger"
-                                               href="delete-discoCollezione?id_disco=${disco.getKey()}&id_collezione=${collezione.getKey()}">
-                                                <i class="lni lni-trash-can"></i></a>
+                                        <a class="btn btn-danger"
+                                           href="delete-discoCollezione?id_disco=${disco.getKey()}&id_collezione=${collezione.getKey()}">
+                                            <i class="lni lni-trash-can"></i></a>
                                     </td>
                                 </#if>
                             </tr>

@@ -10,6 +10,7 @@
     min-height: calc(100vh - 64px);
 }
 
+/*CSS FLEXBOX*/
 .flex {
     display: flex;
 }
@@ -25,6 +26,11 @@
 .align-items-center {
     align-items: center;
 }
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+/*END CSS FLEXBOX*/
 
 .horizontal-separator {
     background-color: gray;
@@ -76,19 +82,48 @@
     margin-top: 1rem;
 }
 
+/*CSS PER LE FORM*/
+.form-card {
+    width: 70%;
+}
+
+.form-title {
+    color: black;
+    font-weight: bold;
+}
+
+.form-group {
+    margin: 0;
+    padding: 1.5rem;
+    width: 50%;
+}
+
+/*END CSS FORM*/
+
+
 @media (max-width: 991px) {
+    .resp991 {
+        display: none;
+    }
+
     .tabelle-filtro-container {
         display: block;
-        width: 100%;
-        padding: 0;
     }
 
     .actions {
         justify-content: space-around;
+    }
+
+    .tabelle-filtro-container, .actions {
         padding: 0;
     }
 
     .btn-wd-fixed {
         margin-left: 0;
     }
+
+    .form-group, .form-card, .tabelle-filtro-container {
+        width: 100%;
+    }
+
 }

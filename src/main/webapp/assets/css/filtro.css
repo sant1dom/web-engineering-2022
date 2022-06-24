@@ -27,8 +27,9 @@
 
 .input-filtro.inner-table {
     border-bottom: none;
-
-    width: 20rem;
+    margin-left: 2rem;
+    width: 100%;
+    max-width: 20rem;
 }
 
 .filtro-info {
@@ -60,9 +61,7 @@
 }
 
 @media (max-width: 991px) {
-    .filtro-list, .filtro-info {
-        display: none;
-    }
+
 
     .side-bar-container {
         width: 100%;
