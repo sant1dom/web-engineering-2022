@@ -58,7 +58,6 @@ search_box.keyup(function () {
             method: "GET",
             data: {keyword: search_box.val()},
             success: function (data) {
-                console.log(data[0] + " " + data[1]);
                 if (!((data[0] + data[1]) === "[]")) {
                     let obj = $.parseJSON(data);
                     suggestion_box.children().remove();

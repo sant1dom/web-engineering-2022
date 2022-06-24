@@ -88,7 +88,7 @@
                                 <td><a class="link" href="show-disco?id=${disco.getKey()}">${disco.getTitolo()}</a></td>
                                 <td>${disco.getAnno()}</td>
                                 <td>${disco.getEtichetta()}</td>
-                                <td>${disco.getGenere()}</td>
+                                <td>${disco.getGenere()?lower_case?cap_first}</td>
                                 <#if (utente?? && proprietario.getKey() == utente.getKey())>
                                     <td class="table-actions">
                                         <a class="btn btn-danger"
@@ -105,22 +105,22 @@
                 </div>
             </div>
 
-            <#if (collezione.getPrivacy()="CONDIVISA")>
+            <#if (collezione.getPrivacy() = "CONDIVISA")>
                 <div class="table-container">
                     <div class="title">CONDIVISIONE</div>
                     <#if (utenti_condivisi?? && utenti_condivisi?size>0)>
-                        <table class="table table-bordered">
-                            <thead class="thead-dark">
+                    <div class="table-scrollable">
+                        <table class="table table-borderless table-striped overflow-auto">
+                            <thead class="table-dark">
                             <tr>
                                 <th scope="col">Username</th>
-                                <th scope="col">Azioni</th>
+                                <th scope="col" style="text-align: center">Azioni</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <h3>Collezione condivisa con</h3>
+                            <tbody id="table-tbody-dischi">
                             <#list utenti_condivisi as user>
                                 <tr>
-                                    <td>${user.getUsername()}</td>
+                                    <td><a class="link" href="profilo?id=${user.getKey()}">${user.getUsername()}</a></td>
                                     <td class="table-actions">
                                         <a class="btn btn-danger"
                                            href="delete-utenteCondiviso?id_utenteCondiviso=${user.getKey()}&id_collezione=${collezione.getKey()}">
@@ -128,13 +128,13 @@
                                     </td>
                                 </tr>
                             </#list>
-                            </tbody>
                         </table>
-                    <#else>
-                        <div class="table-empty">Collezione condivisa con nessun utente</div>
-                    </#if>
+                        <#else>
+                            <div class="table-empty">Collezione condivisa con nessun utente</div>
+                        </#if>
+                    </div>
                 </div>
-            </#if>
+                </#if>
+            </div>
         </div>
     </div>
-</div>

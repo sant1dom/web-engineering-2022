@@ -2,6 +2,8 @@ package org.webeng.collector_site.controller.utenti;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
+import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -10,36 +12,48 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
 
+/**
+ * Servlet per il profilo di un utente
+ * @author Davide De Acetis
+ */
 public class Profilo extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
-            Utente utente = Utility.getUtente(request, response);
-
-            TemplateResult result = new TemplateResult(getServletContext());
-            request.setAttribute(REFERRER, request.getParameter(REFERRER));
-            request.setAttribute("utente", utente);
-            result.activate("utenti/profilo.ftl", request, response);
-        } catch (TemplateManagerException | DataException ex) {
-            handleError(ex, request, response);
-        }
-    }
-
-    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-        try {
-            Utente utente = Utility.getUtente(request, response);
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
 
+            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+            Utente utente_generico;
+            List<Collezione> collezioni;
+
+            Utente utente = Utility.getUtente(request, response);
             if (utente != null) {
                 request.setAttribute("utente", utente);
             }
+
+            if (request.getParameter("id") != null && !request.getParameter("id").isBlank()) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                utente_generico = dataLayer.getUtenteDAO().getUtente(id);
+                if (utente_generico != null) {
+                    request.setAttribute("utente_generico", utente_generico);
+                    collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente_generico);
+                    request.setAttribute("collezioni", collezioni);
+                } else {
+                    response.sendRedirect("/");
+                }
+            } else {
+                collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente);
+                request.setAttribute("collezioni", collezioni);
+            }
+            
             result.activate("utenti/profilo.ftl", request, response);
-        } catch (TemplateManagerException | DataException ex) {
+        } catch (TemplateManagerException | DataException | IOException ex) {
             handleError(ex, request, response);
         }
     }
@@ -54,14 +68,10 @@ public class Profilo extends CollectorsBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession s = SecurityHelpers.checkSession(request);
             String https_redirect_url = SecurityHelpers.checkHttps(request);
             request.setAttribute("https-redirect", https_redirect_url);
-            if (s == null) {
-                action_default(request, response);
-            } else {
-                action_logged(request, response);
-            }
+
+            action_default(request, response);
         } catch (TemplateManagerException ex) {
             handleError(ex, request, response);
         }

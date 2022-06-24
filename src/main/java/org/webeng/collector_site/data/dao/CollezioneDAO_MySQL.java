@@ -247,7 +247,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             throw new DataException("Unable to add disco to collezione", ex);
 
         }
-}
+    }
 
     //Condivisione della collezione
     private void addUtenteCondiviso(Collezione collezione) throws SQLException {

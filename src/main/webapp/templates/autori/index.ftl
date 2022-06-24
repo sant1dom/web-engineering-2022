@@ -17,7 +17,13 @@
                 <span class="testo-info">${keyword}</span>
             </div>
         </#if>
-
+        <#if (utente??)>
+            <div class="actions">
+                <a class="btn btn-success btn-wd-fixed"
+                   href="create-autore">
+                    Aggiungi autore</a>
+            </div>
+        </#if>
     </div>
 
     <div class="horizontal-separator"></div>

@@ -1,4 +1,6 @@
-<#-- @ftlvariable name="tracce" type="org.webeng.collector_site.data.model.Traccia[]" -->
+<#-- @ftlvariable name="collezioni" type="org.webeng.collector_site.data.model.Collezione[]" -->
+<#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
+<#-- @ftlvariable name="utente_generico" type="org.webeng.collector_site.data.model.Utente" -->
 <#-- @ftlvariable name="keyword" type="String" -->
 
 <#include "../outlines/outline_header.ftl">
@@ -7,24 +9,49 @@
 
 <div class="page-container">
     <div class="info">
-        <#if (utente??)>
+        <#if (utente_generico??)>
+            <h3>${utente_generico.getUsername()}</h3>
+        <#elseif (utente??)>
             <h3>${utente.getUsername()}</h3>
         </#if>
-        <#if (keyword?? && keyword != "")>
-            <div class="labels">
-                <span class="label-info">Hai cercato: </span>
+
+        <div class="labels">
+            <#if (utente_generico?? && utente_generico.getNome()?? && utente_generico.getCognome()??)>
+                <span class="label-info">Nome completo: </span>
                 <br>
-            </div>
-            <div class="testi">
-                <span class="testo-info">${keyword}</span>
-            </div>
-        </#if>
-        <div class="actions">
-            <a class="btn btn-success btn-wd-fixed"
-               href="create-traccia">
-                Aggiungi traccia</a>
+            <#elseif (utente?? && utente.getNome()?? && utente.getCognome()??)>
+                <span class="label-info">Nome completo: </span>
+                <br>
+            </#if>
+            <span class="label-info">Email: </span>
+            <br>
+        </div>
+        <div class="testi">
+            <#if (utente_generico?? && utente_generico.getNome()?? && utente_generico.getCognome()??)>
+                <span class="testo-info">${utente_generico.getNome()} ${utente_generico.getCognome()}</span>
+                <br>
+            <#elseif (utente?? && utente.getNome()?? && utente.getCognome()??)>
+                <span class="testo-info">${utente.getNome()} ${utente.getCognome()}</span>
+                <br>
+            </#if>
+            <#if (utente_generico??)>
+                <span class="testo-info">${utente_generico.getEmail()}</span>
+            <#elseif (utente??)>
+                <span class="testo-info">${utente.getEmail()}</span>
+            </#if>
+            <br>
         </div>
 
+        <#if (utente?? && utente_generico?? && utente.getKey() == utente_generico.getKey())>
+            <div class="actions">
+                <a class="btn btn-success btn-wd-fixed"
+                   href="create-traccia">
+                    Aggiungi collezione</a>
+                <a class="btn btn-warning btn-wd-fixed"
+                   href="edit-profile?id=${utente.getKey()}">
+                    Modifica profilo</a>
+            </div>
+        </#if>
     </div>
 
     <div class="horizontal-separator"></div>
@@ -36,54 +63,50 @@
                        placeholder="Search.." class="input-filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <#include "../outlines/filtro/outline_durata.ftl">
+                        <#include "../outlines/filtro/outline_privacy.ftl">
                     </dl>
                 </div>
             </div>
         </div>
         <div class="tables-container">
-            <div class="table-container" id="tracce-container">
+            <div class="table-container" id="collezioni-container">
                 <div class="title flex justify-between align-items-center">
-                    TRACCE
+                    COLLEZIONI
                 </div>
-                <#if (tracce?? && tracce?size > 0)>
-                <div class="table-scrollable">
-                    <table class="table table-borderless table-striped">
-                        <thead class="table-dark">
-                        <tr>
-                            <th scope="col">ISWC</th>
-                            <th scope="col">Titolo</th>
-                            <th scope="col">Durata</th>
-                            <th scope="col">Autori</th>
-                            <th scope="col"><span class="flex justify-center">Originale</span></th>
-                        </tr>
-                        </thead>
-                        <tbody id="table-tbody-tracce">
-                        <#list tracce as traccia>
+                <#if (collezioni?? && collezioni?size > 0)>
+                    <div class="table-scrollable">
+                        <table class="table table-borderless table-striped overflow-auto">
+                            <thead class="table-dark">
                             <tr>
-                                <td>${traccia.getISWC()}</td>
-                                <td>${traccia.getTitolo()}</td>
-                                <td>${traccia.getDurata()}s</td>
-                                <td>
-                                    <#list traccia.getAutori() as autore>
-                                        ${autore.getNomeArtistico()},
-                                    </#list>
-                                </td>
-                                <td class="flex justify-center">
-                                    <#if (traccia.getPadre()?has_content)>
-                                        ${traccia.getPadre().getISWC()}
-                                    <#else>
-                                        SI
-                                    </#if>
-                                </td>
+                                <th scope="col">Titolo</th>
+                                <th scope="col">Data creazione</th>
+                                <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
+                                    <th scope="col">Privacy</th>
+                                    <th scope="col" style="text-align: center">Azioni</th>
+                                </#if>
                             </tr>
-                        </#list>
-                        </tbody>
-                    </table>
-                    <#else>
-                        <div class="table-empty">Non ci sono tracce.</div>
-                    </#if>
-                </div>
+                            </thead>
+                            <tbody id="table-tbody-collezioni">
+                            <#list collezioni as collezione>
+                                <tr>
+                                    <td><a class="link"
+                                           href="show-collezione?id=${collezione.getKey()}">${collezione.getTitolo()}</a>
+                                    </td>
+                                    <td>${collezione.getDataCreazione()}</td>
+                                    <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
+                                        <td>${collezione.getPrivacy()?lower_case?cap_first}</td>
+                                        <td class="table-actions">
+                                            <a href="delete-collezione?id_collezione=${collezione.getKey()}"
+                                               class="btn btn-danger"><i class="lni lni-trash-can"></i></a>
+                                        </td>
+                                    </#if>
+                                </tr>
+                            </#list>
+                        </table>
+                    </div>
+                <#else>
+                    <div class="table-empty">Non ci sono collezioni.</div>
+                </#if>
             </div>
         </div>
     </div>

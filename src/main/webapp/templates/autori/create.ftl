@@ -3,7 +3,7 @@
 
 <#include "../outlines/outline_header.ftl">
 
-<div class="page-container flex justify-center align-items-center">
+<div class="page-container page-bg flex justify-center align-items-center">
     <div class="card form-card">
         <div class="card-header">
             <span class="form-title flex justify-center align-items-center">NUOVO AUTORE</span>

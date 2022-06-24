@@ -49,7 +49,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             dUtenteCollezione= connection.prepareStatement("DELETE FROM collezione_condivisa_con WHERE collezione_id=? AND utente_id=?");
 
             //query per auto completamento ricerca
-            fUtentiByUsername = connection.prepareStatement("SELECT * from utente WHERE username LIKE CONCAT('%', ? ,'%')");
+            fUtentiByUsername = connection.prepareStatement("SELECT * from utente WHERE username LIKE CONCAT('%', ? ,'%') OR (nome IS NOT NULL AND nome LIKE CONCAT('%' ,? ,'%')) OR (cognome IS NOT NULL AND cognome LIKE CONCAT('%' ,? ,'%'))");
         } catch (SQLException ex) {
             throw new DataException("Error initializing users data layer", ex);
         }
@@ -295,6 +295,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 result = getUtenti();
             } else {
                 fUtentiByUsername.setString(1, keyword);
+                fUtentiByUsername.setString(2, keyword);
+                fUtentiByUsername.setString(3, keyword);
                 ResultSet rs = fUtentiByUsername.executeQuery();
                 while (rs.next()) {
                     Utente utente = createUtente(rs);
