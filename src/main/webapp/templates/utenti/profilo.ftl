@@ -4,7 +4,7 @@
 <#-- @ftlvariable name="keyword" type="String" -->
 
 <#include "../outlines/outline_header.ftl">
-
+<#setting date_format="dd-MM-yyyy">
 <link href="/assets/css/page.css" rel="stylesheet"/>
 
 <div class="page-container">
@@ -92,7 +92,7 @@
                                     <td><a class="link"
                                            href="show-collezione?id=${collezione.getKey()}">${collezione.getTitolo()}</a>
                                     </td>
-                                    <td>${collezione.getDataCreazione()}</td>
+                                    <td>${collezione.dataCreazione?date("yyyy-MM-dd")?string("dd-MM-yyyy")}</td>
                                     <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
                                         <td>${collezione.getPrivacy()?lower_case?cap_first}</td>
                                         <td class="table-actions">

@@ -1,4 +1,5 @@
 <#include "../outlines/outline_header.ftl">
+<#setting date_format="dd-MM-yyyy">
 <link href="/assets/css/page.css" rel="stylesheet"/>
 
 <div class="card-body">
@@ -8,7 +9,6 @@
         <table class="table table-bordered">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">ID Collezione</th>
                 <th scope="col">Titolo</th>
                 <th scope="col">Data creazione</th>
                 <th scope="col">Dettagli</th>
@@ -18,9 +18,8 @@
             <tbody>
             <#list collezioni as collezione>
                 <tr>
-                    <th scope="row">${collezione.key}</th>
-                    <td>${collezione.titolo}</td>
-                    <td>${collezione.dataCreazione}</td>
+                    <th scope="row">${collezione.titolo}</th>
+                    <td>${collezione.dataCreazione?date("yyyy-MM-dd")?string("dd-MM-yyyy")}</td>
                     <td><a href="show-collezione?id=${collezione.key}" class="btn btn-success">visualizza</a></td>
                     <td><a href="delete-collezione?id_collezione=${collezione.key}" class="btn btn-danger">elimina collezione</a></td>
                 </tr>
