@@ -38,8 +38,7 @@ function selectSuggestion(id, nomeArray, input) {
 }
 
 //permette di selezionare tutti gli elementi di un tipo suggeriti, impostare i campi di ricerca e richiamare la ricerca
-function seeAll(nomeArray, input) {
-    search_box.val(input);
+function seeAll(nomeArray) {
     suggestion_box.hide();
     item_type.val(nomeArray);
     search_form.submit();

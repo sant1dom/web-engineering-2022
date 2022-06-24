@@ -7,9 +7,7 @@
 
 <div class="page-container">
     <div class="info">
-        <#if (utente??)>
-            <h3>${utente.getUsername()}</h3>
-        </#if>
+        <h3>Lista delle tracce</h3>
         <#if (keyword?? && keyword != "")>
             <div class="labels">
                 <span class="label-info">Hai cercato: </span>

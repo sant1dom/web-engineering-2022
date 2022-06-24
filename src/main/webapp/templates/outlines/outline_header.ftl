@@ -1,3 +1,6 @@
+<#-- @ftlvariable name="error" type="String" -->
+<#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index: 100; position: sticky; top: 0">
     <a class="navbar-brand" href="home">Collector Site</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -27,13 +30,16 @@
             <li class="nav-item nav-square dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+                    Esplora
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-menu scripted show" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="index-collezione">Collezioni</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="index-disco">Dischi</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="index-traccia">Tracce</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="index-autore">Autori</a>
                 </div>
             </li>
         </ul>

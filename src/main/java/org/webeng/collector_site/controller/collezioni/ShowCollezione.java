@@ -32,7 +32,7 @@ public class ShowCollezione extends CollectorsBaseController {
             Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
             Utente proprietario = collezione.getUtente();
             List<Disco> dischi = collezione.getDischi();
-            List<Utente>utenti_condivisi=collezione.getUtentiCondivisi();
+            List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
 
             //Ogni collezione ha una lista di dischi e il suo proprietario.
             request.setAttribute("collezione", collezione);

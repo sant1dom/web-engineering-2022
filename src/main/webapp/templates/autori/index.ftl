@@ -1,26 +1,25 @@
-<#-- @ftlvariable name="autore" type="org.webeng.collector_site.data.model.Autore" -->
-<#-- @ftlvariable name="dischi" type="org.webeng.collector_site.data.model.Disco[]" -->
-<#-- @ftlvariable name="tracce" type="org.webeng.collector_site.data.model.Traccia[]" -->
+<#-- @ftlvariable name="autori" type="org.webeng.collector_site.data.model.Autore" -->
+<#-- @ftlvariable name="keyword" type="String" -->
 
 <#include "../outlines/outline_header.ftl">
 
 <link href="/assets/css/page.css" rel="stylesheet"/>
 
 <div class="page-container">
-    <#if (autore??)>
-        <div class="info">
-            <h3>${autore.getNomeArtistico()}</h3>
+    <div class="info">
+        <h3>Lista degli autori</h3>
+        <#if (keyword?? && keyword != "")>
             <div class="labels">
-                <span class="label-info">Vero nome: </span> <br>
-                <span class="label-info">Tipologia: </span>
+                <span class="label-info">Hai cercato: </span>
                 <br>
             </div>
             <div class="testi">
-                <span class="testo-info">${autore.getNome() + " " + autore.getCognome()}</span> <br>
-                <span class="testo-info">${autore.getTipologia()}</span>
+                <span class="testo-info">${keyword}</span>
             </div>
-        </div>
-    </#if>
+        </#if>
+
+    </div>
+
     <div class="horizontal-separator"></div>
     <div class="tabelle-filtro-container">
         <div class="side-bar-container">

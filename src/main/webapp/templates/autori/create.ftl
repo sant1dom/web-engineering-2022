@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="error" type="String" -->
 <#-- @ftlvariable name="tipologie" type="org.webeng.collector_site.data.model.TipologiaAutore[]" -->
 
 <#include "../outlines/outline_header.ftl">

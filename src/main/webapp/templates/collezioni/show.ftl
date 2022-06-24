@@ -1,3 +1,9 @@
+<#-- @ftlvariable name="collezione" type="org.webeng.collector_site.data.model.Collezione" -->
+<#-- @ftlvariable name="proprietario" type="org.webeng.collector_site.data.model.Utente" -->
+<#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
+<#-- @ftlvariable name="dischi" type="org.webeng.collector_site.data.model.Disco[]" -->
+<#-- @ftlvariable name="utenti_condivisi" type="org.webeng.collector_site.data.model.Utente[]" -->
+
 <#include "../outlines/outline_header.ftl">
 
 <link href="/assets/css/page.css" rel="stylesheet"/>
@@ -15,36 +21,6 @@
                     <div class="testi">
                         <span class="testo-info">${collezione.getPrivacy()}</span>
                     </div>
-                    <#if (collezione.getPrivacy()="CONDIVISA")>
-
-                            <#if (utenti_condivisi?size>0)>
-                                <table class="table table-bordered">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Azioni</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <h3>Collezione condivisa con</h3>
-                                <#list utenti_condivisi as user>
-                                    <tr>
-                                        <td>${user.getUsername()}</td>
-                                        <td class="table-actions">
-                                            <a class="btn btn-danger"
-                                               href="delete-utenteCondiviso?id_utenteCondiviso=${user.getKey()}&id_collezione=${collezione.getKey()}">
-                                                rimuovi utente</a>
-                                        </td>
-                                    </tr>
-                                </#list>
-                                </tbody>
-                                </table>
-                            <#else>
-                                <div class="table-empty">Collezione condivisa con nessun utente</div>
-                            </#if>
-
-                    </#if>
-
                     <div class="actions">
                         <a class="btn btn-success btn-wd-fixed"
                            href="update-collezione?id_collezione=${collezione.getKey()}">
@@ -70,9 +46,6 @@
     </#if>
 
     <div class="horizontal-separator"></div>
-
-
-
     <div class="tabelle-filtro-container">
         <div class="side-bar-container">
 
@@ -131,6 +104,37 @@
                     </#if>
                 </div>
             </div>
+
+            <#if (collezione.getPrivacy()="CONDIVISA")>
+                <div class="table-container">
+                    <div class="title">CONDIVISIONE</div>
+                    <#if (utenti_condivisi?? && utenti_condivisi?size>0)>
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Username</th>
+                                <th scope="col">Azioni</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <h3>Collezione condivisa con</h3>
+                            <#list utenti_condivisi as user>
+                                <tr>
+                                    <td>${user.getUsername()}</td>
+                                    <td class="table-actions">
+                                        <a class="btn btn-danger"
+                                           href="delete-utenteCondiviso?id_utenteCondiviso=${user.getKey()}&id_collezione=${collezione.getKey()}">
+                                            rimuovi utente</a>
+                                    </td>
+                                </tr>
+                            </#list>
+                            </tbody>
+                        </table>
+                    <#else>
+                        <div class="table-empty">Collezione condivisa con nessun utente</div>
+                    </#if>
+                </div>
+            </#if>
         </div>
     </div>
 </div>

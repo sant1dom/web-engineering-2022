@@ -189,6 +189,14 @@
 
     <!-- TRACCE -->
     <servlet>
+        <servlet-name>IndexTraccia</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.tracce.IndexTraccia</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndexTraccia</servlet-name>
+        <url-pattern>/index-traccia</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>CreateTraccia</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.tracce.CreateTraccia</servlet-class>
     </servlet>

@@ -52,7 +52,7 @@ public class CreateTraccia extends CollectorsBaseController {
         List<Traccia> tracce = ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccePadri();
         request.setAttribute("authors", Objects.requireNonNullElse(autori, ""));
         request.setAttribute("tracce", Objects.requireNonNullElse(tracce, ""));
-        result.activate("tracce/create_traccia.ftl", request, response);
+        result.activate("tracce/create.ftl", request, response);
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, IOException {
@@ -71,7 +71,7 @@ public class CreateTraccia extends CollectorsBaseController {
             }
             Traccia padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.parseInt(request.getParameter("padre")));
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().storeTraccia(new TracciaImpl(titolo, durata, iswc, autori, padre));
-            response.sendRedirect("/home");
+            response.sendRedirect("/index-traccia");
         } catch (Exception e) {
             handleError(e, request, response);
         }

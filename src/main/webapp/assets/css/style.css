@@ -10,6 +10,10 @@
     min-height: calc(100vh - 64px);
 }
 
+.page-bg {
+    background-image: url('/assets/images/auth_bg.jpg');
+}
+
 /*CSS FLEXBOX*/
 .flex {
     display: flex;
@@ -98,8 +102,18 @@
     width: 50%;
 }
 
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%; !important;
+}
+
 /*END CSS FORM*/
 
+
+/*CSS WIDTH*/
+.cw-25 {
+    width: 25%;
+}
+/*END CSS WIDTH*/
 
 @media (max-width: 991px) {
     .resp991 {
@@ -123,7 +137,7 @@
     }
 
     .form-group, .form-card, .tabelle-filtro-container {
-        width: 100%;
+        width: 100%; !important;
     }
 
 }

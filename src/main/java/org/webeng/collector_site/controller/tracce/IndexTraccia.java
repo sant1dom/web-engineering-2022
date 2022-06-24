@@ -1,9 +1,10 @@
-package org.webeng.collector_site.controller.autori;
+package org.webeng.collector_site.controller.tracce;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.Autore;
+import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -18,7 +19,7 @@ import java.util.List;
  * Servlet per la visualizzazione del singolo autore.
  * @author Davide De Acetis
  */
-public class IndexAutore extends CollectorsBaseController {
+public class IndexTraccia extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
 
@@ -27,19 +28,19 @@ public class IndexAutore extends CollectorsBaseController {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
             CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-            List<Autore> autori;
+            List<Traccia> tracce;
 
             if (request.getParameter("keyword") != null && !request.getParameter("keyword").isBlank()) {
-                autori = dataLayer.getAutoreDAO().getAutoriByKeyword(request.getParameter("keyword"));
+                tracce = dataLayer.getTracciaDAO().getTracceByKeyword(request.getParameter("keyword"));
                 request.setAttribute("keyword", request.getParameter("keyword"));
             } else {
-                autori = dataLayer.getAutoreDAO().getAutori();
+                tracce = dataLayer.getTracciaDAO().getTracce();
             }
 
             //lista degli autori
-            request.setAttribute("autori", autori);
+            request.setAttribute("tracce", tracce);
 
-            result.activate("/autori/index.ftl", request, response);
+            result.activate("/tracce/index.ftl", request, response);
         } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
