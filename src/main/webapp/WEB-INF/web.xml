@@ -273,6 +273,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>DeleteUtenteCondiviso</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.DeleteUtenteCondiviso</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteUtenteCondiviso</servlet-name>
+        <url-pattern>/delete-utenteCondiviso</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UpdateCollezione</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.collezioni.UpdateCollezione</servlet-class>
     </servlet>

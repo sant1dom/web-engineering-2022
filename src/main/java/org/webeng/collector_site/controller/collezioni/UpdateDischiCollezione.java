@@ -60,7 +60,7 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
         dischi.addAll(allDischi);
         dischi.removeAll(dischiCollezione);
 
-        request.setAttribute(REFERRER, request.getParameter("id_collezione"));
+       // request.setAttribute(REFERRER, request.getParameter("id_collezione"));
         request.setAttribute("collezione", collezione);
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
         result.activate("collezioni/update_dischiCollezione.ftl", request, response);
@@ -82,12 +82,10 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
             }
             Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-            //richiamo il metodo storeCollezione per aggiornare la collezione
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
             //aggiunta di ogni disco selezionato nella collezione in questione
             for (Disco disco : dischi) {
-                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
+                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().addDiscoCollezione(collezione, disco);
             }
             response.sendRedirect("/show-collezioni");
         } catch (Exception e) {

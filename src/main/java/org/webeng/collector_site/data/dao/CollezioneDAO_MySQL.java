@@ -4,6 +4,8 @@ import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.collector_site.data.proxy.CollezioneProxy;
+import org.webeng.collector_site.data.dao.DiscoDAO_MySQL;
+import org.webeng.collector_site.data.proxy.DiscoProxy;
 import org.webeng.collector_site.data.proxy.TracciaProxy;
 import org.webeng.framework.data.*;
 
@@ -21,6 +23,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement uCollezione;
     private PreparedStatement iCollezione;
     private PreparedStatement dCollezione;
+
+    private PreparedStatement addDiscoCollezione;
     private PreparedStatement addUtenteCondiviso;
     private PreparedStatement fCollezioniByTitolo;
 
@@ -41,6 +45,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
+            addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addUtenteCondiviso = connection.prepareStatement("INSERT INTO collezione_condivisa_con (collezione_id, utente_id) VALUES (?, ?)");
             fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy != 'PRIVATO' AND privacy != 'CONDIVISO' AND titolo LIKE CONCAT('%', ? , '%')");
         } catch (SQLException ex) {
@@ -60,6 +65,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             iCollezione.close();
             dCollezione.close();
             addUtenteCondiviso.close();
+            addDiscoCollezione.close();
             fCollezioniByTitolo.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying collections data layer", ex);
@@ -209,6 +215,40 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
         }
     }
 
+    @Override
+    public void addDiscoCollezione(Collezione collezione, Disco disco) throws DataException {
+        try {
+            if (collezione.getKey() != null && collezione.getKey() > 0) {
+                if (collezione instanceof DataItemProxy && !((DataItemProxy) collezione).isModified()) {
+                    return;
+                }
+
+                uCollezione.setString(1, collezione.getTitolo());
+                uCollezione.setString(2, collezione.getPrivacy());
+
+                long current_version = collezione.getVersion();
+                long next_version = current_version + 1;
+
+                uCollezione.setLong(3, next_version);
+                uCollezione.setInt(4, collezione.getKey());
+                uCollezione.setLong(5, current_version);
+
+                if (uCollezione.executeUpdate() == 0) {
+                    throw new OptimisticLockException(collezione);
+                } else {
+                    collezione.setVersion(next_version);
+                }
+                addDisco(collezione,disco);
+            }
+            if (collezione instanceof DataItemProxy) {
+                ((DataItemProxy) collezione).setModified(false);
+            }
+        } catch (SQLException | OptimisticLockException ex) {
+            throw new DataException("Unable to add disco to collezione", ex);
+
+        }
+}
+
     //Condivisione della collezione
     private void addUtenteCondiviso(Collezione collezione) throws SQLException {
         int id = collezione.getKey();
@@ -282,6 +322,17 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             throw new DataException("Unable to load collections by utente", ex);
         }
         return collezioni;
+    }
+
+    @Override
+    public void addDisco(Collezione collezione, Disco disco) throws DataException {
+        try {
+            addDiscoCollezione.setInt(1, collezione.getKey());
+            addDiscoCollezione.setInt(2, disco.getKey());
+            addDiscoCollezione.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Error setting disk in collection", ex);
+        }
     }
 
     @Override

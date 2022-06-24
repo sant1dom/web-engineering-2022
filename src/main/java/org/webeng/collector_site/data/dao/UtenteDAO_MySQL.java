@@ -22,6 +22,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
     private PreparedStatement iUtente;
     private PreparedStatement dUtente;
     private PreparedStatement addUtenteCollezione;
+    private PreparedStatement dUtenteCollezione;
     private PreparedStatement fUtentiByUsername;
 
     public UtenteDAO_MySQL(DataLayer d) {
@@ -45,6 +46,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             iUtente = connection.prepareStatement("INSERT INTO utente (nome, cognome, username, email, password) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             dUtente = connection.prepareStatement("DELETE FROM utente WHERE id=?");
             addUtenteCollezione = connection.prepareStatement("INSERT INTO collezione_condivisa_con (utente_id, collezione_id) VALUES (?,?)");
+            dUtenteCollezione= connection.prepareStatement("DELETE FROM collezione_condivisa_con WHERE collezione_id=? AND utente_id=?");
+
             //query per auto completamento ricerca
             fUtentiByUsername = connection.prepareStatement("SELECT * from utente WHERE username LIKE CONCAT('%', ? ,'%')");
         } catch (SQLException ex) {
@@ -66,7 +69,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             iUtente.close();
             dUtente.close();
             addUtenteCollezione.close();
-
+            dUtenteCollezione.close();
             fUtentiByUsername.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing prepared statements", ex);
@@ -349,6 +352,19 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to delete utente", ex);
+        }
+    }
+
+    @Override
+    public void deleteUtenteCondiviso(Collezione collezione,Utente utente) throws DataException {
+        try {
+            dUtenteCollezione.setInt(1, collezione.getKey());
+            dUtenteCollezione.setInt(2, utente.getKey());
+            if(dUtenteCollezione.executeUpdate() == 1){
+                dataLayer.getCache().delete(Utente.class, utente.getKey());
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error removing user in collection", ex);
         }
     }
 

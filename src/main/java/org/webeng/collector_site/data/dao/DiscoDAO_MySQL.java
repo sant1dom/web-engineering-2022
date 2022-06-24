@@ -251,7 +251,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 dataLayer.getCache().delete(Disco.class, disco.getKey());
             }
         } catch (SQLException ex) {
-            throw new DataException("Error setting disk in collection", ex);
+            throw new DataException("Error removing disk in collection", ex);
         }
     }
 

@@ -83,7 +83,7 @@ public class UpdateCollezione extends CollectorsBaseController {
 
             Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-            //chiamata dei metodi setTitolo e setPrivacy sui valori di titolo e privacy inseriti dall'utente
+            //chiamata dei metodi setTitolo,setPrivacy e setUtentiCondivisi sui valori di titolo e privacy inseriti dall'utente
             collezione.setTitolo(titolo);
             collezione.setPrivacy(privacy);
             collezione.setUtentiCondivisi(utenti);

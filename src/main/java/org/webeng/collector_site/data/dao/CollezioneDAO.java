@@ -15,7 +15,8 @@ public interface CollezioneDAO {
     Collezione getCollezione(String titolo) throws DataException;
 
     void storeCollezione(Collezione collezione) throws DataException;
-
+    void addDiscoCollezione(Collezione collezione,Disco disco) throws DataException;
+    void addDisco(Collezione collezione, Disco disco)throws DataException;
     List<Collezione> getCollezioni() throws DataException;
 
     List<Collezione> getCollezioniByKeyword(String keyword) throws DataException;

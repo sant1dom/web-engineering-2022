@@ -34,5 +34,7 @@ public interface UtenteDAO {
 
     void addUtenteCondiviso(Utente utente, Collezione collezione) throws DataException;
 
+    void deleteUtenteCondiviso(Collezione collezione,Utente utente) throws DataException;
+
     List<Utente> getUtentiCondivisi(Collezione collezione) throws DataException;
 }

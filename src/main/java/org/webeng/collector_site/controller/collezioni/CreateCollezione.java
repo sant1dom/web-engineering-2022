@@ -66,16 +66,26 @@ public class CreateCollezione extends CollectorsBaseController {
             String titolo = request.getParameter("titolo");
             String privacy = String.valueOf(request.getParameter("privacy"));
             Utente utente= Utility.getUtente(request, response);
+            List<String> utenti_usernames= List.of(request.getParameterValues("utenti[]"));
+            List<Utente> utenti = new ArrayList<>();
             List<Disco> dischi = new ArrayList<>();
 
             for (String disco : request.getParameterValues("disco")) {
                 dischi.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(disco)));
             }
 
+            for(String username: utenti_usernames){
+                try {
+                    Utente user = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
+                    utenti.add(user);
+                } catch (DataException ignored) {}
+            }
+
+
             LocalDate dataCreazione= LocalDate.now();
 
             //creo una collezione passandogli tutti i parametri e faccio la store della collezione
-            Collezione collezione=new CollezioneImpl(titolo,privacy,utente,dataCreazione,dischi,null);
+            Collezione collezione=new CollezioneImpl(titolo,privacy,utente,dataCreazione,dischi,utenti);
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
             //per ogni disco selezionato per la collezione aggiungo il disco alla collezione in questione
