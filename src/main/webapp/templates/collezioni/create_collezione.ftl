@@ -22,8 +22,8 @@
                 Non ci sono dischi
             </p>
         </#if>
-
-    <div class="form-group col-5">
+    </div>
+    <div class="form-group col-7">
         <label for="titolo">Titolo</label>
         <input type="text" class="form-control" required id="titolo" name="titolo" placeholder="Titolo">
     </div>
@@ -36,7 +36,7 @@
             <option value="PUBBLICA">PUBBLICA</option>
             <option value="CONDIVISA">CONDIVISA</option>
         </select>
-
+    </div>
     <div class="form-group" id="condivisione">
         <div style="display: flex; justify-content: space-between">
             <h4>Condividi con:</h4>
@@ -45,12 +45,11 @@
         <input type="text" class="form-control" id="utente_1" name="utenti[]" placeholder="Username">
 
     </div>
-    </div>
 
     <div class="form-group col-3">
         <button type="submit" class="btn btn-primary">Salva</button>
     </div>
-    </div>
+
 </form>
 
 <script>
