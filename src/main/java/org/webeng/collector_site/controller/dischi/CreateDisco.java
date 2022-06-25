@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -48,28 +49,29 @@ public class CreateDisco extends CollectorsBaseController {
         }
     }
 
-
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
         TemplateResult result = new TemplateResult(getServletContext());
         Utente utente = Utility.getUtente(request, response);
-        List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(utente);
-        List<Autore> autori = ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori();
-        List<Disco> dischiPadri = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischiPadri();
-        List<Traccia> tracce = ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTracce();
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+
+        List<Collezione> collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente);
+        List<Autore> autori = dataLayer.getAutoreDAO().getAutori();
+        List<Disco> dischiPadri = dataLayer.getDiscoDAO().getDischiPadri();
+        List<Traccia> tracce = dataLayer.getTracciaDAO().getTracce();
 
 
         Genere[] genere = Genere.values();
-        List<String> generi = new ArrayList<String>();
+        List<String> generi = new ArrayList<>();
         for (Genere g : genere) {
             generi.add(g.name());
         }
         Formato[] formato = Formato.values();
-        List<String> formati = new ArrayList<String>();
+        List<String> formati = new ArrayList<>();
         for (Formato f : formato) {
             formati.add(f.name());
         }
         StatoConservazione[] stato_conservazione = StatoConservazione.values();
-        List<String> statoConservazione = new ArrayList<String>();
+        List<String> statoConservazione = new ArrayList<>();
         for (StatoConservazione s : stato_conservazione) {
             statoConservazione.add(s.name());
         }
@@ -80,7 +82,8 @@ public class CreateDisco extends CollectorsBaseController {
         request.setAttribute("formati", Objects.requireNonNull(formati));
         request.setAttribute("statoConservazione", Objects.requireNonNull(statoConservazione));
         request.setAttribute("tracce", Objects.requireNonNull(tracce));
-        result.activate("disco/creaDisco.ftl", request, response);
+
+        result.activate("dischi/create.ftl", request, response);
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -90,56 +93,61 @@ public class CreateDisco extends CollectorsBaseController {
 
     private void saveDisco(HttpServletRequest request, HttpServletResponse response) {
         try {
+            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+            Utente utente = Utility.getUtente(request, response);
             List<Autore> autori = new ArrayList<>();
             List<Traccia> tracce = new ArrayList<>();
-            Genere genere = null;
-            Utente utente = Utility.getUtente(request, response);
-
+            List<Image> immagini = new ArrayList<>();
+            Disco padre = new DiscoImpl();
+            String padre_id;
+            Genere genere;
             Formato formato = Formato.valueOf(request.getParameter("formato"));
-            StatoConservazione statoConservazione = StatoConservazione.valueOf(request.getParameter("statoConservazione"));
-
+            StatoConservazione statoConservazione;
             LocalDate dataInserimento = LocalDate.now();
+
+            if (request.getParameter("formato").equals("DIGITALE")) {
+                statoConservazione = null;
+            } else {
+                statoConservazione = StatoConservazione.valueOf(request.getParameter("statoConservazione"));
+            }
+
             String titolo = request.getParameter("titolo");
             String anno = request.getParameter("anno");
             String barcode = request.getParameter("barcode");
             String etichetta = request.getParameter("etichetta");
-            Disco padre= new DiscoImpl();
-            String padre_id = "0";
-            List<Image> immagini = new ArrayList<>();
+
+
             if (!(request.getParameter("padre").equals(""))) {
                 padre_id = request.getParameter("padre");
-                 padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(padre_id));
-                 genere= padre.getGenere();
-                autori=((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori(padre);
-                tracce=((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTracce(padre);
-            }else{
+                padre = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(padre_id));
+                genere = padre.getGenere();
+                autori = dataLayer.getAutoreDAO().getAutori(padre);
+                tracce = dataLayer.getTracciaDAO().getTracce(padre);
+            } else {
                 for (String autore : request.getParameterValues("autore")) {
-                    autori.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutore(Integer.parseInt(autore)));
+                    autori.add(dataLayer.getAutoreDAO().getAutore(Integer.parseInt(autore)));
                 }
 
                 for (String traccia : request.getParameterValues("tracce")) {
-                    tracce.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.parseInt(traccia)));
+                    tracce.add(dataLayer.getTracciaDAO().getTraccia(Integer.parseInt(traccia)));
                 }
                 genere = Genere.valueOf(request.getParameter("genere"));
             }
             Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
 
-            String idDisco = String.valueOf(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco));
+            String idDisco = String.valueOf(dataLayer.getDiscoDAO().storeDisco(disco));
             List<Collezione> collezioni = new ArrayList<>();
             if (request.getParameterValues("collezioni") != null) {
                 for (String collezione_id : request.getParameterValues("collezioni")) {
-                    collezioni.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(collezione_id)));
+                    collezioni.add(dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(collezione_id)));
                 }
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDiscoToCollezioni(collezioni, disco);
+                dataLayer.getDiscoDAO().addDiscoToCollezioni(collezioni, disco);
             }
 
-            HttpSession s = SecurityHelpers.checkSession(request);
-            s.setAttribute("idDisco", idDisco);
-            response.sendRedirect("/add-immagini");
+            response.sendRedirect("/add-immagini?id=" + idDisco);
         } catch (Exception e) {
+            e.printStackTrace();
             handleError(e, request, response);
         }
-
     }
-
 }

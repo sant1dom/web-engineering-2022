@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="autori" type="org.webeng.collector_site.data.model.Autore" -->
+<#-- @ftlvariable name="autori" type="org.webeng.collector_site.data.model.Autore[]" -->
 <#-- @ftlvariable name="keyword" type="String" -->
 
 <#include "../outlines/outline_header.ftl">

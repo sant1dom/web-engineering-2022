@@ -24,9 +24,6 @@
             </div>
         </form>
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item nav-square">
-                <a class="nav-link">Bottone</a>
-            </li>
             <li class="nav-item nav-square dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">

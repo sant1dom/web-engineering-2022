@@ -1,5 +1,5 @@
 <#include "../outlines/outline_header.ftl">
-<#if idDisco??>
+<#if id??>
 
     <body>
     <form method="post" action="add-immagini" class="ml-5 mt-3" enctype="multipart/form-data" >

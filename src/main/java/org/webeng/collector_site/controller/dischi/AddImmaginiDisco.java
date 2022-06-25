@@ -51,11 +51,9 @@ public class AddImmaginiDisco extends CollectorsBaseController {
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        HttpSession s = SecurityHelpers.checkSession(request);
-        String idDisco = (String) s.getAttribute("idDisco");
-        request.setAttribute("idDisco", idDisco);
+        request.setAttribute("id", request.getParameter("id"));
         TemplateResult result = new TemplateResult(getServletContext());
-        result.activate("disco/aggiungiImmaginiDisco.ftl", request, response);
+        result.activate("dischi/add-immagini.ftl", request, response);
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -99,7 +97,7 @@ public class AddImmaginiDisco extends CollectorsBaseController {
                     ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().storeImages(disco.getImmagini());
                 }
 
-                response.sendRedirect("/home");
+                response.sendRedirect("/show-immagine?id=" + disco.getKey());
             }
         } catch (Exception e) {
             handleError(e, request, response);

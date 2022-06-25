@@ -40,6 +40,14 @@
                         </div>
                         <div class="resp991">
                             <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            <#include "../outlines/filtro/outline_formato.ftl">
+                        </div>
+                        <div class="resp991">
+                            <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            <#include "../outlines/filtro/outline_stato_conservazione.ftl">
+                        </div>
+                        <div class="resp991">
+                            <div class="horizontal-separator filtro-horizontal-separator"></div>
                             <#include "../outlines/filtro/outline_tipologia.ftl">
                         </div>
                     </dl>
@@ -112,41 +120,53 @@
                     <div class="table-empty">Non ci sono collezioni.</div>
                 </#if>
             </div>
-
             <div class="table-container" id="dischi-container">
                 <div class="title flex justify-between align-items-center">
                     DISCHI
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-dischi')" type="text"
-                           placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (dischi?? && dischi?size > 0)>
-                    <div class="table-scrollable">
-                        <table class="table table-borderless table-striped overflow-auto">
-                            <thead class="table-dark">
+                <div class="table-scrollable">
+                    <table class="table table-borderless table-striped">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Titolo</th>
+                            <th scope="col">Anno</th>
+                            <th scope="col">Barcode</th>
+                            <th scope="col">Etichetta</th>
+                            <th scope="col">Genere</th>
+                            <th scope="col">Formato</th>
+                            <th scope="col">Stato di conservazione</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-tbody-dischi">
+                        <#list dischi as disco>
                             <tr>
-                                <th scope="col">Barcode</th>
-                                <th scope="col">Titolo</th>
-                                <th scope="col">Anno</th>
-                                <th scope="col">Etichetta</th>
-                                <th scope="col">Genere</th>
-                            </tr>
-                            </thead>
-                            <tbody id="table-tbody-dischi">
-                            <#list dischi as disco>
-                                <tr>
+                                <#if (disco.getBarCode()??)>
                                     <td>${disco.getBarCode()}</td>
-                                    <td><a class="link" href="show-disco?id=${disco.getKey()}">${disco.getTitolo()}</a>
-                                    </td>
-                                    <td>${disco.getAnno()}</td>
-                                    <td>${disco.getEtichetta()}</td>
-                                    <td>${disco.getGenere()?lower_case?cap_first}</td>
-                                </tr>
-                            </#list>
-                        </table>
-                    </div>
-                <#else>
-                    <div class="table-empty">Non ci sono dischi.</div>
-                </#if>
+                                <#else>
+                                    <td><i class="fa-solid fa-xmark"></i></td>
+                                </#if>
+                                <td><a class="link"
+                                       href="show-disco?id=${disco.getKey()}">${disco.getTitolo()}</a>
+                                </td>
+                                <td>${disco.anno}</td>
+                                <td>${disco.etichetta?cap_first}</td>
+                                <td>${disco.genere?lower_case?cap_first}</td>
+                                <td>${disco.formato?lower_case?cap_first}</td>
+                                <#if (disco.getStatoConservazione()??)>
+                                    <td>${disco.statoConservazione?lower_case?cap_first}</td>
+                                <#else>
+                                    <td><i class="fa-solid fa-xmark"></i></td>
+                                </#if>
+                            </tr>
+                        </#list>
+
+                        </tbody>
+                    </table>
+                    <#else>
+                        <div class="table-empty">Non ci sono dischi.</div>
+                    </#if>
+                </div>
             </div>
             <div class="table-container" id="tracce-container">
                 <div class="title flex justify-between align-items-center">

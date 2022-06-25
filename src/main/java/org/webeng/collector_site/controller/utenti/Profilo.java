@@ -4,6 +4,7 @@ import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.Collezione;
+import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -30,7 +31,8 @@ public class Profilo extends CollectorsBaseController {
 
             CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
             Utente utente_generico;
-            List<Collezione> collezioni;
+            List<Collezione> collezioni = null;
+            List<Disco> dischi = null;
 
             Utente utente = Utility.getUtente(request, response);
             if (utente != null) {
@@ -43,14 +45,17 @@ public class Profilo extends CollectorsBaseController {
                 if (utente_generico != null) {
                     request.setAttribute("utente_generico", utente_generico);
                     collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente_generico);
-                    request.setAttribute("collezioni", collezioni);
+                    dischi = dataLayer.getDiscoDAO().getDischi(utente_generico);
                 } else {
                     response.sendRedirect("/");
                 }
             } else {
                 collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente);
-                request.setAttribute("collezioni", collezioni);
+                dischi = dataLayer.getDiscoDAO().getDischi(utente);
             }
+
+            request.setAttribute("collezioni", collezioni);
+            request.setAttribute("dischi", dischi);
             
             result.activate("utenti/profilo.ftl", request, response);
         } catch (TemplateManagerException | DataException | IOException ex) {

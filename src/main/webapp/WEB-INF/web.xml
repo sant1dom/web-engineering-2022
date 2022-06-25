@@ -98,12 +98,12 @@
 
     <!--DISCO -->
     <servlet>
-        <servlet-name>crea-disco</servlet-name>
+        <servlet-name>CreateDisco</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.dischi.CreateDisco</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>crea-disco</servlet-name>
-        <url-pattern>/crea-disco</url-pattern>
+        <servlet-name>CreateDisco</servlet-name>
+        <url-pattern>/create-disco</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>show-disco</servlet-name>
@@ -114,12 +114,12 @@
         <url-pattern>/show-disco</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>lista-dischi</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.ListaDischiUtente</servlet-class>
+        <servlet-name>IndexDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.IndexDisco</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>lista-dischi</servlet-name>
-        <url-pattern>/lista-dischi</url-pattern>
+        <servlet-name>IndexDisco</servlet-name>
+        <url-pattern>/index-disco</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>update-disco</servlet-name>
@@ -131,7 +131,7 @@
     </servlet-mapping>
     <!-- ADD-IMMAGINI-->
     <servlet>
-        <servlet-name>add-immagini</servlet-name>
+        <servlet-name>AddImmagini</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.dischi.AddImmaginiDisco</servlet-class>
         <multipart-config>
             <location>C:\Users\david\Desktop\apache-tomcat-9.0.62\temp</location>
@@ -141,7 +141,7 @@
         </multipart-config>
     </servlet>
     <servlet-mapping>
-        <servlet-name>add-immagini</servlet-name>
+        <servlet-name>AddImmagini</servlet-name>
         <url-pattern>/add-immagini</url-pattern>
     </servlet-mapping>
    <!--DELATE TRACCIA-DISCO -->

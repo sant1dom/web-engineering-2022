@@ -116,7 +116,11 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             d.setGenere(Genere.valueOf(rs.getString("genere")));
             d.setEtichetta(rs.getString("etichetta"));
             d.setFormato(Formato.valueOf(rs.getString("formato")));
-            d.setStatoConservazione(StatoConservazione.valueOf(rs.getString("stato_conservazione")));
+            if (rs.getString("stato_conservazione") != null) {
+                d.setStatoConservazione(StatoConservazione.valueOf(rs.getString("stato_conservazione")));
+            } else {
+                d.setStatoConservazione(null);
+            }
             d.setUtenteKey(rs.getInt("utente_id"));
             d.setPadreKey(rs.getInt("padre"));
             d.setVersion(rs.getInt("version"));
@@ -201,8 +205,11 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 iDisco.setString(6, disco.getFormato().toString());
                 iDisco.setDate(7, Date.valueOf(disco.getDataInserimento()));
                 iDisco.setInt(8, disco.getUtente().getKey());
-                iDisco.setString(9, disco.getStatoConservazione().toString());
-
+                if (disco.getStatoConservazione() != null) {
+                    iDisco.setString(9, disco.getStatoConservazione().toString());
+                } else {
+                    iDisco.setString(9, null);
+                }
                 if (disco.getPadre() != null) {
                     iDisco.setInt(10, disco.getPadre().getKey());
                 } else

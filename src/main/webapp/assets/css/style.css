@@ -71,17 +71,13 @@
 
 .actions {
     display: flex;
-    justify-content: space-around;
-}
-
-.actions {
-    display: flex;
     justify-content: end;
     padding-right: 2rem;
 }
 
 .btn-wd-fixed {
-    width: 10rem;
+    width: 100%;
+    max-width: 12rem;
     margin-left: 1rem;
     margin-top: 1rem;
 }
@@ -106,6 +102,26 @@
     width: 100%; !important;
 }
 
+.form-control.selected {
+    background: greenyellow;
+    opacity: 0.5;
+}
+
+.dropdown.selected {
+    background: greenyellow;
+    border-radius: 5px;
+}
+
+.dropdown.off {
+    background: orangered;
+    border-radius: 5px;
+}
+
+.warning-msg {
+    color: orange;
+    padding-left: 1.5rem;
+}
+
 /*END CSS FORM*/
 
 
@@ -125,7 +141,7 @@
     }
 
     .actions {
-        justify-content: space-around;
+        justify-content: space-evenly;
     }
 
     .tabelle-filtro-container, .actions {
@@ -133,7 +149,8 @@
     }
 
     .btn-wd-fixed {
-        margin-left: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
     }
 
     .form-group, .form-card, .tabelle-filtro-container {
