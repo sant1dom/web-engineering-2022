@@ -15,6 +15,7 @@ import java.io.IOException;
 
 /**
  * Servlet per l'autenticazione dell'utente.
+ *
  * @author Davide De Acetis
  */
 public class Login extends CollectorsBaseController {
@@ -42,37 +43,41 @@ public class Login extends CollectorsBaseController {
             request.setAttribute("error", "Inserire username e password");
             action_default(request, response);
         } else {
-            //se i campi sono presenti controlliamo se l'utente esiste
-            password = SecurityHelpers.encryptPassword(password);
-            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-
-            Utente utente = null;
             try {
+                //se i campi sono presenti controlliamo se l'utente esiste
+                password = SecurityHelpers.encryptPassword(password);
+                CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+                Utente utente = null;
                 utente = dataLayer.getUtenteDAO().doLogin(username, password);
-            } catch (DataException ex) {
-                handleError(ex, request, response);
-            }
-
-            if (utente != null) {
-                //se l'utente esiste lo autentichiamo
-                if (utente.getKey() != null) {
-                    //carichiamo lo userid dal database utenti
-                    int userid = utente.getKey();
-                    SecurityHelpers.createSession(request, username, userid);
-                    //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
-                    if (request.getParameter(REFERRER) != null) {
-                        response.sendRedirect(request.getParameter(REFERRER));
+                if (utente != null) {
+                    //se l'utente esiste lo autentichiamo
+                    if (utente.getKey() != null) {
+                        //carichiamo lo userid dal database utenti
+                        int userid = utente.getKey();
+                        SecurityHelpers.createSession(request, username, userid);
+                        //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
+                        if (request.getParameter(REFERRER) != null) {
+                            response.sendRedirect(request.getParameter(REFERRER));
+                        } else {
+                            response.sendRedirect("/");
+                        }
                     } else {
-                        response.sendRedirect("/");
+                        //se la validazione non ha successo si torna alla pagina di login
+                        request.setAttribute("error", "Username o password errati");
+                        action_default(request, response);
                     }
                 } else {
-                    //se la validazione non ha successo si torna alla pagina di login
+                    throw new DataException("Login fallito");
+                }
+            } catch (DataException ex) {
+                if (ex.getMessage().contains("User not found")) {
                     request.setAttribute("error", "Username o password errati");
                     action_default(request, response);
+                } else {
+                    handleError(ex, request, response);
                 }
-            } else {
-                handleError("Login fallito", request, response);
             }
+
         }
     }
 

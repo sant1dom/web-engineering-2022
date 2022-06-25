@@ -73,10 +73,15 @@ public class Register extends CollectorsBaseController {
                         response.sendRedirect("/");
                     }
                 } else {
-                    handleError("Login fallito", request, response);
+                    throw new  DataException("Registrazione fallita");
                 }
             } catch (DataException ex) {
-                handleError(ex, request, response);
+                if (ex.getMessage().contains("Duplicate entry")) {
+                    request.setAttribute("error", "Username o email già in uso");
+                    action_default(request, response);
+                } else {
+                    handleError(ex, request, response);
+                }
             }
         }
     }

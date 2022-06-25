@@ -86,11 +86,11 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             if (rs.next()) {
                 return createUtente(rs);
             } else {
-                throw new SQLException("Login failed");
+                throw new SQLException();
             }
 
         } catch (SQLException ex) {
-            throw new DataException("Error logging in user", ex);
+            throw new DataException("User not found", ex);
         }
     }
 
@@ -273,7 +273,11 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 ((DataItemProxy) utente).setModified(false);
             }
         } catch (SQLException | OptimisticLockException ex) {
-            throw new DataException("Unable to store user", ex);
+            if (ex.getMessage().contains("Duplicated entry")) {
+                throw new DataException("Duplicated entry", ex);
+            } else {
+                throw new DataException("Unable to store user", ex);
+            }
         }
 
     }
