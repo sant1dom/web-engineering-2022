@@ -1,7 +1,14 @@
 <#include "../outlines/outline_header.ftl">
+<link href="/assets/css/auth.css" rel="stylesheet"/>
 <h2 class="ml-5 mt-3">Crea una nuova collezione</h2>
 
 <form method="post" action="create-collezione" class="ml-5 mt-3">
+    <#if error??>
+        <div class=text-red>
+            ${error!}
+        </div>
+    </#if>
+
     <div class="form-group col-7">
         <label for="disco">Dischi</label>
         <#if dischi??>
