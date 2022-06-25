@@ -125,7 +125,7 @@ public class CreateDisco extends CollectorsBaseController {
             }
             Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
 
-            String idDisco = String.valueOf(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco));
+            String id_disco = String.valueOf(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco));
             List<Collezione> collezioni = new ArrayList<>();
             if (request.getParameterValues("collezioni") != null) {
                 for (String collezione_id : request.getParameterValues("collezioni")) {
@@ -133,10 +133,7 @@ public class CreateDisco extends CollectorsBaseController {
                 }
                 ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDiscoToCollezioni(collezioni, disco);
             }
-
-            HttpSession s = SecurityHelpers.checkSession(request);
-            s.setAttribute("idDisco", idDisco);
-            response.sendRedirect("/add-immagini");
+            response.sendRedirect("/add-immagini?id_disco=" + id_disco);
         } catch (Exception e) {
             handleError(e, request, response);
         }

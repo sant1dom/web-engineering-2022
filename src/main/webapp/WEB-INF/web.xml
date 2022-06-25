@@ -376,7 +376,24 @@
         <servlet-name>render-disco</servlet-name>
         <url-pattern>/display-immagine</url-pattern>
     </servlet-mapping>
-
+    <!--DELATE DISCO -->
+    <servlet>
+        <servlet-name>delete-disco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete-disco</servlet-name>
+        <url-pattern>/delete-disco</url-pattern>
+    </servlet-mapping>
+    <!-- DELETE IMMAGINE DISCO-->
+    <servlet>
+        <servlet-name>delete-immagine</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteImmagine</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>delete-immagine</servlet-name>
+        <url-pattern>/delete-immagine</url-pattern>
+    </servlet-mapping>
     <!--  END SERVLET  -->
 
 

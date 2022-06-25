@@ -94,7 +94,7 @@ public class UpdateDisco extends CollectorsBaseController {
             disco.setFormato(formato);
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco);
 
-            response.sendRedirect("/lista-dischi");
+            response.sendRedirect("/show_disco?id_disco="+id_disco);
 
         } catch (Exception e) {
             handleError(e, request, response);

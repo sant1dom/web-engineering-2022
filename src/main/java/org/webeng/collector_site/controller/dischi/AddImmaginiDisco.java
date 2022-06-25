@@ -51,9 +51,8 @@ public class AddImmaginiDisco extends CollectorsBaseController {
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        HttpSession s = SecurityHelpers.checkSession(request);
-        String idDisco = (String) s.getAttribute("idDisco");
-        request.setAttribute("idDisco", idDisco);
+        String id_disco = request.getParameter("id_disco");
+        request.setAttribute("id_disco", id_disco);
         TemplateResult result = new TemplateResult(getServletContext());
         result.activate("disco/aggiungiImmaginiDisco.ftl", request, response);
     }
@@ -65,8 +64,8 @@ public class AddImmaginiDisco extends CollectorsBaseController {
 
     private void addImmagini(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession s = SecurityHelpers.checkSession(request);
-            Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt((String) s.getAttribute("idDisco")));
+           System.out.println("id_disco: " + request.getParameter("id_disco"));
+            Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter(("id_disco"))));
             if (request.getParts() != null) {
                 List<Part> files_to_upload = request.getParts().stream().filter(p -> p.getContentType() != null).collect(Collectors.toList());
                 if (!files_to_upload.isEmpty()) {
@@ -74,13 +73,15 @@ public class AddImmaginiDisco extends CollectorsBaseController {
                     for (Part image : files_to_upload) {
                         File uploaded_file = File.createTempFile("upload_", "." + image.getContentType().split("/")[1], new File(getServletContext().getInitParameter("uploads.directory")));
                         try (InputStream is = image.getInputStream();
-                             OutputStream os = new FileOutputStream(uploaded_file);) {
+                             OutputStream os = new FileOutputStream(uploaded_file)) {
                             byte[] buffer = new byte[1024];
                             int read;
                             while ((read = is.read(buffer)) > 0) {
                                 os.write(buffer, 0, read);
                             }
+                            os.close();
                         }
+
                         files_uploaded.add(uploaded_file);
                     }
 
@@ -99,7 +100,7 @@ public class AddImmaginiDisco extends CollectorsBaseController {
                     ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().storeImages(disco.getImmagini());
                 }
 
-                response.sendRedirect("/home");
+                response.sendRedirect("/show-disco?id_disco=" + request.getParameter("id_disco"));
             }
         } catch (Exception e) {
             handleError(e, request, response);

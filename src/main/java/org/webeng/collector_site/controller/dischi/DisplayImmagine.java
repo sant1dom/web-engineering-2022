@@ -32,7 +32,6 @@ public class DisplayImmagine extends CollectorsBaseController {
             request.setAttribute("contentType", image.getImageType());
             request.setAttribute("contentDisposition", "inline");
             File file= new File(getServletContext().getInitParameter("uploads.directory") +"\\"+ image.getFileName());
-            System.out.println(file.getAbsolutePath());
             result.setResource(file);
             result.activate(request, response);
             //result.activate(image.getImageData(), image.getImageSize(), image.getImageType(), request, response);

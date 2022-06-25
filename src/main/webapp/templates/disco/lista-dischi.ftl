@@ -12,6 +12,7 @@
             <th scope="col">Genere</th>
             <th scope="col">Formato</th>
             <th scope="col">Stato di conservazione</th>
+            <th scope="col">Elimina disco</th>
         </tr>
         </thead>
         <tbody>
@@ -29,6 +30,10 @@
                     <td>${disco.genere?lower_case?cap_first}</td>
                     <td>${disco.formato?lower_case?cap_first}</td>
                     <td>${disco.statoConservazione?lower_case?cap_first}</td>
+                    <td>
+                        <a href="delete-disco?id_disco=${disco.key}">
+                            <i class="fa-solid fa-trash-alt"></i>
+                        </a>
                 </tr>
             </#list>
         </#if>

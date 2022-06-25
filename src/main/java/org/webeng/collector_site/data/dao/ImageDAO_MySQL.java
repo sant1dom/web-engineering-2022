@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageDAO_MySQL extends DAO implements ImageDAO {
-    private PreparedStatement sImageByID, sImageByDisco, sImageByFileName, sImages, iImages;
+    private PreparedStatement sImageByID, sImageByDisco, sImageByFileName, sImages, iImages, dImagesByDisco;
 
     public ImageDAO_MySQL(DataLayer d) {
         super(d);
@@ -32,6 +32,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
             sImageByDisco = connection.prepareStatement("SELECT id FROM image WHERE disco_id=?");
             sImageByFileName = connection.prepareStatement("SELECT * FROM image WHERE filename=?");
             sImages = connection.prepareStatement("SELECT id FROM image");
+            dImagesByDisco = connection.prepareStatement("DELETE FROM image WHERE id=? AND disco_id=?");
             iImages= connection.prepareStatement("INSERT INTO image (size, type, filename, disco_id, version) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException ex) {
             throw new DataException("Error initializing newspaper data layer", ex);
@@ -44,6 +45,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
         try {
             sImageByID.close();
             sImageByDisco.close();
+            dImagesByDisco.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing prepared statements", ex);
         }
@@ -161,6 +163,18 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
     } catch (SQLException ex) {
         throw new DataException("Unable to store images", ex);
         }
+    }
+
+    @Override
+    public void deleteImage(Disco disco, Image image) throws DataException {
+        try {
+            dImagesByDisco.setInt(1, image.getKey());
+            dImagesByDisco.setInt(2, disco.getKey());
+            dImagesByDisco.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataException("Unable to delete image", ex);
+        }
+
     }
 
 }
