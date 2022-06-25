@@ -23,28 +23,34 @@ import java.util.Objects;
 
 public class CreateCollezione extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
+
     @Override
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        if(request.getMethod().equals("POST")){
-            saveCollezione(request,response);
-        }else {
-            try {
-                HttpSession s = SecurityHelpers.checkSession(request);
-                String https_redirect_url = SecurityHelpers.checkHttps(request);
-                request.setAttribute("https-redirect", https_redirect_url);
-                if (s == null) {
-                    action_anonymous(request, response);
-                } else {
-                    //Ottengo l'utente loggato
-                    Utente utente = Utility.getUtente(request, response);
-                    if (utente != null) {
-                        request.setAttribute("utente", utente);
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+
+        try {
+            if (request.getMethod().equals("POST")) {
+                saveCollezione(request, response);
+            } else {
+                try {
+                    HttpSession s = SecurityHelpers.checkSession(request);
+                    String https_redirect_url = SecurityHelpers.checkHttps(request);
+                    request.setAttribute("https-redirect", https_redirect_url);
+                    if (s == null) {
+                        action_anonymous(request, response);
+                    } else {
+                        //Ottengo l'utente loggato
+                        Utente utente = Utility.getUtente(request, response);
+                        if (utente != null) {
+                            request.setAttribute("utente", utente);
+                        }
+                        action_logged(request, response);
                     }
-                    action_logged(request, response);
+                } catch (TemplateManagerException | DataException | IOException ex) {
+                    handleError(ex, request, response);
                 }
-            } catch (TemplateManagerException | DataException | IOException ex) {
-                handleError(ex, request, response);
             }
+        } catch (TemplateManagerException | DataException ex ){
+            handleError(ex, request, response);
         }
     }
 
@@ -61,41 +67,55 @@ public class CreateCollezione extends CollectorsBaseController {
         response.sendRedirect("/login");
     }
 
-    private void saveCollezione(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String titolo = request.getParameter("titolo");
-            String privacy = String.valueOf(request.getParameter("privacy"));
-            Utente utente= Utility.getUtente(request, response);
-            List<String> utenti_usernames= List.of(request.getParameterValues("utenti[]"));
-            List<Utente> utenti = new ArrayList<>();
-            List<Disco> dischi = new ArrayList<>();
-
-            for (String disco : request.getParameterValues("disco")) {
-                dischi.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(disco)));
+    private void saveCollezione(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException ,DataException {
+        String titolo = request.getParameter("titolo");
+        List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
+       Boolean exit=false;
+        for(Collezione c:collezioni) {
+            if(c.getTitolo().equals(titolo)) {
+                request.setAttribute("error", "Hai già una collezione con questo titolo!");
+                action_logged(request, response);
+                exit=true;
+                break;
             }
 
-            for(String username: utenti_usernames){
-                try {
-                    Utente user = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
-                    utenti.add(user);
-                } catch (DataException ignored) {}
+        }
+        if(!exit) {
+            try {
+                String privacy = String.valueOf(request.getParameter("privacy"));
+                Utente utente = Utility.getUtente(request, response);
+                List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
+                List<Utente> utenti = new ArrayList<>();
+                List<Disco> dischi = new ArrayList<>();
+
+                for (String disco : request.getParameterValues("disco")) {
+                    dischi.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(disco)));
+                }
+
+                for (String username : utenti_usernames) {
+                    try {
+                        Utente user = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
+                        utenti.add(user);
+                    } catch (DataException ignored) {
+                    }
+                }
+
+
+                LocalDate dataCreazione = LocalDate.now();
+
+                //creo una collezione passandogli tutti i parametri e faccio la store della collezione
+                Collezione collezione = new CollezioneImpl(titolo, privacy, utente, dataCreazione, dischi, utenti);
+                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+
+                //per ogni disco selezionato per la collezione aggiungo il disco alla collezione in questione
+                for (Disco disco : dischi) {
+                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
+                }
+
+                response.sendRedirect("/home");
+            } catch (Exception e) {
+                handleError(e, request, response);
             }
-
-
-            LocalDate dataCreazione= LocalDate.now();
-
-            //creo una collezione passandogli tutti i parametri e faccio la store della collezione
-            Collezione collezione=new CollezioneImpl(titolo,privacy,utente,dataCreazione,dischi,utenti);
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
-
-            //per ogni disco selezionato per la collezione aggiungo il disco alla collezione in questione
-            for (Disco disco : dischi) {
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
-            }
-
-            response.sendRedirect("/home");
-        } catch (Exception e) {
-            handleError(e, request, response);
         }
     }
 
