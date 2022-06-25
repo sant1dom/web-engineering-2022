@@ -49,6 +49,7 @@ CREATE TABLE `collezione` (
   `data_creazione` date DEFAULT NULL,
   `version` int unsigned DEFAULT '1',
   `utente_id` int unsigned NOT NULL,
+  UNIQUE (`utente_id`,`titolo`),
   PRIMARY KEY (`id`),
   KEY `fk_collezione_utente1_idx` (`utente_id`),
   CONSTRAINT `fk_collezione_utente1` FOREIGN KEY (`utente_id`) REFERENCES `utente` (`id`)

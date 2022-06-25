@@ -20,6 +20,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement sCollezioneByID;
     private PreparedStatement sCollezioniByDisco;
     private PreparedStatement sCollezioniByUtente;
+
+    private PreparedStatement sCollezioniCondiviseByUtente;
     private PreparedStatement uCollezione;
     private PreparedStatement iCollezione;
     private PreparedStatement dCollezione;
@@ -42,6 +44,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             sCollezioneByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE titolo = ?");
             sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc ON collezione.id = dhc.collezione_id JOIN disco d ON d.id = dhc.disco_id WHERE d.id = ?");
             sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ?");
+            sCollezioniCondiviseByUtente= connection.prepareStatement("SELECT c.id FROM collezione c  JOIN collezione_condivisa_con ccc on c.id = ccc.collezione_id JOIN utente u on u.id = ccc.utente_id WHERE u.id = ?");
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
@@ -61,6 +64,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             sCollezioneByTitolo.close();
             sCollezioniByDisco.close();
             sCollezioniByUtente.close();
+            sCollezioniCondiviseByUtente.close();
             uCollezione.close();
             iCollezione.close();
             dCollezione.close();
@@ -320,6 +324,23 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Unable to load collections by utente", ex);
+        }
+        return collezioni;
+    }
+
+
+    @Override
+    public List<Collezione> getCollezioniCondivise(Utente utente) throws DataException {
+        List<Collezione> collezioni = new ArrayList<>();
+        try {
+            sCollezioniCondiviseByUtente.setInt(1, utente.getKey());
+            try (ResultSet rs = sCollezioniCondiviseByUtente.executeQuery()) {
+                while (rs.next()) {
+                    collezioni.add(getCollezione(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load collections shared with utente", ex);
         }
         return collezioni;
     }

@@ -46,6 +46,8 @@ public class ShowCollezioniUtente extends CollectorsBaseController {
 
         TemplateResult result = new TemplateResult(getServletContext());
         List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
+        List<Collezione> collezioniCondivise= ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioniCondivise(Utility.getUtente(request, response));
+        request.setAttribute("collezioniCondivise", Objects.requireNonNullElse(collezioniCondivise, ""));
         request.setAttribute("collezioni", Objects.requireNonNullElse(collezioni, ""));
         result.activate("collezioni/show_collezioni.ftl", request, response);
     }

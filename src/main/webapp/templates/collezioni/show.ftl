@@ -107,6 +107,8 @@
 
             <#if (collezione.getPrivacy() = "CONDIVISA")>
                 <div class="table-container">
+                    <#if (proprietario??)>
+                    <#if (utente?? && proprietario.getKey() == utente.getKey())>
                     <div class="title">CONDIVISIONE</div>
                     <#if (utenti_condivisi?? && utenti_condivisi?size>0)>
                     <div class="table-scrollable">
@@ -132,6 +134,9 @@
                         <#else>
                             <div class="table-empty">Collezione condivisa con nessun utente</div>
                         </#if>
+                        </#if>
+                        </#if>
+
                     </div>
                 </div>
                 </#if>
