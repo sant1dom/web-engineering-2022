@@ -32,8 +32,8 @@
         <a href="create-collezione" class="btn btn-warning">Crea una nuova collezione</a>
 </div>
     <div class="card-body">
+        <h2>Collezioni condivise con te</h2>
     <#if (collezioniCondivise?size>0)>
-    <h2>Collezioni condivise con te</h2>
     <table class="table table-bordered">
         <thead class="thead-dark">
         <tr>

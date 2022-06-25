@@ -112,7 +112,7 @@ public class CreateCollezione extends CollectorsBaseController {
                     ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
                 }
 
-                response.sendRedirect("/home");
+                response.sendRedirect("/show-collezioni");
             } catch (Exception e) {
                 handleError(e, request, response);
             }
