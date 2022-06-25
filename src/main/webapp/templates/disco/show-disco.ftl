@@ -143,4 +143,9 @@
         </form>
         </div>
 </div>
+    <#if immagini??>
+    <#list immagini as immagine>
+    <img src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}" style="width: 30vw; min-width: 150px;" ></img>
+    </#list>
+    </#if>
 </div>

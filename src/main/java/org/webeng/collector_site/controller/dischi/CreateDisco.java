@@ -92,7 +92,7 @@ public class CreateDisco extends CollectorsBaseController {
         try {
             List<Autore> autori = new ArrayList<>();
             List<Traccia> tracce = new ArrayList<>();
-            Genere genere = null;
+            Genere genere;
             Utente utente = Utility.getUtente(request, response);
 
             Formato formato = Formato.valueOf(request.getParameter("formato"));
@@ -121,6 +121,7 @@ public class CreateDisco extends CollectorsBaseController {
                     tracce.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.parseInt(traccia)));
                 }
                 genere = Genere.valueOf(request.getParameter("genere"));
+
             }
             Disco disco = new DiscoImpl(titolo, anno, etichetta, barcode, genere, statoConservazione, formato, dataInserimento, utente, autori, immagini, tracce, padre);
 

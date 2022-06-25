@@ -129,6 +129,7 @@
             $("select[name='genere']").prop('requiered', false);
             $("select[name='tracce']").prop('required', false);
             $("select[name='autore']").prop('required', false);
+
         });
     });
 </script>
