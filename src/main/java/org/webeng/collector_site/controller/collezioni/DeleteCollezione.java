@@ -48,37 +48,34 @@ public class DeleteCollezione extends CollectorsBaseController {
         CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
         Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
         List<Disco> dischi = dataLayer.getDiscoDAO().getDischi(collezione);
-        List<Utente> utenti= dataLayer.getUtenteDAO().getUtentiCondivisi(collezione);
+        List<Utente> utenti = dataLayer.getUtenteDAO().getUtentiCondivisi(collezione);
 
         /* cancellazione di tutte tutte le associazioni
         tra un disco nella collezione e la collezione in questione
         nella tabella collezione_disco richiamando il metodo deleteDisco */
-        if(Utility.getUtente(request,response).equals(collezione.getUtente())){
-            for(Disco disco:dischi){
-                dataLayer.getDiscoDAO().deleteDisco(collezione,disco);
+        if (Utility.getUtente(request, response).equals(collezione.getUtente())) {
+            for (Disco disco : dischi) {
+                dataLayer.getDiscoDAO().deleteDisco(collezione, disco);
             }
 
             /* se la collezione è condivisa cancello prima tutte le associazioni
             tra un utente con cui la collezione era condivisa e la collezione in questione
             nella tabella collezione_condivisa_con richiamando il metodo deleteUtenteCondiviso */
 
-            if(collezione.getPrivacy().equals("CONDIVISA")){
-                for(Utente utente:utenti)
-                dataLayer.getUtenteDAO().deleteUtenteCondiviso(collezione,utente);
+            if (collezione.getPrivacy().equals("CONDIVISA")) {
+                for (Utente utente : utenti)
+                    dataLayer.getUtenteDAO().deleteUtenteCondiviso(collezione, utente);
             }
             //cancellazione della collezione
             dataLayer.getCollezioneDAO().deleteCollezione(collezione);
 
-            response.sendRedirect("/show-collezioni");
-        }
-        else {
+            response.sendRedirect("/show-collezione?id=" + collezione.getKey());
+        } else {
             response.sendRedirect("/home");
         }
-
-
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }

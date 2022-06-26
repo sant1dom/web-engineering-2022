@@ -5,6 +5,7 @@ import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
+import org.webeng.collector_site.data.model.Genere;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
@@ -13,6 +14,7 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,12 +35,16 @@ public class ShowCollezione extends CollectorsBaseController {
             Utente proprietario = collezione.getUtente();
             List<Disco> dischi = collezione.getDischi();
             List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
+            List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi());
+
+            dischiAdd.removeAll(dischi);
 
             //Ogni collezione ha una lista di dischi e il suo proprietario.
             request.setAttribute("collezione", collezione);
             request.setAttribute("dischi", dischi);
             request.setAttribute("proprietario", proprietario);
             request.setAttribute("utenti_condivisi", utenti_condivisi);
+            request.setAttribute("dischiAdd", dischiAdd);
 
             result.activate("/collezioni/show.ftl", request, response);
         } catch (DataException | TemplateManagerException ex) {

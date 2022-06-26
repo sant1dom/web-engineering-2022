@@ -315,21 +315,21 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>IndexCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.IndexCollezione</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndexCollezione</servlet-name>
+        <url-pattern>/index-collezione</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>CreateCollezione</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.collezioni.CreateCollezione</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CreateCollezione</servlet-name>
         <url-pattern>/create-collezione</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ListaCollezioniUtente</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.ShowCollezioniUtente</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ListaCollezioniUtente</servlet-name>
-        <url-pattern>/show-collezioni</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -341,51 +341,42 @@
         <url-pattern>/delete-collezione</url-pattern>
     </servlet-mapping>
 
-
     <servlet>
-        <servlet-name>DeleteDiscoCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.DeleteDiscoCollezione</servlet-class>
+        <servlet-name>RemoveDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.RemoveDisco</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>DeleteDiscoCollezione</servlet-name>
-        <url-pattern>/delete-discoCollezione</url-pattern>
+        <servlet-name>RemoveDisco</servlet-name>
+        <url-pattern>/remove-disco</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>DeleteUtenteCondiviso</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.DeleteUtenteCondiviso</servlet-class>
+        <servlet-name>RemoveCondivisione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.RemoveCondivisione</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>DeleteUtenteCondiviso</servlet-name>
-        <url-pattern>/delete-utenteCondiviso</url-pattern>
+        <servlet-name>RemoveCondivisione</servlet-name>
+        <url-pattern>/remove-condivisione</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>UpdateCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.UpdateCollezione</servlet-class>
+        <servlet-name>EditCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.EditCollezione</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UpdateCollezione</servlet-name>
-        <url-pattern>/update-collezione</url-pattern>
+        <servlet-name>EditCollezione</servlet-name>
+        <url-pattern>/edit-collezione</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>AddDischiCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.AddDischiCollezione</servlet-class>
+        <servlet-name>AddDischi</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.AddDischi</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AddDischiCollezione</servlet-name>
-        <url-pattern>/add-dischiCollezione</url-pattern>
+        <servlet-name>AddDischi</servlet-name>
+        <url-pattern>/add-dischi</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>ShowDiscoCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.ShowDiscoCollezione</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ShowDiscoCollezione</servlet-name>
-        <url-pattern>/show-discoCollezione</url-pattern>
-    </servlet-mapping>
     <!-- DISPLAY IMMAGINE-->
     <servlet>
         <servlet-name>render-disco</servlet-name>

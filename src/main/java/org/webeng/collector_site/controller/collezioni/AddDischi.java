@@ -3,6 +3,7 @@ package org.webeng.collector_site.controller.collezioni;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
@@ -15,14 +16,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DeleteDiscoCollezione extends CollectorsBaseController {
+public class AddDischi extends CollectorsBaseController {
+
     public static final String REFERRER = "referrer";
-
-
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
@@ -38,27 +40,41 @@ public class DeleteDiscoCollezione extends CollectorsBaseController {
                 if (utente != null) {
                     request.setAttribute("utente", utente);
                 }
-                action_logged(request, response);
+                if (request.getMethod().equals("POST")) {
+                    action_logged(request, response);
+                }
             }
-        } catch (TemplateManagerException | DataException | IOException ex) {
+        } catch (DataException | IOException ex) {
             handleError(ex, request, response);
         }
-
     }
 
-    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, IOException {
-        Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
-        Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
-        request.setAttribute("collezione",collezione);
-        request.setAttribute("disco",disco);
+    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws DataException {
+        try {
+            List<Disco> dischi = new ArrayList<>();
+            CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
+            if (request.getParameterValues("dischi[]") != null) {
+                for (String disco : request.getParameterValues("dischi[]")) {
+                    dischi.add(dataLayer.getDiscoDAO().getDisco(Integer.parseInt(disco)));
+                }
 
-        //eliminazione del disco in questione dalla collezione
-        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
-        response.sendRedirect("/show-collezione?id=" + request.getParameter("id_collezione"));
+                Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
 
+                //aggiunta di ogni disco selezionato nella collezione in questione
+                for (Disco disco : dischi) {
+                    dataLayer.getCollezioneDAO().addDiscoCollezione(collezione, disco);
+                }
+
+                response.sendRedirect("/show-collezione?id=" + request.getParameter("id"));
+            } else {
+                throw new DataException("Nessun disco selezionato");
+            }
+        } catch (IOException | DataException ex) {
+            handleError(ex, request, response);
+        }
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }

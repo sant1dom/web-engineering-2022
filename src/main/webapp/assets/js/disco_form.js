@@ -101,16 +101,25 @@ $(document).ready(function () {
     const add_tracce = $('#add-tracce');
     const add_autori = $('#add-autori');
     const add_immagini = $('#add-immagini');
+    const add_dischi = $('#add-dischi');
     const remove_immagini = $('#remove-immagini');
+    const edit_collezione = $('#edit-collezione');
+    const share_collezione = $('#share-collezione');
     let isTracceHidden = true;
     let isAutoriHidden = true;
     let isImmaginiHidden = true;
     let isImmaginiRemoveHidden = true;
+    let isDischiHidden = true;
+    let isEditCollezioneHidden = true;
+    let isShareCollezioneHidden = true;
 
     add_tracce.hide()
     add_autori.hide()
     add_immagini.hide()
     remove_immagini.hide()
+    add_dischi.hide()
+    edit_collezione.hide()
+    share_collezione.hide()
 
     $('#add-tracce-btn').on('click', function () {
         if (isTracceHidden) {
@@ -149,6 +158,36 @@ $(document).ready(function () {
         } else {
             remove_immagini.hide()
             isImmaginiRemoveHidden = true;
+        }
+    })
+
+    $('#add-dischi-btn').on('click', function () {
+        if (isDischiHidden) {
+            add_dischi.show()
+            isDischiHidden = false;
+        } else {
+            add_dischi.hide()
+            isDischiHidden = true;
+        }
+    })
+
+    $('#edit-collezione-btn').on('click', function () {
+        if (isEditCollezioneHidden) {
+            edit_collezione.show()
+            isEditCollezioneHidden = false;
+        } else {
+            edit_collezione.hide()
+            isEditCollezioneHidden = true;
+        }
+    })
+
+    $('#share-collezione-btn').on('click', function () {
+        if (isShareCollezioneHidden) {
+            share_collezione.show()
+            isShareCollezioneHidden = false;
+        } else {
+            share_collezione.hide()
+            isShareCollezioneHidden = true;
         }
     })
 

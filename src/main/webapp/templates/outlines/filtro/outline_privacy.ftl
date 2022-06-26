@@ -3,7 +3,7 @@
 <div class="horizontal-separator filtro-horizontal-separator"></div>
 
 <dd><span class="filtro-link" onclick="ricerca('', '#table-tbody-collezioni')">TUTTI</span></dd>
-<dd><span class="filtro-link" onclick="ricerca('PUBBLICA', '#table-tbody-collezioni')">PUBBLICA</span></dd>
-<dd><span class="filtro-link" onclick="ricerca('CONDIVISA', '#table-tbody-collezioni')">CONDIVISA</span></dd>
-<dd><span class="filtro-link" onclick="ricerca('PRIVATA', '#table-tbody-collezioni')">PRIVATA</span></dd>
+<dd><span class="filtro-link" onclick="ricerca('PUBBLICO', '#table-tbody-collezioni')">PUBBLICO</span></dd>
+<dd><span class="filtro-link" onclick="ricerca('CONDIVISO', '#table-tbody-collezioni')">CONDIVISO</span></dd>
+<dd><span class="filtro-link" onclick="ricerca('PRIVATO', '#table-tbody-collezioni')">PRIVATO</span></dd>
 

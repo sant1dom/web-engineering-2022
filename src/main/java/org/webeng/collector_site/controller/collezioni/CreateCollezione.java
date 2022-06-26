@@ -59,7 +59,7 @@ public class CreateCollezione extends CollectorsBaseController {
         List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(Utility.getUtente(request, response));
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
 
-        result.activate("collezioni/create_collezione.ftl", request, response);
+        result.activate("collezioni/create.ftl", request, response);
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {

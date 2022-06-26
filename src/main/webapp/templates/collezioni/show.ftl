@@ -2,6 +2,7 @@
 <#-- @ftlvariable name="proprietario" type="org.webeng.collector_site.data.model.Utente" -->
 <#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
 <#-- @ftlvariable name="dischi" type="org.webeng.collector_site.data.model.Disco[]" -->
+<#-- @ftlvariable name="dischiAdd" type="org.webeng.collector_site.data.model.Disco[]" -->
 <#-- @ftlvariable name="utenti_condivisi" type="org.webeng.collector_site.data.model.Utente[]" -->
 
 <#include "../outlines/outline_header.ftl">
@@ -21,15 +22,6 @@
                     <div class="testi">
                         <span class="testo-info">${collezione.getPrivacy()}</span>
                     </div>
-                    <div class="actions">
-                        <a class="btn btn-success btn-wd-fixed"
-                           href="update-collezione?id_collezione=${collezione.getKey()}">
-                            Modifica</a>
-                        <a class="btn btn-warning btn-wd-fixed"
-                           href="add-dischiCollezione?id_collezione=${collezione.getKey()}">
-                            Aggiungi disco</a>
-                    </div>
-
                 <#else>
                     <div class="labels">
                         <span class="label-info">Proprietario: </span>
@@ -44,10 +36,91 @@
             </#if>
         </div>
     </#if>
-
+    <#if error??>
+        <div class=text-red>
+            ${error!}
+        </div>
+    </#if>
     <div class="horizontal-separator"></div>
     <div class="tabelle-filtro-container">
         <div class="side-bar-container">
+            <#if (utente?? && utente.getKey() == collezione.getUtente().getKey())>
+                <div class="title">AZIONI</div>
+                <div class="filtro mb-5">
+                    <div style="width: 100%; padding: 1rem">
+                        <button class="btn btn-success" id="edit-collezione-btn" style="width: 100%;">Aggiorna
+                            collezione
+                        </button>
+                        <form method="post" action="edit-collezione?id=${collezione.getKey()}" id="edit-collezione">
+                            <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            <label for="privacy">Modifica le informazioni:</label><br>
+                            <label for="titolo">Titolo</label>
+                            <input type="text" class="form-control" value="${collezione.getTitolo()}" id="titolo"
+                                   name="titolo">
+                            <label for="privacy" class="mt-2">Modifica le informazioni:</label>
+                            <select id="privacy" name="privacy" class="selectpicker">
+                                <#if (collezione.getPrivacy()="PRIVATA")>
+                                    <option selected="selected" value="PRIVATA">PRIVATA</option>
+                                <#else>
+                                    <option value="PRIVATA">PRIVATA</option>
+                                </#if>
+                                <#if (collezione.getPrivacy()="PUBBLICA")>
+                                    <option selected="selected" value="PUBBLICA">PUBBLICA</option>
+                                <#else>
+                                    <option value="PUBBLICA">PUBBLICA</option>
+                                </#if>
+                                <#if (collezione.getPrivacy()="CONDIVISA")>
+                                    <option selected="selected" value="CONDIVISA">CONDIVISA</option>
+                                <#else>
+                                    <option value="CONDIVISA">CONDIVISA</option>
+                                </#if>
+                            </select>
+                            <div class="flex justify-center mt-3" style="width: 100%;">
+                                <button type="submit" class="btn btn-warning">Aggiorna</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="horizontal-separator filtro-horizontal-separator"></div>
+                    <div style="width: 100%; padding: 1rem">
+                        <button class="btn btn-success" id="add-dischi-btn" style="width: 100%;">Aggiungi dischi
+                        </button>
+                        <form method="post" action="add-dischi?id=${collezione.getKey()}" id="add-dischi">
+                            <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            <label for="dischi">Seleziona i dischi:</label>
+                            <#if (dischiAdd?? && dischiAdd?size>0)>
+                                <select id="dischi" name="dischi[]" class="selectpicker" multiple
+                                        data-live-search="true">
+                                    <#list dischiAdd as disco>
+                                        <option value="${disco.key}">${disco.titolo} | ${disco.anno}</option>
+                                    </#list>
+                                </select>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button type="submit" class="btn btn-warning">Aggiungi</button>
+                                </div>
+                            <#else>
+                                <p>Non ci sono dischi</p>
+                            </#if>
+                        </form>
+                    </div>
+                    <#if (collezione.getPrivacy() == "CONDIVISA")>
+                        <div class="horizontal-separator filtro-horizontal-separator"></div>
+                        <div style="width: 100%; padding: 1rem">
+                            <button class="btn btn-success" id="share-collezione-btn" style="width: 100%;">Condividi
+                            </button>
+                            <form method="post" action="edit-collezione?id=${collezione.getKey()}"
+                                  id="share-collezione">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <label for="user_share">Inserire Username utente:</label>
+                                <input type="text" class="form-control" id="user_share"
+                                       name="user_share" required>
+                                <div class="flex justify-center mt-3" style="width: 100%;">
+                                    <button type="submit" class="btn btn-warning">Condividi</button>
+                                </div>
+                            </form>
+                        </div>
+                    </#if>
+                </div>
+            </#if>
 
             <div class="title">FILTRO</div>
             <div class="filtro">
@@ -92,7 +165,7 @@
                                 <#if (utente?? && proprietario.getKey() == utente.getKey())>
                                     <td class="table-actions">
                                         <a class="btn btn-danger"
-                                           href="delete-discoCollezione?id_disco=${disco.getKey()}&id_collezione=${collezione.getKey()}">
+                                           href="remove-disco?c=${collezione.getKey()}&d=${disco.getKey()}">
                                             <i class="lni lni-trash-can"></i></a>
                                     </td>
                                 </#if>
@@ -103,43 +176,40 @@
                         <div class="table-empty">Non ci sono dischi.</div>
                     </#if>
                 </div>
-            </div>
 
-            <#if (collezione.getPrivacy() = "CONDIVISA")>
-                <div class="table-container">
-                    <#if (proprietario??)>
-                    <#if (utente?? && proprietario.getKey() == utente.getKey())>
-                    <div class="title">CONDIVISIONE</div>
-                    <#if (utenti_condivisi?? && utenti_condivisi?size>0)>
-                    <div class="table-scrollable">
-                        <table class="table table-borderless table-striped overflow-auto">
-                            <thead class="table-dark">
-                            <tr>
-                                <th scope="col">Username</th>
-                                <th scope="col" style="text-align: center">Azioni</th>
-                            </tr>
-                            </thead>
-                            <tbody id="table-tbody-dischi">
-                            <#list utenti_condivisi as user>
+                <#if (utente?? && proprietario.getKey() == utente.getKey() && collezione.getPrivacy() = "CONDIVISA")>
+                    <div class="table-container">
+                        <div class="title">UTENTI CONDIVISI</div>
+                        <#if (utenti_condivisi?? && utenti_condivisi?size > 0)>
+                        <div class="table-scrollable">
+                            <table class="table table-borderless table-striped overflow-auto">
+                                <thead class="table-dark">
                                 <tr>
-                                    <td><a class="link" href="profilo?id=${user.getKey()}">${user.getUsername()}</a></td>
-                                    <td class="table-actions">
-                                        <a class="btn btn-danger"
-                                           href="delete-utenteCondiviso?id_utenteCondiviso=${user.getKey()}&id_collezione=${collezione.getKey()}">
-                                            rimuovi utente</a>
-                                    </td>
+                                    <th scope="col">Username</th>
+                                    <th scope="col" style="text-align: center">Azioni</th>
                                 </tr>
-                            </#list>
-                        </table>
-                        <#else>
-                            <div class="table-empty">Collezione condivisa con nessun utente</div>
-                        </#if>
-                        </#if>
-                        </#if>
-
+                                </thead>
+                                <tbody id="table-tbody-dischi">
+                                <#list utenti_condivisi as user>
+                                    <tr>
+                                        <td><a class="link"
+                                               href="profilo?id=${user.getKey()}">${user.getUsername()}</a>
+                                        </td>
+                                        <td class="table-actions">
+                                            <a class="btn btn-danger"
+                                               href="remove-condivisione?c=${collezione.getKey()}&u=${user.getKey()}">
+                                                <i class="lni lni-trash-can"></i></a>
+                                        </td>
+                                    </tr>
+                                </#list>
+                            </table>
+                            <#else>
+                                <div class="table-empty">Non ci sono utenti condivisi.</div>
+                            </#if>
+                        </div>
                     </div>
-                </div>
                 </#if>
             </div>
         </div>
     </div>
+</div>

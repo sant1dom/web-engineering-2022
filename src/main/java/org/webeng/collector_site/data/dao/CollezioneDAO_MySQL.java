@@ -4,15 +4,15 @@ import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.collector_site.data.proxy.CollezioneProxy;
-import org.webeng.collector_site.data.dao.DiscoDAO_MySQL;
-import org.webeng.collector_site.data.proxy.DiscoProxy;
-import org.webeng.collector_site.data.proxy.TracciaProxy;
 import org.webeng.framework.data.*;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement sCollezioni;
@@ -20,15 +20,15 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement sCollezioneByID;
     private PreparedStatement sCollezioniByDisco;
     private PreparedStatement sCollezioniByUtente;
-
     private PreparedStatement sCollezioniCondiviseByUtente;
     private PreparedStatement uCollezione;
     private PreparedStatement iCollezione;
     private PreparedStatement dCollezione;
-
     private PreparedStatement addDiscoCollezione;
     private PreparedStatement addUtenteCondiviso;
     private PreparedStatement fCollezioniByTitolo;
+    private PreparedStatement fCollezioniByTitoloPrivate;
+    private PreparedStatement fCollezioniByTitoloCondivise;
 
     public CollezioneDAO_MySQL(DataLayer d) {
         super(d);
@@ -39,18 +39,21 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
         try {
             super.init();
             //precompiliamo tutte le query utilizzate nella classe
-            sCollezioni = connection.prepareStatement("SELECT * FROM collezione");
+            sCollezioni = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PUBBLICO'");
             sCollezioneByID = connection.prepareStatement("SELECT * FROM collezione WHERE id = ?");
             sCollezioneByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE titolo = ?");
             sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc ON collezione.id = dhc.collezione_id JOIN disco d ON d.id = dhc.disco_id WHERE d.id = ?");
             sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ?");
-            sCollezioniCondiviseByUtente= connection.prepareStatement("SELECT c.id FROM collezione c  JOIN collezione_condivisa_con ccc on c.id = ccc.collezione_id JOIN utente u on u.id = ccc.utente_id WHERE u.id = ?");
+            sCollezioniCondiviseByUtente = connection.prepareStatement("SELECT c.id FROM collezione c  JOIN collezione_condivisa_con ccc on c.id = ccc.collezione_id JOIN utente u on u.id = ccc.utente_id WHERE u.id = ?");
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addUtenteCondiviso = connection.prepareStatement("INSERT INTO collezione_condivisa_con (collezione_id, utente_id) VALUES (?, ?)");
-            fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy != 'PRIVATO' AND privacy != 'CONDIVISO' AND titolo LIKE CONCAT('%', ? , '%')");
+
+            fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PUBBLICO' AND titolo LIKE CONCAT('%', ? , '%')");
+            fCollezioniByTitoloPrivate = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PRIVATO' AND utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
+            fCollezioniByTitoloCondivise = connection.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE privacy = 'CONDIVISO' AND ccc.utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
         }
@@ -71,6 +74,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             addUtenteCondiviso.close();
             addDiscoCollezione.close();
             fCollezioniByTitolo.close();
+            fCollezioniByTitoloPrivate.close();
+            fCollezioniByTitoloCondivise.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying collections data layer", ex);
         }
@@ -161,7 +166,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
                     collezione.setVersion(next_version);
                 }
 
-                addUtenteCondiviso(collezione);
+                addUtentiCondivisi(collezione);
 
             } else { //insert
                 iCollezione.setString(1, collezione.getTitolo());
@@ -195,7 +200,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
                 }
 
                 //Condivisione della collezione
-                addUtenteCondiviso(collezione);
+                addUtentiCondivisi(collezione);
             }
 
 //            //se possibile, restituiamo l'oggetto appena inserito RICARICATO
@@ -242,7 +247,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
                 } else {
                     collezione.setVersion(next_version);
                 }
-                addDisco(collezione,disco);
+                addDisco(collezione, disco);
             }
             if (collezione instanceof DataItemProxy) {
                 ((DataItemProxy) collezione).setModified(false);
@@ -254,13 +259,18 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     }
 
     //Condivisione della collezione
-    private void addUtenteCondiviso(Collezione collezione) throws SQLException {
+    private void addUtentiCondivisi(Collezione collezione) throws SQLException {
         int id = collezione.getKey();
         for (Utente u : collezione.getUtentiCondivisi()) {
             if (u.getKey() != null && u.getKey() > 0) {
-                addUtenteCondiviso.setInt(1, id);
-                addUtenteCondiviso.setInt(2, u.getKey());
-                addUtenteCondiviso.executeUpdate();
+                try {
+                    addUtenteCondiviso.setInt(1, id);
+                    addUtenteCondiviso.setInt(2, u.getKey());
+                    addUtenteCondiviso.executeUpdate();
+                } catch (SQLException ex) {
+                    continue;
+                }
+
             }
         }
     }
@@ -294,6 +304,40 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             throw new DataException("Unable to set keyword", ex);
         }
         return result;
+    }
+
+    @Override
+    public List<Collezione> getCollezioniByKeywordLogged(String keyword, Utente utente) throws DataException {
+        Set<Collezione> result = new HashSet<>();
+        try {
+            //pesco le collezioni per l'utente autenticato che fanno match la keyword
+            fCollezioniByTitolo.setString(1, keyword);
+            fCollezioniByTitoloPrivate.setInt(1, utente.getKey());
+            fCollezioniByTitoloPrivate.setString(2, keyword);
+            fCollezioniByTitoloCondivise.setInt(1, utente.getKey());
+            fCollezioniByTitoloCondivise.setString(2, keyword);
+            //faccio merge di tutte le collezioni in un'unica lista
+            try (ResultSet rs = fCollezioniByTitolo.executeQuery()) {
+                while (rs.next()) {
+                    result.add(createCollezione(rs));
+                }
+            }
+            try (ResultSet rs = fCollezioniByTitoloPrivate.executeQuery()) {
+                while (rs.next()) {
+                    result.add(createCollezione(rs));
+                }
+            }
+            try (ResultSet rs = fCollezioniByTitoloCondivise.executeQuery()) {
+                while (rs.next()) {
+                    result.add(createCollezione(rs));
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load collections", ex);
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to set keyword", ex);
+        }
+        return new ArrayList<>(result);
     }
 
     @Override

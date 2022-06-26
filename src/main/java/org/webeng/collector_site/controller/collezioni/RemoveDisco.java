@@ -3,12 +3,11 @@ package org.webeng.collector_site.controller.collezioni;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
-import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
-import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.ServletException;
@@ -16,11 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
-public class ShowDiscoCollezione extends CollectorsBaseController {
+public class RemoveDisco extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
+
+
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
@@ -43,19 +42,23 @@ public class ShowDiscoCollezione extends CollectorsBaseController {
 
     }
 
-    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        TemplateResult result = new TemplateResult(getServletContext());
-        Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
-        List <Traccia> tracce= ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTracce(disco);
+    private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, IOException {
+        CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
+
+        Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("c")));
+        Disco disco = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("d")));
+
+        request.setAttribute("collezione", collezione);
         request.setAttribute("disco", disco);
-        request.setAttribute("tracce", Objects.requireNonNullElse(tracce, ""));
-        result.activate("collezioni/show_discoCollezione.ftl", request, response);
+
+        //eliminazione del disco in questione dalla collezione
+        dataLayer.getDiscoDAO().deleteDisco(collezione, disco);
+
+        response.sendRedirect("/show-collezione?id=" + request.getParameter("c"));
     }
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }
-
-
-
 }

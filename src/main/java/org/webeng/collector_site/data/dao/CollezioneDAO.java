@@ -21,6 +21,8 @@ public interface CollezioneDAO {
 
     List<Collezione> getCollezioniByKeyword(String keyword) throws DataException;
 
+    List<Collezione> getCollezioniByKeywordLogged(String keyword, Utente utente) throws DataException;
+
     List<Collezione> getCollezioni(Disco disco) throws DataException;
 
     List<Collezione> getCollezioni(Utente utente) throws DataException;
