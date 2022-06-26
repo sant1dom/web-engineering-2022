@@ -19,6 +19,19 @@ INSERT INTO `utente` (`id`, `nome`, `cognome`, `username`, `email`, `password`, 
 INSERT INTO `utente` (`id`, `nome`, `cognome`, `username`, `email`, `password`, `version`) VALUES (8, 'Cecilia', 'Balistreri', 'runte.donnie', 'cpurdy@example.org', '66ef6dba5a29f4372638d87581b66e73732dbffe', 1);
 INSERT INTO `utente` (`id`, `nome`, `cognome`, `username`, `email`, `password`, `version`) VALUES (9, 'Sabryna', 'Larson', 'leonor.hermiston', 'mavis.brekke@example.com', '6eaa130d468da506e3d54c53fca3004697a62e57', 1);
 INSERT INTO `utente` (`id`, `nome`, `cognome`, `username`, `email`, `password`, `version`) VALUES (10, 'Hassan', 'Koelpin', 'uhuels', 'lisandro65@example.org', '0e9370dc81a6dccec9959ae16c9a7fbbe02c028f', 1);
+INSERT INTO `utente` (`id`, `nome`, `cognome`, `username`, `email`, `password`, `version`) VALUES (11, 'Davide', 'De Acetis', 'davide', 'lisandro65@example.org', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1);
+
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (1, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (2, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (3, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (4, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (5, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (6, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (7, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (8, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (9, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (10, NULL);
+INSERT INTO `utente_rest` (`id`, `token`) VALUES (11, NULL);
 
 INSERT INTO `collezione` (`id`, `titolo`, `privacy`, `data_creazione`, `version`, `utente_id`) VALUES (1, 'I\'m never sure what I\'m.', 'CONDIVISO', '2007-06-15', 1, 1);
 INSERT INTO `collezione` (`id`, `titolo`, `privacy`, `data_creazione`, `version`, `utente_id`) VALUES (2, 'Alice by the White Rabbit.', 'PRIVATO', '1988-12-29', 1, 2);
