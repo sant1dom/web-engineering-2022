@@ -8,6 +8,7 @@
         <input class="form-control" type="file" id="immagini" name="immagini" multiple />
     </div>
         <div class="form-group col-7">
+            <input hidden type="text" name="id_disco" value="${id_disco}">
             <input type="submit" value="Aggiungi foto"><br>
         </div>
 

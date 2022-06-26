@@ -28,6 +28,7 @@ public class UpdateCollezione extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        try {
         if(request.getMethod().equals("POST")){
             updateCollezione(request,response);
         }else {
@@ -43,6 +44,9 @@ public class UpdateCollezione extends CollectorsBaseController {
             } catch (TemplateManagerException | DataException | IOException ex) {
                 handleError(ex, request, response);
             }
+           }
+        } catch (TemplateManagerException | DataException ex ){
+            handleError(ex, request, response);
         }
     }
 
@@ -64,38 +68,52 @@ public class UpdateCollezione extends CollectorsBaseController {
         response.sendRedirect("/login");
     }
 
-    private void updateCollezione(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String titolo = request.getParameter("titolo");
-            List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
-            List<Utente> utenti = new ArrayList<>();
-
-            for(String username: utenti_usernames){
-                try {
-                    Utente utente = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
-                    utenti.add(utente);
-                } catch (DataException ignored) {}
+    private void updateCollezione(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException ,DataException{
+        String titolo = request.getParameter("titolo");
+        List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
+        Boolean exit = false;
+        for (Collezione c : collezioni) {
+            if (c.getTitolo().equalsIgnoreCase(titolo)) {
+                request.setAttribute("error", "Hai già una collezione con questo titolo!");
+                action_logged(request, response);
+                exit = true;
+                break;
             }
 
+        }
+        if (!exit) {
+            try {
+
+                List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
+                List<Utente> utenti = new ArrayList<>();
+
+                for (String username : utenti_usernames) {
+                    try {
+                        Utente utente = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
+                        utenti.add(utente);
+                    } catch (DataException ignored) {
+                    }
+                }
 
 
-            String privacy = String.valueOf(request.getParameter("privacy"));
+                String privacy = String.valueOf(request.getParameter("privacy"));
 
-            Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
+                Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-            //chiamata dei metodi setTitolo,setPrivacy e setUtentiCondivisi sui valori di titolo e privacy inseriti dall'utente
-            collezione.setTitolo(titolo);
-            collezione.setPrivacy(privacy);
-            collezione.setUtentiCondivisi(utenti);
+                //chiamata dei metodi setTitolo,setPrivacy e setUtentiCondivisi sui valori di titolo e privacy inseriti dall'utente
+                collezione.setTitolo(titolo);
+                collezione.setPrivacy(privacy);
+                collezione.setUtentiCondivisi(utenti);
 
-            //chiamata metodo storeCollezione per aggiornare la collezione
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+                //chiamata metodo storeCollezione per aggiornare la collezione
+                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
 
-            response.sendRedirect("/show-collezioni");
+                response.sendRedirect("/show-collezioni");
 
-        } catch (Exception e) {
-            handleError(e, request, response);
-            e.printStackTrace();
+            } catch (Exception e) {
+                handleError(e, request, response);
+                e.printStackTrace();
+            }
         }
     }
 

@@ -53,7 +53,7 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
 
         Collezione collezione=((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
         List<Disco> dischiCollezione=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
-        List <Disco> allDischi=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
+        List <Disco> allDischi=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(Utility.getUtente(request, response));
 
         // la lista dischi conterrà tutti i dischi che non sono già nella collezione
         List<Disco> dischi=new ArrayList<>();

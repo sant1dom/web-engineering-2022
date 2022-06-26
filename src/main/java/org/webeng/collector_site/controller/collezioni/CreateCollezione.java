@@ -56,7 +56,7 @@ public class CreateCollezione extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
-        List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi();
+        List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(Utility.getUtente(request, response));
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
 
         result.activate("collezioni/create_collezione.ftl", request, response);
@@ -72,7 +72,7 @@ public class CreateCollezione extends CollectorsBaseController {
         List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
        Boolean exit=false;
         for(Collezione c:collezioni) {
-            if(c.getTitolo().equals(titolo)) {
+            if(c.getTitolo().equalsIgnoreCase(titolo)) {
                 request.setAttribute("error", "Hai già una collezione con questo titolo!");
                 action_logged(request, response);
                 exit=true;

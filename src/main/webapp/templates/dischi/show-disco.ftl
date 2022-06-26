@@ -143,4 +143,13 @@
         </form>
         </div>
 </div>
+    <#if immagini??>
+    <#list immagini as immagine>
+        <div class=form-group">
+        <img src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}" style="width: 30vw; min-width: 150px;" >
+            <a href="/delete-immagine?id_disco=${disco.key}&id_image=${immagine.key}">Rimuovi l'immagine </a>
+        </div>
+    </#list>
+    </#if>
+    <a href="/add-immagini?id_disco=${disco.key}">Aggiungi immagini al disco </a>
 </div>

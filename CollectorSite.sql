@@ -115,8 +115,8 @@ CREATE TABLE `disco` (
   PRIMARY KEY (`id`),
   KEY `fk_disco_utente1_idx` (`utente_id`),
   KEY `fk_disco_disco1_idx` (`padre`),
-  CONSTRAINT `fk_disco_disco1` FOREIGN KEY (`padre`) REFERENCES `disco` (`id`),
-  CONSTRAINT `fk_disco_utente1` FOREIGN KEY (`utente_id`) REFERENCES `utente` (`id`)
+  CONSTRAINT `fk_disco_disco1` FOREIGN KEY (`padre`) REFERENCES `disco` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_disco_utente1` FOREIGN KEY (`utente_id`) REFERENCES `utente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
