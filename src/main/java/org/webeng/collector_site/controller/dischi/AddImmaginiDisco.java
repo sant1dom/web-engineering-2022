@@ -63,7 +63,7 @@ public class AddImmaginiDisco extends CollectorsBaseController {
 
     private void addImmagini(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int id_disco = request.getAttribute("id");
+            int id_disco = (int)request.getAttribute("id");
             Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(id_disco);
             if (request.getParts() != null) {
                 List<Part> files_to_upload = request.getParts().stream().filter(p -> p.getContentType() != null).collect(Collectors.toList());

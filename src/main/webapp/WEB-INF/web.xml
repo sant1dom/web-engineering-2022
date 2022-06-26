@@ -144,14 +144,14 @@
         <servlet-name>AddImmagini</servlet-name>
         <url-pattern>/add-immagini</url-pattern>
     </servlet-mapping>
-   <!--DELATE TRACCIA-DISCO -->
+   <!--DELETE TRACCIA-DISCO -->
     <servlet>
-        <servlet-name>delate-tracciaDisco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.DelateTraccia</servlet-class>
+        <servlet-name>delete-tracciaDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteTraccia</servlet-class>
     </servlet>
    <servlet-mapping>
-       <servlet-name>delate-tracciaDisco</servlet-name>
-       <url-pattern>/delate-tracciaDisco</url-pattern>
+       <servlet-name>delete-tracciaDisco</servlet-name>
+       <url-pattern>/delete-tracciaDisco</url-pattern>
    </servlet-mapping>
     <!--AGGIUNGI TRACCIA-DISCO -->
     <servlet>

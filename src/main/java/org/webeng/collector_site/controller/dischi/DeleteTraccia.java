@@ -7,7 +7,6 @@ import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
-import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.ServletException;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class DelateTraccia extends CollectorsBaseController {
+public class DeleteTraccia extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,7 +41,7 @@ public class DelateTraccia extends CollectorsBaseController {
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws IOException, DataException {
         Disco disco= ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.valueOf(request.getParameter("id_disco")));
         Traccia traccia= ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.valueOf(request.getParameter("id_traccia")));
-        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().delateDiscoTraccia(disco,traccia);
+        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDiscoTraccia(disco,traccia);
         response.sendRedirect("/show-disco?id_disco="+disco.getKey());
 
     }

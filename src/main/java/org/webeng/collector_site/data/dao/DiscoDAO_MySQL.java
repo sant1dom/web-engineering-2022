@@ -426,7 +426,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     }
 
     @Override
-    public void delateDiscoTraccia(Disco disco, Traccia traccia) throws DataException {
+    public void deleteDiscoTraccia(Disco disco, Traccia traccia) throws DataException {
         try {
             dTracciaDisco.setInt(1, disco.getKey());
             dTracciaDisco.setInt(2, traccia.getKey());

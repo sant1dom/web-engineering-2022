@@ -43,7 +43,7 @@ public interface DiscoDAO {
 
     void addDiscoToCollezioni(List<Collezione> collezioni, Disco disco) throws DataException;
 
-    void delateDiscoTraccia(Disco disco, Traccia traccia) throws DataException;
+    void deleteDiscoTraccia(Disco disco, Traccia traccia) throws DataException;
     void addDiscoTraccia(Disco disco, List<Traccia> tracce) throws DataException;
 
 

@@ -48,7 +48,7 @@ public class DeleteDisco extends CollectorsBaseController {
         List<Autore> autori= ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori(disco);
         List<Image> images= ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().getImages(disco);
         for(Traccia traccia:tracce){
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().delateDiscoTraccia(disco,traccia);
+            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDiscoTraccia(disco,traccia);
         }
         for(Autore autore:autori){
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDiscoAutore(disco,autore);

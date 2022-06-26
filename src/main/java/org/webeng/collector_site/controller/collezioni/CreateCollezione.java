@@ -69,6 +69,12 @@ public class CreateCollezione extends CollectorsBaseController {
 
     private void saveCollezione(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException ,DataException {
         String titolo = request.getParameter("titolo");
+        String privacy = String.valueOf(request.getParameter("privacy"));
+        Utente utente = Utility.getUtente(request, response);
+        List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
+        List<Utente> utenti = new ArrayList<>();
+        List<Disco> dischi = new ArrayList<>();
+
         List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
        Boolean exit=false;
         for(Collezione c:collezioni) {
@@ -82,11 +88,7 @@ public class CreateCollezione extends CollectorsBaseController {
         }
         if(!exit) {
             try {
-                String privacy = String.valueOf(request.getParameter("privacy"));
-                Utente utente = Utility.getUtente(request, response);
-                List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
-                List<Utente> utenti = new ArrayList<>();
-                List<Disco> dischi = new ArrayList<>();
+
 
                 for (String disco : request.getParameterValues("disco")) {
                     dischi.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(disco)));
