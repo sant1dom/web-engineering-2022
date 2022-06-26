@@ -3,7 +3,7 @@
     <context-param>
         <param-name>uploads.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
-        <param-value>C:\Users\Raluc\Desktop\images</param-value>
+        <param-value>C:\Users\feder\Desktop\Immagini</param-value>
 
     </context-param>
     <context-param>
@@ -134,7 +134,7 @@
         <servlet-name>AddImmagini</servlet-name>
         <servlet-class>org.webeng.collector_site.controller.dischi.AddImmaginiDisco</servlet-class>
         <multipart-config>
-            <location>C:\Users\Raluc\Documents\workspace\apache-tomcat-9.0.62\temp</location>
+            <location>C:\Users\feder\WE_Workspace\apache-tomcat-9.0.60\temp</location>
             <max-file-size>20848820</max-file-size>
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>
@@ -351,12 +351,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>UpdateDischiCollezione</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.collezioni.UpdateDischiCollezione</servlet-class>
+        <servlet-name>AddDischiCollezione</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.collezioni.AddDischiCollezione</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UpdateDischiCollezione</servlet-name>
-        <url-pattern>/update-dischiCollezione</url-pattern>
+        <servlet-name>AddDischiCollezione</servlet-name>
+        <url-pattern>/add-dischiCollezione</url-pattern>
     </servlet-mapping>
 
     <servlet>

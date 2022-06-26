@@ -68,7 +68,7 @@ public class DeleteCollezione extends CollectorsBaseController {
             //cancellazione della collezione
             ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().deleteCollezione(collezione);
 
-            response.sendRedirect(request.getHeader("Referer"));
+            response.sendRedirect("/show-collezioni");
         }
         else {
             response.sendRedirect("/home");

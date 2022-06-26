@@ -71,15 +71,18 @@ public class UpdateCollezione extends CollectorsBaseController {
     private void updateCollezione(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException ,DataException{
         String titolo = request.getParameter("titolo");
         List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
+        Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
         Boolean exit = false;
-        for (Collezione c : collezioni) {
-            if (c.getTitolo().equalsIgnoreCase(titolo)) {
-                request.setAttribute("error", "Hai già una collezione con questo titolo!");
-                action_logged(request, response);
-                exit = true;
-                break;
-            }
+        if(!titolo.equalsIgnoreCase(collezione.getTitolo())) {
+            for (Collezione c : collezioni) {
+                if (c.getTitolo().equalsIgnoreCase(titolo)) {
+                    request.setAttribute("error", "Hai già una collezione con questo titolo!");
+                    action_logged(request, response);
+                    exit = true;
+                    break;
+                }
 
+            }
         }
         if (!exit) {
             try {
@@ -98,15 +101,20 @@ public class UpdateCollezione extends CollectorsBaseController {
 
                 String privacy = String.valueOf(request.getParameter("privacy"));
 
-                Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
 
-                //chiamata dei metodi setTitolo,setPrivacy e setUtentiCondivisi sui valori di titolo e privacy inseriti dall'utente
-                collezione.setTitolo(titolo);
-                collezione.setPrivacy(privacy);
-                collezione.setUtentiCondivisi(utenti);
+                /*chiamata dei metodi setTitolo,setPrivacy
+                e setUtentiCondivisi sui valori di titolo
+                e privacy inseriti dall'utente */
 
-                //chiamata metodo storeCollezione per aggiornare la collezione
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+                try {
+                    collezione.setTitolo(titolo);
+                    collezione.setPrivacy(privacy);
+                    collezione.setUtentiCondivisi(utenti);
+
+                    //chiamata metodo storeCollezione per aggiornare la collezione
+                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+                } catch (DataException ignored) {
+                }
 
                 response.sendRedirect("/show-collezioni");
 

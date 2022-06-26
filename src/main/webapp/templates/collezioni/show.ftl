@@ -26,7 +26,7 @@
                            href="update-collezione?id_collezione=${collezione.getKey()}">
                             Modifica</a>
                         <a class="btn btn-warning btn-wd-fixed"
-                           href="update-dischiCollezione?id_collezione=${collezione.getKey()}">
+                           href="add-dischiCollezione?id_collezione=${collezione.getKey()}">
                             Aggiungi disco</a>
                     </div>
 

@@ -40,12 +40,16 @@
             </select>
            </div>
           <div class="form-group col-7">
-            <#if (utenti_condivisi??)>
-                <h4>Collezione condivisa con:</h4>
-                <#list utenti_condivisi as user>
-                    ${user.username}
-                </#list>
-            </#if>
+              <#if collezione.privacy="CONDIVISA">
+                  <h4>Collezione condivisa con:</h4>
+                    <#if (utenti_condivisi??)>
+                    <#list utenti_condivisi as user>
+                        ${user.username}
+                    </#list>
+                    <#else>
+                     <p>nessun utente</p>
+                    </#if>
+                </#if>
           </div>
 
             <div class="form-group" id="condivisione">

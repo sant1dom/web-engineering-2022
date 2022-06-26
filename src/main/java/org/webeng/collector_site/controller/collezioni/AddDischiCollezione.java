@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UpdateDischiCollezione extends CollectorsBaseController {
+public class AddDischiCollezione extends CollectorsBaseController {
 
     public static final String REFERRER = "referrer";
     @Override
@@ -63,7 +63,7 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
        // request.setAttribute(REFERRER, request.getParameter("id_collezione"));
         request.setAttribute("collezione", collezione);
         request.setAttribute("dischi", Objects.requireNonNullElse(dischi, ""));
-        result.activate("collezioni/update_dischiCollezione.ftl", request, response);
+        result.activate("collezioni/add_dischiCollezione.ftl", request, response);
 
     }
 
@@ -87,7 +87,7 @@ public class UpdateDischiCollezione extends CollectorsBaseController {
             for (Disco disco : dischi) {
                     ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().addDiscoCollezione(collezione, disco);
             }
-            response.sendRedirect("/show-collezioni");
+            response.sendRedirect("/show-collezione?id=" + request.getParameter("id_collezione"));
         } catch (Exception e) {
             handleError(e, request, response);
         }

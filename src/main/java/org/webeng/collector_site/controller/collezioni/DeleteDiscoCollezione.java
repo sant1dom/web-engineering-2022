@@ -54,7 +54,7 @@ public class DeleteDiscoCollezione extends CollectorsBaseController {
 
         //eliminazione del disco in questione dalla collezione
         ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
-        response.sendRedirect(request.getHeader("Referer"));
+        response.sendRedirect("/show-collezione?id=" + request.getParameter("id_collezione"));
 
     }
 

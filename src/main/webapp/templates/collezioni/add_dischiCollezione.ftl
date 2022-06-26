@@ -1,7 +1,7 @@
 <#include "../outlines/outline_header.ftl">
 
 <h2 class="ml-5 mt-3">Aggiungi dischi alla collezione</h2>
-<form method="post" action="update-dischiCollezione?id_collezione=${collezione.key}" class="ml-5 mt-3">
+<form method="post" action="add-dischiCollezione?id_collezione=${collezione.key}" class="ml-5 mt-3">
     <div class="form-group col-7">
         <label for="disco">Dischi</label>
         <#if dischi??>
@@ -22,11 +22,6 @@
     </div>
 
 </form>
-
-<h2 class="ml-5 mt-3">Crea un nuovo disco per la collezione</h2>
-<div class="ml-5 mt-3">
-    <a href="crea-disco" class="btn btn-primary">crea nuovo disco</a>
-</div>
 
 <script>
     $(window).on('load', function () {
