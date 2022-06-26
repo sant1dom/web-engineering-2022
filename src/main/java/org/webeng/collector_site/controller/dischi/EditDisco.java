@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UpdateDisco extends CollectorsBaseController {
+public class EditDisco extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
+
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        if(request.getMethod().equals("POST")){
-            updateDisco(request,response);
-        }else {
+        if (request.getMethod().equals("POST")) {
+            updateDisco(request, response);
+        } else {
             try {
                 HttpSession s = SecurityHelpers.checkSession(request);
                 String https_redirect_url = SecurityHelpers.checkHttps(request);
@@ -42,19 +43,19 @@ public class UpdateDisco extends CollectorsBaseController {
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult result = new TemplateResult(getServletContext());
 
-        Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id_disco")));
+        Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id")));
         Genere[] genere = Genere.values();
-        List<String> generi = new ArrayList<String>();
+        List<String> generi = new ArrayList<>();
         for (Genere g : genere) {
             generi.add(g.name());
         }
         Formato[] formato = Formato.values();
-        List<String> formati = new ArrayList<String>();
+        List<String> formati = new ArrayList<>();
         for (Formato f : formato) {
             formati.add(f.name());
         }
         StatoConservazione[] stato_conservazione = StatoConservazione.values();
-        List<String> statoConservazione = new ArrayList<String>();
+        List<String> statoConservazione = new ArrayList<>();
         for (StatoConservazione s : stato_conservazione) {
             statoConservazione.add(s.name());
         }
@@ -62,29 +63,36 @@ public class UpdateDisco extends CollectorsBaseController {
         request.setAttribute("generi", Objects.requireNonNull(generi));
         request.setAttribute("formati", Objects.requireNonNull(formati));
         request.setAttribute("statoConservazione", Objects.requireNonNull(statoConservazione));
-        result.activate("disco/update_disco.ftl", request, response);
+        result.activate("dischi/edit.ftl", request, response);
 
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }
 
     private void updateDisco(HttpServletRequest request, HttpServletResponse response) {
         try {
+            CollectorsDataLayer datalayer = (CollectorsDataLayer) request.getAttribute("datalayer");
+
             String titolo = request.getParameter("titolo");
-            System.out.println(request.getParameter("titolo"));
-            System.out.println(request.getParameter("anno"));
             String anno = request.getParameter("anno");
             String barcode = request.getParameter("barcode");
             String etichetta = request.getParameter("etichetta");
-            Genere genere= Genere.valueOf(request.getParameter("genere"));
-            StatoConservazione statoConservazione= StatoConservazione.valueOf(request.getParameter("statoConservazione"));
-            Formato formato= Formato.valueOf(request.getParameter("formato"));
-            int id_disco= Integer.parseInt(request.getParameter("id_disco"));
-            Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(id_disco);
-            disco.setKey(id_disco);
+            Genere genere = Genere.valueOf(request.getParameter("genere"));
+            Formato formato = Formato.valueOf(request.getParameter("formato"));
+            StatoConservazione statoConservazione;
+            if ("DIGITALE".equals(formato.name())) {
+                statoConservazione = null;
+            } else {
+                statoConservazione = StatoConservazione.valueOf(request.getParameter("statoConservazione"));
+            }
+
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            Disco disco = datalayer.getDiscoDAO().getDisco(id);
+
             disco.setTitolo(titolo);
             disco.setAnno(anno);
             disco.setBarCode(barcode);
@@ -92,9 +100,9 @@ public class UpdateDisco extends CollectorsBaseController {
             disco.setGenere(genere);
             disco.setStatoConservazione(statoConservazione);
             disco.setFormato(formato);
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().storeDisco(disco);
+            datalayer.getDiscoDAO().storeDisco(disco);
 
-            response.sendRedirect("/show_disco?id_disco="+id_disco);
+            response.sendRedirect("/show-disco?id=" + id);
 
         } catch (Exception e) {
             handleError(e, request, response);

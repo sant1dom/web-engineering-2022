@@ -102,7 +102,7 @@
                                     <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
                                         <td>${collezione.getPrivacy()?lower_case?cap_first}</td>
                                         <td class="table-actions">
-                                            <a href="delete-collezione?id_collezione=${collezione.getKey()}"
+                                            <a href="delete-collezione?id=${collezione.getKey()}"
                                                class="btn btn-danger"><i class="lni lni-trash-can"></i></a>
                                         </td>
                                     </#if>
@@ -132,7 +132,10 @@
                             <th scope="col">Etichetta</th>
                             <th scope="col">Genere</th>
                             <th scope="col">Formato</th>
-                            <th scope="col">Stato di conservazione</th>
+                            <th scope="col" style="text-align: center">Stato di conservazione</th>
+                            <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
+                                <th scope="col" style="text-align: center">Azioni</th>
+                            </#if>
                         </tr>
                         </thead>
                         <tbody id="table-tbody-dischi">
@@ -150,11 +153,19 @@
                                 <td>${disco.etichetta?cap_first}</td>
                                 <td>${disco.genere?lower_case?cap_first}</td>
                                 <td>${disco.formato?lower_case?cap_first}</td>
-                                <#if (disco.getStatoConservazione()??)>
-                                    <td>${disco.statoConservazione?lower_case?cap_first}</td>
-                                <#else>
-                                    <td><i class="fa-solid fa-xmark"></i></td>
-                                </#if>
+                                <td style="text-align: center">
+                                    <#if (disco.getStatoConservazione()??)>
+                                        ${disco.statoConservazione?lower_case?cap_first}
+                                    <#else>
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </#if>
+                                </td>
+                                <td style="text-align: center">
+                                    <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
+                                        <a href="delete-disco?id=${disco.getKey()}"
+                                           class="btn btn-danger"><i class="lni lni-trash-can"></i></a>
+                                    </#if>
+                                </td>
                             </tr>
                         </#list>
 

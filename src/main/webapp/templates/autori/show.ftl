@@ -99,9 +99,7 @@
                         <#list tracce as traccia>
                             <tr>
                                 <td>${traccia.getISWC()}</td>
-                                <td><a class="link"
-                                       href="show-traccia?id=${traccia.getKey()}">${traccia.getTitolo()}</a>
-                                </td>
+                                <td>>${traccia.getTitolo()}</td>
                                 <td>${traccia.getDurata()}</td>
                             </tr>
                         </#list>

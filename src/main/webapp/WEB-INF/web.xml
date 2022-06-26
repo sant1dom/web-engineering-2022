@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <context-param>
         <param-name>uploads.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
@@ -37,7 +38,7 @@
     <context-param>
         <param-name>security.protect.patterns</param-name>
         <!-- qui configuriamo i pattern delle URL da proteggere -->
-        <param-value>/compose,/write</param-value>        
+        <param-value>/compose,/write</param-value>
     </context-param>
     <context-param>
         <param-name>data.source</param-name>
@@ -96,91 +97,6 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
-    <!--DISCO -->
-    <servlet>
-        <servlet-name>CreateDisco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.CreateDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CreateDisco</servlet-name>
-        <url-pattern>/create-disco</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>show-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.ShowDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>show-disco</servlet-name>
-        <url-pattern>/show-disco</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>IndexDisco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.IndexDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>IndexDisco</servlet-name>
-        <url-pattern>/index-disco</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>update-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.UpdateDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>update-disco</servlet-name>
-        <url-pattern>/update-disco</url-pattern>
-    </servlet-mapping>
-    <!-- ADD-IMMAGINI-->
-    <servlet>
-        <servlet-name>AddImmagini</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.AddImmaginiDisco</servlet-class>
-        <multipart-config>
-            <location>C:\Users\feder\WE_Workspace\apache-tomcat-9.0.60\temp</location>
-            <max-file-size>20848820</max-file-size>
-            <max-request-size>418018841</max-request-size>
-            <file-size-threshold>1048576</file-size-threshold>
-        </multipart-config>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddImmagini</servlet-name>
-        <url-pattern>/add-immagini</url-pattern>
-    </servlet-mapping>
-   <!--DELETE TRACCIA-DISCO -->
-    <servlet>
-        <servlet-name>delete-tracciaDisco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteTraccia</servlet-class>
-    </servlet>
-   <servlet-mapping>
-       <servlet-name>delete-tracciaDisco</servlet-name>
-       <url-pattern>/delete-tracciaDisco</url-pattern>
-   </servlet-mapping>
-    <!--AGGIUNGI TRACCIA-DISCO -->
-    <servlet>
-        <servlet-name>aggiungiTracce-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.AggiungiTraccia</servlet-class>
-    </servlet>
-<servlet-mapping>
-        <servlet-name>aggiungiTracce-disco</servlet-name>
-        <url-pattern>/aggiungiTracce-disco</url-pattern>
-    </servlet-mapping>
-    <!--ELIMINA AUTORE DAL DISCO-->
-    <servlet>
-        <servlet-name>delate-autoreDisco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.EliminaAutoreDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>delate-autoreDisco</servlet-name>
-        <url-pattern>/delate-autoreDisco</url-pattern>
-    </servlet-mapping>
-    <!--AGGIUNGI AUTORE AL DISCO-->
-    <servlet>
-        <servlet-name>aggiungiAutore-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.AggiungiAutoreDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>aggiungiAutore-disco</servlet-name>
-        <url-pattern>/aggiungiAutore-disco</url-pattern>
-    </servlet-mapping>
-
     <!--  LOGOUT  -->
     <servlet>
         <servlet-name>logout</servlet-name>
@@ -201,6 +117,109 @@
         <url-pattern>/error</url-pattern>
     </servlet-mapping>
 
+
+    <!--DISCO -->
+    <servlet>
+        <servlet-name>CreateDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.CreateDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateDisco</servlet-name>
+        <url-pattern>/create-disco</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ShowDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.ShowDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowDisco</servlet-name>
+        <url-pattern>/show-disco</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>IndexDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.IndexDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IndexDisco</servlet-name>
+        <url-pattern>/index-disco</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EditDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.EditDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditDisco</servlet-name>
+        <url-pattern>/edit-disco</url-pattern>
+    </servlet-mapping>
+    <!-- ADD-IMMAGINI-->
+    <servlet>
+        <servlet-name>AddImmagini</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.AddImmagini</servlet-class>
+        <multipart-config>
+            <location>C:\Users\feder\WE_Workspace\apache-tomcat-9.0.60\temp</location>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddImmagini</servlet-name>
+        <url-pattern>/add-immagini</url-pattern>
+    </servlet-mapping>
+    <!--DELETE TRACCIA-DISCO -->
+    <servlet>
+        <servlet-name>RemoveTraccia</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.RemoveTraccia</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemoveTraccia</servlet-name>
+        <url-pattern>/remove-traccia</url-pattern>
+    </servlet-mapping>
+    <!--AGGIUNGI TRACCIA-DISCO -->
+    <servlet>
+        <servlet-name>AddTracce</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.AddTracce</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddTracce</servlet-name>
+        <url-pattern>/add-tracce</url-pattern>
+    </servlet-mapping>
+    <!--ELIMINA AUTORE DAL DISCO-->
+    <servlet>
+        <servlet-name>RemoveAutore</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.RemoveAutore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemoveAutore</servlet-name>
+        <url-pattern>/remove-autore</url-pattern>
+    </servlet-mapping>
+    <!--AGGIUNGI AUTORE AL DISCO-->
+    <servlet>
+        <servlet-name>AddAutori</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.AddAutori</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddAutori</servlet-name>
+        <url-pattern>/add-autori</url-pattern>
+    </servlet-mapping>
+    <!--DELATE DISCO -->
+    <servlet>
+        <servlet-name>DeleteDisco</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteDisco</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteDisco</servlet-name>
+        <url-pattern>/delete-disco</url-pattern>
+    </servlet-mapping>
+    <!-- DELETE IMMAGINE DISCO-->
+    <servlet>
+        <servlet-name>DeleteImage</servlet-name>
+        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteImmagine</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteImage</servlet-name>
+        <url-pattern>/delete-immagine</url-pattern>
+    </servlet-mapping>
 
     <!-- UTENTI -->
     <servlet>
@@ -376,24 +395,7 @@
         <servlet-name>render-disco</servlet-name>
         <url-pattern>/display-immagine</url-pattern>
     </servlet-mapping>
-    <!--DELATE DISCO -->
-    <servlet>
-        <servlet-name>delete-disco</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteDisco</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>delete-disco</servlet-name>
-        <url-pattern>/delete-disco</url-pattern>
-    </servlet-mapping>
-    <!-- DELETE IMMAGINE DISCO-->
-    <servlet>
-        <servlet-name>delete-immagine</servlet-name>
-        <servlet-class>org.webeng.collector_site.controller.dischi.DeleteImmagine</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>delete-immagine</servlet-name>
-        <url-pattern>/delete-immagine</url-pattern>
-    </servlet-mapping>
+
     <!--  END SERVLET  -->
 
 

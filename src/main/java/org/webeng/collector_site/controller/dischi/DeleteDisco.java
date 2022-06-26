@@ -5,7 +5,6 @@ import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.*;
 import org.webeng.framework.data.DataException;
-import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.*;
@@ -34,36 +33,44 @@ public class DeleteDisco extends CollectorsBaseController {
                 if (utente != null) {
                     request.setAttribute("utente", utente);
                 }
-                action_delateDisco(request, response);
+                action_deleteDisco(request, response);
             }
-        } catch ( DataException | IOException ex) {
+        } catch (DataException | IOException ex) {
             handleError(ex, request, response);
         }
-
     }
 
-    private void action_delateDisco(HttpServletRequest request, HttpServletResponse response) throws DataException, IOException {
-        Disco disco=((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.valueOf(request.getParameter("id_disco")));
-        List<Traccia> tracce= ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTracce(disco);
-        List<Autore> autori= ((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutori(disco);
-        List<Image> images= ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().getImages(disco);
-        for(Traccia traccia:tracce){
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDiscoTraccia(disco,traccia);
+    private void action_deleteDisco(HttpServletRequest request, HttpServletResponse response) throws DataException, IOException {
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+
+        Disco disco = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id")));
+        List<Traccia> tracce = dataLayer.getTracciaDAO().getTracce(disco);
+        List<Autore> autori = dataLayer.getAutoreDAO().getAutori(disco);
+        List<Image> images = dataLayer.getImageDAO().getImages(disco);
+
+        for (Traccia traccia : tracce) {
+            dataLayer.getDiscoDAO().deleteDiscoTraccia(disco, traccia);
         }
-        for(Autore autore:autori){
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDiscoAutore(disco,autore);
+        for (Autore autore : autori) {
+            dataLayer.getDiscoDAO().deleteDiscoAutore(disco, autore);
         }
-        for(Image image:images) {
-            Path imagePath= Paths.get(getServletContext().getInitParameter("uploads.directory") +"\\"+ image.getFileName());
-            try{
+        for (Image image : images) {
+            Path imagePath = Paths.get(getServletContext().getInitParameter("uploads.directory") + "\\" + image.getFileName());
+            try {
                 Files.delete(imagePath);
-            }catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().deleteImage(disco,image);
+            dataLayer.getImageDAO().deleteImage(disco, image);
         }
-        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(disco);
-        response.sendRedirect("/lista-dischi");
+        
+        dataLayer.getDiscoDAO().deleteDisco(disco);
+        Utente utente = Utility.getUtente(request, response);
+        if (utente != null) {
+            response.sendRedirect("/profilo?id=" + utente.getKey());
+        } else {
+            response.sendRedirect("/index-disco");
+        }
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {

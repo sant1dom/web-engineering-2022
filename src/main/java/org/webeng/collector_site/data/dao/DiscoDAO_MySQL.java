@@ -182,8 +182,11 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 uDisco.setString(4, disco.getGenere().toString());
                 uDisco.setString(5, disco.getEtichetta());
                 uDisco.setString(6, disco.getFormato().toString());
-                uDisco.setString(7,disco.getStatoConservazione().toString());
-
+                if (disco.getStatoConservazione() != null) {
+                    uDisco.setString(7, disco.getStatoConservazione().toString());
+                } else {
+                    uDisco.setNull(7, Types.VARCHAR);
+                }
                 long current_version = disco.getVersion();
                 long next_version = current_version + 1;
 

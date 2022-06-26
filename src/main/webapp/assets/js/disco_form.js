@@ -1,7 +1,17 @@
-$(window).on('load', function () {
-    $('.selectpicker').selectpicker();
+$(document).ready(function () {
+    const selectpicker = $('.selectpicker');
+    const formato = $('#formato');
+    selectpicker.selectpicker();
 
-    $('#formato').on('change', function () {
+    if (formato.val() === 'DIGITALE') {
+        disableStatoCoservazione();
+    }
+
+    formato.on('change', function () {
+        disableStatoCoservazione();
+    });
+
+    function disableStatoCoservazione() {
         let selected = $('#formato option:selected');
         let statoConservazione = $('#statoConservazione');
         if (selected.val() === 'DIGITALE') {
@@ -15,8 +25,8 @@ $(window).on('load', function () {
             statoConservazione.prop('required', true);
             statoConservazione.removeClass('off');
         }
-        $('.selectpicker').selectpicker('refresh');
-    });
+        selectpicker.selectpicker('refresh');
+    }
 
     $('#padre').on('change', function () {
 
@@ -85,6 +95,34 @@ $(window).on('load', function () {
 
             msg.text('');
         }
-        $('.selectpicker').selectpicker('refresh');
+        selectpicker.selectpicker('refresh');
     });
+
+    const add_tracce = $('#add-tracce');
+    const add_autori = $('#add-autori');
+    let isTracceHidden = true;
+    let isAutoriHidden = true;
+
+    add_tracce.hide()
+    add_autori.hide()
+
+    $('#add-tracce-btn').on('click', function () {
+        if (isTracceHidden) {
+            add_tracce.show()
+            isTracceHidden = false;
+        } else {
+            add_tracce.hide()
+            isTracceHidden = true;
+        }
+    })
+
+    $('#add-autori-btn').on('click', function () {
+        if (isAutoriHidden) {
+            add_autori.show()
+            isAutoriHidden = false;
+        } else {
+            add_autori.hide()
+            isAutoriHidden = true;
+        }
+    })
 });

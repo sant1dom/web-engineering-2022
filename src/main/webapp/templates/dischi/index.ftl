@@ -66,7 +66,7 @@
                             <th scope="col">Etichetta</th>
                             <th scope="col">Genere</th>
                             <th scope="col">Formato</th>
-                            <th scope="col">Stato di conservazione</th>
+                            <th scope="col" style="text-align: center">Stato di conservazione</th>
                         </tr>
                         </thead>
                         <tbody id="table-tbody-dischi">
@@ -84,11 +84,13 @@
                                 <td>${disco.etichetta?cap_first}</td>
                                 <td>${disco.genere?lower_case?cap_first}</td>
                                 <td>${disco.formato?lower_case?cap_first}</td>
-                                <#if (disco.getStatoConservazione()??)>
-                                    <td>${disco.statoConservazione?lower_case?cap_first}</td>
-                                <#else>
-                                    <td><i class="fa-solid fa-xmark"></i></td>
-                                </#if>
+                                <td style="text-align: center">
+                                    <#if (disco.getStatoConservazione()??)>
+                                        ${disco.statoConservazione?lower_case?cap_first}
+                                    <#else>
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </#if>
+                                </td>
                             </tr>
                         </#list>
 

@@ -2,7 +2,6 @@ package org.webeng.collector_site.controller.dischi;
 
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.framework.data.DataException;
@@ -14,13 +13,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AggiungiAutoreDisco extends CollectorsBaseController {
+public class AddTracce extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getMethod().equals("POST")) {
-            aggiungiAutori(request, response);
+            aggiungiTracce(request, response);
         } else {
             try {
                 HttpSession s = SecurityHelpers.checkSession(request);
@@ -40,21 +39,21 @@ public class AggiungiAutoreDisco extends CollectorsBaseController {
         response.sendRedirect("/login");
     }
 
-    private void aggiungiAutori(HttpServletRequest request, HttpServletResponse response) {
-        List<Autore> autore = new ArrayList<>();
-        try{
-            if(request.getParameterValues("autori")!=null){
-                for(String a: request.getParameterValues("autori")){
-                    autore.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutore(Integer.valueOf(a)));
+    private void aggiungiTracce(HttpServletRequest request, HttpServletResponse response) {
+        List<Traccia> tracce = new ArrayList<>();
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+        try {
+            if (request.getParameterValues("tracce[]") != null) {
+                for (String t : request.getParameterValues("tracce[]")) {
+                    tracce.add(dataLayer.getTracciaDAO().getTraccia(Integer.parseInt(t)));
                 }
             }
-            Disco disco= ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.valueOf(request.getParameter("id_disco")));
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDiscoAutore(disco,autore);
-        }catch(DataException e){}
-        try {
-            response.sendRedirect("/show-disco?id_disco="+request.getParameter("id_disco"));
-        } catch (IOException e) {
-            e.printStackTrace();
+            Disco disco = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("id")));
+            dataLayer.getDiscoDAO().addDiscoTraccia(disco, tracce);
+
+            response.sendRedirect("/show-disco?id=" + disco.getKey());
+        } catch (IOException | DataException ex) {
+            handleError(ex, request, response);
         }
     }
 }

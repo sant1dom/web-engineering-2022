@@ -10,8 +10,8 @@
 
     <!-- SCRIPTS PER TUTTE LE PAGINE -->
     <script src="/assets/js/scripts.js"></script>
-    <!-- SCRIPTS PER LE IMMAGINI -->
-    <script src="/assets/js/images.js"></script>
+    <!-- SCRIPTS PER LE FORM DEI DISCHI -->
+    <script src="/assets/js/disco_form.js"></script>
     <!-- AUTOCOMPLETE -->
     <script src="/assets/js/search_suggestions.js"></script>
     <!-- FILTRO -->

@@ -45,16 +45,17 @@ public class DeleteCollezione extends CollectorsBaseController {
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, IOException {
-        Collezione collezione = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id_collezione")));
-        List<Disco> dischi = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDischi(collezione);
-        List<Utente> utenti= ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiCondivisi(collezione);
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+        Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
+        List<Disco> dischi = dataLayer.getDiscoDAO().getDischi(collezione);
+        List<Utente> utenti= dataLayer.getUtenteDAO().getUtentiCondivisi(collezione);
 
         /* cancellazione di tutte tutte le associazioni
         tra un disco nella collezione e la collezione in questione
         nella tabella collezione_disco richiamando il metodo deleteDisco */
         if(Utility.getUtente(request,response).equals(collezione.getUtente())){
             for(Disco disco:dischi){
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDisco(collezione,disco);
+                dataLayer.getDiscoDAO().deleteDisco(collezione,disco);
             }
 
             /* se la collezione è condivisa cancello prima tutte le associazioni
@@ -63,10 +64,10 @@ public class DeleteCollezione extends CollectorsBaseController {
 
             if(collezione.getPrivacy().equals("CONDIVISA")){
                 for(Utente utente:utenti)
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().deleteUtenteCondiviso(collezione,utente);
+                dataLayer.getUtenteDAO().deleteUtenteCondiviso(collezione,utente);
             }
             //cancellazione della collezione
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().deleteCollezione(collezione);
+            dataLayer.getCollezioneDAO().deleteCollezione(collezione);
 
             response.sendRedirect("/show-collezioni");
         }

@@ -3,19 +3,18 @@ package org.webeng.collector_site.controller.dischi;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
+import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Disco;
-import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.security.SecurityHelpers;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import java.io.IOException;
 
-public class DeleteTraccia extends CollectorsBaseController {
+public class RemoveAutore extends CollectorsBaseController {
+
     public static final String REFERRER = "referrer";
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,10 +38,14 @@ public class DeleteTraccia extends CollectorsBaseController {
     }
 
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws IOException, DataException {
-        Disco disco= ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.valueOf(request.getParameter("id_disco")));
-        Traccia traccia= ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.valueOf(request.getParameter("id_traccia")));
-        ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().deleteDiscoTraccia(disco,traccia);
-        response.sendRedirect("/show-disco?id_disco="+disco.getKey());
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+
+        Disco disco = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(request.getParameter("d")));
+        Autore autore = dataLayer.getAutoreDAO().getAutore(Integer.parseInt(request.getParameter("a")));
+
+        dataLayer.getDiscoDAO().deleteDiscoAutore(disco,autore);
+
+        response.sendRedirect("/show-disco?id=" + disco.getKey());
 
     }
 

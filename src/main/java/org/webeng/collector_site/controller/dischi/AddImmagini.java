@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AddImmaginiDisco extends CollectorsBaseController {
+public class AddImmagini extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
     public static final String UPLOAD_LOCATION = "C:/Users/Raluc/Documents/Workspace";
 
