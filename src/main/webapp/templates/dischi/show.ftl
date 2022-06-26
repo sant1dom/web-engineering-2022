@@ -65,17 +65,6 @@
         </div>
     </#if>
 
-
-    <#if immagini??>
-        <#list immagini as immagine>
-            <div class=form-group">
-                <img src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}" style="width: 30vw; min-width: 150px;" >
-                <a href="/delete-immagine?id_disco=${disco.key}&id_image=${immagine.key}">Rimuovi l'immagine </a>
-            </div>
-        </#list>
-    </#if>
-
-
     <div class="horizontal-separator"></div>
     <div class="tabelle-filtro-container">
         <div class="side-bar-container">
@@ -132,15 +121,51 @@
                     <div class="horizontal-separator filtro-horizontal-separator"></div>
 
                     <div style="width: 100%; padding: 1rem">
-                        <div class="flex justify-center" style="width: 100%;">
-                            <a class="btn btn-success" style="width: 100%;" href="/add-immagini?id=${disco.key}">Aggiungi
-                                immagini</a>
-                        </div>
+                        <button class="btn btn-success" id="add-immagini-btn" style="width: 100%;">Aggiungi
+                            immagini
+                        </button>
+                        <form method="post" action="add-immagini?id=${disco.getKey()}" enctype="multipart/form-data"
+                              id="add-immagini">
+                            <div class="horizontal-separator filtro-horizontal-separator"></div>
+                            <label for="immagini" class="form-label">Scegli le foto da caricare:</label>
+                            <input type="file" id="immagini" name="immagini" multiple/>
+                            <div class="flex justify-center mt-3" style="width: 100%;">
+                                <button type="submit" class="btn btn-warning">Aggiungi</button>
+                            </div>
+                        </form>
                     </div>
+                    <#if (immagini?? && immagini?size > 0) >
+                        <div class="horizontal-separator filtro-horizontal-separator"></div>
 
+                        <div style="width: 100%; padding: 1rem">
+                            <button class="btn btn-danger" id="remove-immagini-btn" style="width: 100%;">Rimuovi
+                                immagini
+                            </button>
+                            <div id="remove-immagini">
+                                <div class="horizontal-separator filtro-horizontal-separator"></div>
+                                <dl>
+                                    <#list immagini as immagine>
+                                        <dd>
+                                            <div class="flex justify-around">
 
+                                                <a class="btn btn-danger"
+                                                   href="/delete-immagine?d=${disco.key}&i=${immagine.key}"><i
+                                                            class="lni lni-trash-can"></i></a>
+                                                <div style="width: 8rem;">
+                                                    <img class="center" style="height: 2rem; width: auto"
+                                                         src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}"
+                                                         alt="slide">
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </#list>
+                                </dl>
+                            </div>
+                        </div>
+                    </#if>
                 </div>
             </#if>
+
             <div class="title">FILTRO</div>
             <div class="filtro">
                 <div class="filtro-list">
@@ -152,15 +177,36 @@
             </div>
         </div>
 
-
         <div class="tables-container">
+            <#if (immagini?? && immagini?size > 0)>
+            <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <#list immagini as immagine>
+                        <div class="carousel-item">
+                            <img class="center" style="max-height: 25rem; height: 100%; width: auto;"
+                                 src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}"
+                                 alt="slide">
+                        </div>
+                    </#list>
+                </div>
+                <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            </#if>
+
             <div class="table-container" id="tracce-container">
                 <div class="title flex justify-between align-items-center">
                     TRACCE
                     <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
-                <#if (tracce??)>
+                <#if (tracce?? && autori?size > 0)>
                 <div class="table-scrollable">
                     <table class="table table-borderless table-striped">
                         <thead class="table-dark">
@@ -194,49 +240,50 @@
                         <div class="table-empty">Non ci sono dischi.</div>
                     </#if>
                 </div>
-            </div>
 
-            <div class="table-container" id="autori-container">
-                <div class="title flex justify-between align-items-center">
-                    AUTORI
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-autori')" type="text"
-                           placeholder="Search.." class="input-filtro inner-table">
-                </div>
-                <#if (autori?? && autori?size > 0)>
-                <div class="table-scrollable">
-                    <table class="table table-borderless table-striped">
-                        <thead class="table-dark">
-                        <tr>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Cognome</th>
-                            <th scope="col">Tipologia</th>
-                            <#if (utente?? && utente.getKey() == disco.getUtente().getKey())>
-                                <th scope="col" style="text-align: center">Azioni</th>
-                            </#if>
-                        </tr>
-                        </thead>
-                        <tbody id="table-tbody-autori">
-                        <#list autori as autore>
+
+                <div class="table-container" id="autori-container">
+                    <div class="title flex justify-between align-items-center">
+                        AUTORI
+                        <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-autori')" type="text"
+                               placeholder="Search.." class="input-filtro inner-table">
+                    </div>
+                    <#if (autori?? && autori?size > 0)>
+                    <div class="table-scrollable">
+                        <table class="table table-borderless table-striped">
+                            <thead class="table-dark">
                             <tr>
-                                <td><a class="link"
-                                       href="show-autore?id=${autore.getKey()}">${autore.getNomeArtistico()}</a>
-                                </td>
-                                <td>${autore.getNome() + autore.getCognome()}</td>
-                                <td>${autore.getTipologia()?lower_case?cap_first}</td>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Cognome</th>
+                                <th scope="col">Tipologia</th>
                                 <#if (utente?? && utente.getKey() == disco.getUtente().getKey())>
-                                    <td style="text-align: center">
-                                        <a href="remove-autore?d=${disco.getKey()}&a=${autore.getKey()}"
-                                           class="btn btn-danger">Rimuovi</a>
-                                    </td>
+                                    <th scope="col" style="text-align: center">Azioni</th>
                                 </#if>
                             </tr>
-                        </#list>
+                            </thead>
+                            <tbody id="table-tbody-autori">
+                            <#list autori as autore>
+                                <tr>
+                                    <td><a class="link"
+                                           href="show-autore?id=${autore.getKey()}">${autore.getNomeArtistico()}</a>
+                                    </td>
+                                    <td>${autore.getNome() + autore.getCognome()}</td>
+                                    <td>${autore.getTipologia()?lower_case?cap_first}</td>
+                                    <#if (utente?? && utente.getKey() == disco.getUtente().getKey())>
+                                        <td style="text-align: center">
+                                            <a href="remove-autore?d=${disco.getKey()}&a=${autore.getKey()}"
+                                               class="btn btn-danger">Rimuovi</a>
+                                        </td>
+                                    </#if>
+                                </tr>
+                            </#list>
 
-                        </tbody>
-                    </table>
-                    <#else>
-                        <div class="table-empty">Non ci sono autori.</div>
-                    </#if>
+                            </tbody>
+                        </table>
+                        <#else>
+                            <div class="table-empty">Non ci sono autori.</div>
+                        </#if>
+                    </div>
                 </div>
             </div>
         </div>

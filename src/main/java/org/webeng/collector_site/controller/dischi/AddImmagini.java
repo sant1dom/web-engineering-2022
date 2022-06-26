@@ -9,11 +9,13 @@ import org.webeng.collector_site.data.model.Image;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
-import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,44 +29,33 @@ public class AddImmagini extends CollectorsBaseController {
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        if (request.getMethod().equals("POST")) {
-            addImmagini(request, response);
-        } else {
-            try {
-                HttpSession s = SecurityHelpers.checkSession(request);
-                String https_redirect_url = SecurityHelpers.checkHttps(request);
-                request.setAttribute("https-redirect", https_redirect_url);
-                if (s == null) {
-                    action_anonymous(request, response);
-                } else {
-                    //Ottengo l'utente loggato
-                    Utente utente = Utility.getUtente(request, response);
-                    if (utente != null) {
-                        request.setAttribute("utente", utente);
-                    }
+        try {
+            HttpSession s = SecurityHelpers.checkSession(request);
+            String https_redirect_url = SecurityHelpers.checkHttps(request);
+            request.setAttribute("https-redirect", https_redirect_url);
+            if (s == null) {
+                action_anonymous(request, response);
+            } else {
+                //Ottengo l'utente loggato
+                Utente utente = Utility.getUtente(request, response);
+                if (utente != null) {
+                    request.setAttribute("utente", utente);
+                }
+                if (request.getMethod().equals("POST")) {
                     action_logged(request, response);
                 }
-            } catch (TemplateManagerException | DataException | IOException ex) {
-                handleError(ex, request, response);
             }
+        } catch (TemplateManagerException | DataException | IOException ex) {
+            handleError(ex, request, response);
         }
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        request.setAttribute("id", request.getParameter("id"));
-        TemplateResult result = new TemplateResult(getServletContext());
-        result.activate("dischi/add-immagini.ftl", request, response);
-    }
-
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        response.sendRedirect("/login");
-    }
-
-    private void addImmagini(HttpServletRequest request, HttpServletResponse response) {
         try {
-            int id_disco = (int)request.getAttribute("id");
-            Disco disco = ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(id_disco);
+            CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+            int id_disco = Integer.parseInt(request.getParameter("id"));
+            Disco disco = dataLayer.getDiscoDAO().getDisco(id_disco);
+
             if (request.getParts() != null) {
                 List<Part> files_to_upload = request.getParts().stream().filter(p -> p.getContentType() != null).collect(Collectors.toList());
                 if (!files_to_upload.isEmpty()) {
@@ -78,7 +69,6 @@ public class AddImmagini extends CollectorsBaseController {
                             while ((read = is.read(buffer)) > 0) {
                                 os.write(buffer, 0, read);
                             }
-                            os.close();
                         }
                         files_uploaded.add(uploaded_file);
                     }
@@ -95,16 +85,18 @@ public class AddImmagini extends CollectorsBaseController {
                             disco.getImmagini().add(immagine);
                         }
                     }
-                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getImageDAO().storeImages(disco.getImmagini());
+                    dataLayer.getImageDAO().storeImages(disco.getImmagini());
                 }
-
-                response.sendRedirect("/show-disco?id_disco=" + request.getParameter("id_disco"));
+                response.sendRedirect("/show-disco?id=" + id_disco);
             }
         } catch (Exception e) {
             handleError(e, request, response);
         }
-
     }
 
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        response.sendRedirect("/login");
+    }
 }
 

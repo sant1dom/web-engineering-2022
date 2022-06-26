@@ -1,18 +1,17 @@
 package org.webeng.collector_site.data.dao;
 
 
-import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Image;
-import org.webeng.collector_site.data.model.Traccia;
 import org.webeng.collector_site.data.proxy.ImageProxy;
 import org.webeng.framework.data.DAO;
 import org.webeng.framework.data.DataException;
-import org.webeng.framework.data.DataItemProxy;
 import org.webeng.framework.data.DataLayer;
 
-import java.sql.*;
-import java.time.LocalDate;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
             sImageByFileName = connection.prepareStatement("SELECT * FROM image WHERE filename=?");
             sImages = connection.prepareStatement("SELECT id FROM image");
             dImagesByDisco = connection.prepareStatement("DELETE FROM image WHERE id=? AND disco_id=?");
-            iImages= connection.prepareStatement("INSERT INTO image (size, type, filename, disco_id, version) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            iImages = connection.prepareStatement("INSERT INTO image (size, type, filename, disco_id, version) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException ex) {
             throw new DataException("Error initializing newspaper data layer", ex);
         }
@@ -59,7 +58,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
 
     //helper
     private ImageProxy createImage(ResultSet rs) throws DataException {
-        ImageProxy i = (ImageProxy)createImage();
+        ImageProxy i = (ImageProxy) createImage();
         try {
             i.setKey(rs.getInt("id"));
             i.setImageSize(rs.getLong("size"));
@@ -125,8 +124,7 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
             while (rs.next()) {
                 images.add(getImage(rs.getInt("id")));
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             throw new DataException("Unable to load images", ex);
         }
         return images;
@@ -150,18 +148,17 @@ public class ImageDAO_MySQL extends DAO implements ImageDAO {
 
     @Override
     public void storeImages(List<Image> images) throws DataException {
-        try{
-        for(Image image: images){
-        iImages.setInt(1, (int) image.getImageSize());
-        iImages.setString(2, image.getImageType());
-        iImages.setString(3, image.getFileName());
-        iImages.setInt(4, image.getDisco().getKey());
-        iImages.setInt(5, 1);
-        iImages.executeUpdate();
-    }
-//
-    } catch (SQLException ex) {
-        throw new DataException("Unable to store images", ex);
+        try {
+            for (Image image : images) {
+                iImages.setInt(1, (int) image.getImageSize());
+                iImages.setString(2, image.getImageType());
+                iImages.setString(3, image.getFileName());
+                iImages.setInt(4, image.getDisco().getKey());
+                iImages.setInt(5, 1);
+                iImages.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to store images", ex);
         }
     }
 

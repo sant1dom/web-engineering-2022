@@ -100,11 +100,17 @@ $(document).ready(function () {
 
     const add_tracce = $('#add-tracce');
     const add_autori = $('#add-autori');
+    const add_immagini = $('#add-immagini');
+    const remove_immagini = $('#remove-immagini');
     let isTracceHidden = true;
     let isAutoriHidden = true;
+    let isImmaginiHidden = true;
+    let isImmaginiRemoveHidden = true;
 
     add_tracce.hide()
     add_autori.hide()
+    add_immagini.hide()
+    remove_immagini.hide()
 
     $('#add-tracce-btn').on('click', function () {
         if (isTracceHidden) {
@@ -125,4 +131,27 @@ $(document).ready(function () {
             isAutoriHidden = true;
         }
     })
+
+    $('#add-immagini-btn').on('click', function () {
+        if (isImmaginiHidden) {
+            add_immagini.show()
+            isImmaginiHidden = false;
+        } else {
+            add_immagini.hide()
+            isImmaginiHidden = true;
+        }
+    })
+
+    $('#remove-immagini-btn').on('click', function () {
+        if (isImmaginiRemoveHidden) {
+            remove_immagini.show()
+            isImmaginiRemoveHidden = false;
+        } else {
+            remove_immagini.hide()
+            isImmaginiRemoveHidden = true;
+        }
+    })
+
+    $('.carousel-indicators').children().first().addClass('active');
+    $('.carousel-inner').children().first().addClass('active');
 });
