@@ -53,7 +53,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addUtenteCondiviso = connection.prepareStatement("INSERT INTO collezione_condivisa_con (collezione_id, utente_id) VALUES (?, ?)");
-            idUtentiAttivi=connection.prepareStatement("SELECT utente_id, COUNT(*) AS occorrenza FROM collezione WHERE privacy = 'PUBBLICO' GROUP BY utente_id ORDER BY occorrenza DESC LIMIT 4");
+            idUtentiAttivi = connection.prepareStatement("SELECT utente_id, COUNT(*) AS occorrenza FROM collezione WHERE privacy = 'PUBBLICO' GROUP BY utente_id ORDER BY occorrenza DESC LIMIT 3");
             fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PUBBLICO' AND titolo LIKE CONCAT('%', ? , '%')");
             fCollezioniByTitoloPrivate = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PRIVATO' AND utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
             fCollezioniByTitoloCondivise = connection.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE privacy = 'CONDIVISO' AND ccc.utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
