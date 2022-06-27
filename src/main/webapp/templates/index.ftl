@@ -8,8 +8,6 @@
     <br>
     <a href="create-collezione" >Aggiungi una collezione</a>
 
-    <br>
-    <a href="show-collezioni" >Visualizza le tue collezioni</a>
 <#else>
     Accedi!
 </#if>

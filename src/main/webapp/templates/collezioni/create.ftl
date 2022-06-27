@@ -30,9 +30,8 @@
 
     <div class="form-group col-7">
         <label for="privacy">Privacy</label>
-        <select id="privacy" name="privacy" class="selectpicker" required>
-            <option selected="" value="">Scegli un'opzione</option>
-            <option value="PRIVATA">PRIVATA</option>
+        <select id="privacy" name="privacy" class="selectpicker">
+            <option selected="" value="PRIVATA">PRIVATA</option>
             <option value="PUBBLICA">PUBBLICA</option>
             <option value="CONDIVISA">CONDIVISA</option>
         </select>

@@ -102,10 +102,10 @@
                                     <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
                                         <td>${collezione.getPrivacy()?lower_case?cap_first}</td>
                                         <td class="table-actions">
-                                            <a href="delete-collezione?id=${collezione.getKey()}"
-                                               class="btn btn-danger"><i class="lni lni-trash-can"></i></a>
                                             <a href="show?id=${collezione.getKey()}"
                                                class="btn btn-success">visualizza</a>
+                                            <a href="delete-collezione?id=${collezione.getKey()}"
+                                            class="btn btn-danger"><i class="lni lni-trash-can"></i></a>
                                         </td>
                                     </#if>
                                 </tr>
