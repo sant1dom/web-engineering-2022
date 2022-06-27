@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
 <#-- @ftlvariable name="dischi" type="org.webeng.collector_site.data.model.Disco[]" -->
 <#-- @ftlvariable name="tracce" type="org.webeng.collector_site.data.model.Traccia[]" -->
+<#-- @ftlvariable name="utenti" type="org.webeng.collector_site.data.model.Utente[]" -->
 
 <#include "outlines/outline_header.ftl">
 
@@ -38,6 +39,66 @@
             </div>
         </div>
     </#if>
+
+    <#if (utenti?? && utenti?size>0)>
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                    UTENTI PIU' ATTIVI
+                </h3>
+            </div>
+            <div class="card-body"
+                 style="padding: 2rem; width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between">
+                <#list utenti as user>
+                    <div class="flex justify-between"
+                         style="height: 100%; width: 100%; margin: 2rem ; border: 1px solid grey">
+
+                        <div class="table-container" id="collezioni-container" STYLE="width: 50%">
+                            <div class="title flex justify-between align-items-center">
+                                COLLEZIONI
+                            </div>
+                            <div class="table-scrollable" style="margin-bottom: 0;">
+                                <#if (user.getCollezioni()?? && user.getCollezioni()?size > 0)>
+                                    <table class="table table-borderless table-striped">
+                                        <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">Titolo</th>
+                                            <th scope="col">Data creazione</th>
+                                            <th scope="col">Proprietario</th>
+                                            <th scope="col">Privacy</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="table-tbody-collezioni">
+                                        <#list user.getCollezioni() as collezione>
+                                            <tr>
+                                                <td><a class="link"
+                                                       href="show-collezione?id=${collezione.key}">${collezione.titolo}</a>
+                                                </td>
+                                                <td>${collezione.dataCreazione?date("yyyy-MM-dd")?string("dd-MM-yyyy")}</td>
+                                                <td><a class="link"
+                                                       href="profilo?id=${collezione.getUtente().getKey()}">${collezione.getUtente().getUsername()}</a>
+                                                </td>
+                                                <td>${collezione.getPrivacy()}</td>
+                                            </tr>
+                                        </#list>
+                                        </tbody>
+                                    </table>
+                                <#else>
+                                    <div class="table-empty">Non ci sono collezioni.</div>
+                                </#if>
+                            </div>
+                        </div>
+                        <div class="" style="width: 50%; padding: 2rem">
+                            ${user.getUsername()}
+                        </div>
+
+                    </div>
+                </#list>
+            </div>
+        </div>
+    </#if>
+
+
     <#if (tracce?? && tracce?size>0)>
     <div class="table-container" id="tracce-container">
         <div class="title flex justify-between align-items-center">
@@ -83,5 +144,4 @@
         </div>
         </#if>
     </div>
-
 </div>

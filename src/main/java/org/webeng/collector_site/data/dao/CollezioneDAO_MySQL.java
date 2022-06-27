@@ -29,7 +29,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement fCollezioniByTitolo;
     private PreparedStatement fCollezioniByTitoloPrivate;
     private PreparedStatement fCollezioniByTitoloCondivise;
-    private PreparedStatement  sCollezioniByUtentePubbliche;
+    private PreparedStatement sCollezioniByUtentePubbliche;
     private PreparedStatement idUtentiAttivi;
 
     public CollezioneDAO_MySQL(DataLayer d) {
@@ -418,7 +418,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             throw new DataException("Unable to delete collezione", ex);
         }
     }
-    public List<Integer> getUtentiAttivi() throws DataException{
+
+    public List<Integer> getUtentiAttivi() throws DataException {
         List<Integer> id_utenti = new ArrayList<>();
         try {
             try (ResultSet rs = idUtentiAttivi.executeQuery()) {
@@ -431,6 +432,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
         }
         return id_utenti;
     }
+
     @Override
     public List<Collezione> getCollezioniPubbliche(Utente utente) throws DataException {
         List<Collezione> collezioni = new ArrayList<>();
