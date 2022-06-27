@@ -52,4 +52,5 @@ public interface DiscoDAO {
     void deleteDiscoAutore(Disco disco, Autore autore) throws DataException;
 
     void addDiscoAutore(Disco disco, List<Autore> autore) throws DataException;
+    List<Disco> getDischiPopolari() throws DataException;
 }

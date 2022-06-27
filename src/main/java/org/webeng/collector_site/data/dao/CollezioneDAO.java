@@ -28,6 +28,9 @@ public interface CollezioneDAO {
     List<Collezione> getCollezioni(Utente utente) throws DataException;
 
      List<Collezione> getCollezioniCondivise(Utente utente) throws DataException;
+     List<Integer> getUtentiAttivi() throws DataException;
+
+     List<Collezione> getCollezioniPubbliche(Utente utente) throws DataException;
 
     void deleteCollezione(Collezione collezione) throws DataException;
 }

@@ -4,6 +4,7 @@ import org.webeng.collector_site.data.model.*;
 import org.webeng.collector_site.data.proxy.DiscoProxy;
 import org.webeng.framework.data.*;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     private PreparedStatement fDischiByKeyword;
     private PreparedStatement dTracciaDisco;
     private PreparedStatement dAutoreDisco;
+    private PreparedStatement dischiPopolari;
 
 
     public DiscoDAO_MySQL(DataLayer d) {
@@ -67,6 +69,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             dTracciaDisco= connection.prepareStatement("DELETE FROM disco_traccia WHERE disco_id = ? AND traccia_id = ?");
             dAutoreDisco= connection.prepareStatement("DELETE FROM disco_autore WHERE disco_id = ? AND autore_id = ?");
             fDischiByKeyword = connection.prepareStatement("SELECT id FROM disco WHERE padre IS NULL AND (titolo LIKE CONCAT('%', ?, '%') OR barcode LIKE CONCAT('%', ?, '%') OR anno LIKE CONCAT('%', ?, '%') OR genere LIKE CONCAT('%', ?, '%') OR etichetta LIKE CONCAT('%', ?, '%')) LIMIT 4");
+            dischiPopolari = connection.prepareStatement("SELECT padre, COUNT(*) AS occorrenza FROM disco WHERE padre IS NOT NULL GROUP BY padre ORDER BY occorrenza DESC LIMIT 4");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer", ex);
         }
@@ -96,6 +99,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             dTracciaDisco.close();
             dAutoreDisco.close();
             fDischiByKeyword.close();
+            dischiPopolari.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing disks data layer", ex);
         }
@@ -500,5 +504,19 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
         } catch (SQLException ex) {
             throw new DataException("Error setting disk in collection", ex);
         }
+    }
+    @Override
+    public List<Disco> getDischiPopolari() throws DataException {
+        List<Disco> dischi = new ArrayList<>();
+        try {
+            try (ResultSet rs = dischiPopolari.executeQuery()) {
+                while (rs.next()) {
+                    dischi.add(getDisco(rs.getInt("padre")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting disks", ex);
+        }
+        return dischi;
     }
 }

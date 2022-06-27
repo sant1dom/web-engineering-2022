@@ -29,6 +29,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement fCollezioniByTitolo;
     private PreparedStatement fCollezioniByTitoloPrivate;
     private PreparedStatement fCollezioniByTitoloCondivise;
+    private PreparedStatement  sCollezioniByUtentePubbliche;
+    private PreparedStatement idUtentiAttivi;
 
     public CollezioneDAO_MySQL(DataLayer d) {
         super(d);
@@ -44,13 +46,14 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             sCollezioneByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE titolo = ?");
             sCollezioniByDisco = connection.prepareStatement("SELECT collezione.id FROM collezione JOIN collezione_disco dhc ON collezione.id = dhc.collezione_id JOIN disco d ON d.id = dhc.disco_id WHERE d.id = ?");
             sCollezioniByUtente = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ?");
+            sCollezioniByUtentePubbliche = connection.prepareStatement("SELECT collezione.id FROM collezione WHERE utente_id = ? AND privacy = 'PUBBLICO'");
             sCollezioniCondiviseByUtente = connection.prepareStatement("SELECT c.id FROM collezione c  JOIN collezione_condivisa_con ccc on c.id = ccc.collezione_id JOIN utente u on u.id = ccc.utente_id WHERE u.id = ?");
             iCollezione = connection.prepareStatement("INSERT INTO collezione (titolo, privacy, data_creazione,version, utente_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCollezione = connection.prepareStatement("UPDATE collezione SET titolo = ?, privacy = ?, version = ? WHERE id = ? AND version = ?");
             dCollezione = connection.prepareStatement("DELETE FROM collezione WHERE id = ?");
             addDiscoCollezione = connection.prepareStatement("INSERT INTO collezione_disco (collezione_id, disco_id) VALUES (?, ?)");
             addUtenteCondiviso = connection.prepareStatement("INSERT INTO collezione_condivisa_con (collezione_id, utente_id) VALUES (?, ?)");
-
+            idUtentiAttivi=connection.prepareStatement("SELECT utente_id, COUNT(*) AS occorrenza FROM collezione WHERE privacy = 'PUBBLICO' GROUP BY utente_id ORDER BY occorrenza DESC LIMIT 4");
             fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PUBBLICO' AND titolo LIKE CONCAT('%', ? , '%')");
             fCollezioniByTitoloPrivate = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PRIVATO' AND utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
             fCollezioniByTitoloCondivise = connection.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE privacy = 'CONDIVISO' AND ccc.utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
@@ -76,6 +79,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             fCollezioniByTitolo.close();
             fCollezioniByTitoloPrivate.close();
             fCollezioniByTitoloCondivise.close();
+            idUtentiAttivi.close();
+            sCollezioniByUtentePubbliche.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying collections data layer", ex);
         }
@@ -413,5 +418,34 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             throw new DataException("Unable to delete collezione", ex);
         }
     }
+    public List<Integer> getUtentiAttivi() throws DataException{
+        List<Integer> id_utenti = new ArrayList<>();
+        try {
+            try (ResultSet rs = idUtentiAttivi.executeQuery()) {
+                while (rs.next()) {
+                    id_utenti.add(rs.getInt("utente_id"));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting id utenti", ex);
+        }
+        return id_utenti;
+    }
+    @Override
+    public List<Collezione> getCollezioniPubbliche(Utente utente) throws DataException {
+        List<Collezione> collezioni = new ArrayList<>();
+        try {
+            sCollezioniByUtentePubbliche.setInt(1, utente.getKey());
+            try (ResultSet rs = sCollezioniByUtentePubbliche.executeQuery()) {
+                while (rs.next()) {
+                    collezioni.add(getCollezione(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to load collections by utente", ex);
+        }
+        return collezioni;
+    }
+
 }
 

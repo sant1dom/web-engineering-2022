@@ -41,4 +41,5 @@ public interface TracciaDAO {
     void addTraccia(Autore autore, Traccia traccia) throws DataException;
 
     List<Traccia> tracciaNonInDisco(Disco disco)throws DataException;
+    List<Traccia> getTraccePopolari() throws DataException;
 }

@@ -27,6 +27,8 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     private PreparedStatement addTracciaDisco;
     private PreparedStatement sTracceNonInDisco;
     private PreparedStatement fTracceByTitle;
+    private PreparedStatement traccePopolari;
+
     public TracciaDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -48,10 +50,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             dTraccia = connection.prepareStatement("DELETE FROM traccia WHERE id = ? AND version = ?");
             addTracciaAutore = connection.prepareStatement("INSERT INTO traccia_autore (traccia_id, autore_id) VALUES (?,?)");
             addTracciaDisco = connection.prepareStatement("INSERT INTO disco_traccia (disco_id, traccia_id) VALUES (?, ?)");
-            sTracceNonInDisco= connection.prepareStatement("SELECT t.id FROM traccia t WHERE t.id NOT IN (SELECT traccia_id FROM disco_traccia WHERE disco_id = ?)");
+            sTracceNonInDisco = connection.prepareStatement("SELECT t.id FROM traccia t WHERE t.id NOT IN (SELECT traccia_id FROM disco_traccia WHERE disco_id = ?)");
+            traccePopolari = connection.prepareStatement("SELECT padre, COUNT(*) AS occorrenza FROM traccia WHERE padre IS NOT NULL GROUP BY padre ORDER BY occorrenza DESC LIMIT 4");
             fTracceByTitle = connection.prepareStatement("SELECT * FROM traccia WHERE titolo LIKE CONCAT('%', ?, '%')");
         } catch (SQLException ex) {
-            throw new DataException("Error initializing tracks data layer",ex);
+            throw new DataException("Error initializing tracks data layer", ex);
         }
     }
 
@@ -73,13 +76,14 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             addTracciaDisco.close();
             sTracceNonInDisco.close();
             fTracceByTitle.close();
+            traccePopolari.close();
         } catch (SQLException ex) {
-            throw new DataException("Error closing tracks data layer",ex);
+            throw new DataException("Error closing tracks data layer", ex);
         }
     }
 
     @Override
-    public Traccia createTraccia(){
+    public Traccia createTraccia() {
         return new TracciaProxy(getDataLayer());
     }
 
@@ -95,9 +99,10 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             t.setPadre(getTraccia(rs.getInt("padre")));
             return t;
         } catch (SQLException ex) {
-            throw new DataException("Error creating track",ex);
+            throw new DataException("Error creating track", ex);
         }
     }
+
     @Override
     public Traccia getTraccia(int traccia_key) throws DataException {
         Traccia t = null;
@@ -107,12 +112,12 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             try {
                 sTracciaByID.setInt(1, traccia_key);
                 ResultSet rs = sTracciaByID.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     t = createTraccia(rs);
                     dataLayer.getCache().add(Traccia.class, t);
                 }
             } catch (SQLException ex) {
-                throw new DataException("Error getting track by id",ex);
+                throw new DataException("Error getting track by id", ex);
             }
         }
         return t;
@@ -124,12 +129,12 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         try {
             sTracciaByISWC.setString(1, iswc);
             ResultSet rs = sTracciaByISWC.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 t = createTraccia(rs);
                 dataLayer.getCache().add(Traccia.class, t);
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting track by id",ex);
+            throw new DataException("Error getting track by id", ex);
         }
         return t;
     }
@@ -243,11 +248,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         List<Traccia> tracce = new ArrayList<>();
         try {
             ResultSet rs = sTracce.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 tracce.add(getTraccia(rs.getInt("id")));
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting tracks",ex);
+            throw new DataException("Error getting tracks", ex);
         }
         return tracce;
     }
@@ -276,11 +281,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         try {
             sTracceByDisco.setInt(1, disco.getKey());
             ResultSet rs = sTracceByDisco.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 tracce.add(getTraccia(rs.getInt("id")));
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting tracks by disk",ex);
+            throw new DataException("Error getting tracks by disk", ex);
         }
         return tracce;
     }
@@ -291,11 +296,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         try {
             sTracceByAutore.setInt(1, autore.getKey());
             ResultSet rs = sTracce.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 tracce.add(getTraccia(rs.getInt("id")));
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting tracks by author",ex);
+            throw new DataException("Error getting tracks by author", ex);
         }
         return tracce;
     }
@@ -305,11 +310,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         List<Traccia> tracce = new ArrayList<>();
         try {
             ResultSet rs = sTraccePadri.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 tracce.add(getTraccia(rs.getInt("id")));
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting parents tracks",ex);
+            throw new DataException("Error getting parents tracks", ex);
         }
         return tracce;
     }
@@ -320,11 +325,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         try {
             sFigliTraccia.setInt(1, traccia.getKey());
             ResultSet rs = sFigliTraccia.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 figli.add(getTraccia(rs.getInt("id")));
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting track's children",ex);
+            throw new DataException("Error getting track's children", ex);
         }
         return figli;
     }
@@ -335,11 +340,11 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         try {
             sPadreTraccia.setInt(1, traccia.getKey());
             ResultSet rs = sPadreTraccia.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 padre = getTraccia(rs.getInt("id"));
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting track's parent",ex);
+            throw new DataException("Error getting track's parent", ex);
         }
         return padre;
     }
@@ -383,10 +388,10 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
     @Override
     public List<Traccia> tracciaNonInDisco(Disco disco) throws DataException {
         List<Traccia> tracce = new ArrayList<>();
-        try{
-            sTracceNonInDisco.setInt(1,disco.getKey());
+        try {
+            sTracceNonInDisco.setInt(1, disco.getKey());
             ResultSet rs = sTracceNonInDisco.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 tracce.add(getTraccia(rs.getInt("id")));
             }
         } catch (SQLException e) {
@@ -395,5 +400,18 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         return tracce;
     }
 
-
+    @Override
+    public List<Traccia> getTraccePopolari() throws DataException {
+        List<Traccia> tracce = new ArrayList<>();
+        try {
+            try (ResultSet rs = traccePopolari.executeQuery()) {
+                while (rs.next()) {
+                    tracce.add(getTraccia(rs.getInt("padre")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Error getting tracce", ex);
+        }
+        return tracce;
+    }
 }
