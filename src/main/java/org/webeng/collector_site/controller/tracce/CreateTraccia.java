@@ -76,6 +76,4 @@ public class CreateTraccia extends CollectorsBaseController {
             handleError(e, request, response);
         }
     }
-
-
 }

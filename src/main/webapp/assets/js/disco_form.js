@@ -191,6 +191,8 @@ $(document).ready(function () {
         }
     })
 
-    $('.carousel-indicators').children().first().addClass('active');
-    $('.carousel-inner').children().first().addClass('active');
+
+    $('[class^="carousel-indicators"]').children().first().addClass('active');
+    $('[class^="carousel-inner"]').children().first().addClass('active');
+    $('[id^="carousel"]').carousel();
 });
