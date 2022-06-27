@@ -63,7 +63,11 @@ public class DeleteDisco extends CollectorsBaseController {
             }
             dataLayer.getImageDAO().deleteImage(disco, image);
         }
-        
+        //prima di cancellare il disco lo rimuovo da tutte le collezioni in cui si trova
+        List<Collezione>collezioni= dataLayer.getCollezioneDAO().getCollezioni(disco);
+        for(Collezione collezione:collezioni){
+            dataLayer.getDiscoDAO().deleteDisco(collezione,disco);
+        }
         dataLayer.getDiscoDAO().deleteDisco(disco);
         Utente utente = Utility.getUtente(request, response);
         if (utente != null) {

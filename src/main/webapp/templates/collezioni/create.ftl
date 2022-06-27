@@ -36,7 +36,12 @@
             <option value="CONDIVISA">CONDIVISA</option>
         </select>
     </div>
+
     <div class="form-group" id="condivisione">
+        <div class="alert alert-info" >
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <b>AVVISO:</b> Manderemo una email a tutti gli utenti con cui vuoi condividere la collezione.
+        </div>
         <div style="display: flex; justify-content: space-between">
             <h4>Condividi con:</h4>
             <a id="aggiungi-utente"><i class="lni lni-circle-plus"></i></a>
@@ -44,6 +49,7 @@
         <input type="text" class="form-control" id="utente_1" name="utenti[]" placeholder="Username">
 
     </div>
+
 
     <div class="form-group col-3">
         <button type="submit" class="btn btn-primary">Salva</button>
@@ -61,6 +67,7 @@
         $('#privacy').on('change', function () {
             if ($(this).val() === 'CONDIVISA') {
                 $('#condivisione').show();
+
             } else {
                 $('#condivisione').hide();
             }
