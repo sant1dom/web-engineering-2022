@@ -35,7 +35,7 @@
                             </select>
                         <#else>
                             <p>
-                                Non ci sono dischi già presenti.
+                                Non ci sono dischi gia' presenti.
                             </p>
                         </#if>
                     </div>

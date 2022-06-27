@@ -40,7 +40,7 @@
     <div class="form-group" id="condivisione">
         <div class="alert alert-info" >
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <b>AVVISO:</b> Manderemo una email a tutti gli utenti con cui vuoi condividere la collezione.
+            <b>AVVISO:</b> Verra' mandata un'email a tutti gli utenti con cui vuoi condividere la collezione.
         </div>
         <div style="display: flex; justify-content: space-between">
             <h4>Condividi con:</h4>

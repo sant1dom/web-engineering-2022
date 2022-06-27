@@ -198,7 +198,7 @@
                                         <td class="table-actions">
                                             <a class="btn btn-danger"
                                                href="remove-condivisione?c=${collezione.getKey()}&u=${user.getKey()}">
-                                                <i class="lni lni-trash-can"></i></a>
+                                                rimuovi</a>
                                         </td>
                                     </tr>
                                 </#list>
