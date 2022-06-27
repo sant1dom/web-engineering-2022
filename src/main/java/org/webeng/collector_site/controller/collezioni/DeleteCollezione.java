@@ -49,6 +49,7 @@ public class DeleteCollezione extends CollectorsBaseController {
         Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
         List<Disco> dischi = dataLayer.getDiscoDAO().getDischi(collezione);
         List<Utente> utenti = dataLayer.getUtenteDAO().getUtentiCondivisi(collezione);
+        Utente user=Utility.getUtente(request, response);
 
         /* cancellazione di tutte tutte le associazioni
         tra un disco nella collezione e la collezione in questione
@@ -69,7 +70,7 @@ public class DeleteCollezione extends CollectorsBaseController {
             //cancellazione della collezione
             dataLayer.getCollezioneDAO().deleteCollezione(collezione);
 
-            response.sendRedirect("/show-collezione?id=" + collezione.getKey());
+            response.sendRedirect("/profilo?id=" + user.getKey());
         } else {
             response.sendRedirect("/home");
         }

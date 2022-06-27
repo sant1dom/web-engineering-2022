@@ -65,7 +65,7 @@ public class AddDischi extends CollectorsBaseController {
                     dataLayer.getCollezioneDAO().addDiscoCollezione(collezione, disco);
                 }
 
-                response.sendRedirect("/show-collezione?id=" + request.getParameter("id"));
+                response.sendRedirect("/show?id=" + request.getParameter("id"));
             } else {
                 throw new DataException("Nessun disco selezionato");
             }
