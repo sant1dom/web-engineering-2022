@@ -311,7 +311,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ShowCollezione</servlet-name>
-        <url-pattern>/show</url-pattern>
+        <url-pattern>/show-collezione</url-pattern>
     </servlet-mapping>
 
     <servlet>

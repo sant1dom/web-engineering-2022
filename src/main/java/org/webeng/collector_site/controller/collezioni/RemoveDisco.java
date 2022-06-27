@@ -54,7 +54,7 @@ public class RemoveDisco extends CollectorsBaseController {
         //eliminazione del disco in questione dalla collezione
         dataLayer.getDiscoDAO().deleteDisco(collezione, disco);
 
-        response.sendRedirect("/show?id=" + request.getParameter("c"));
+        response.sendRedirect("/show-collezione?id=" + request.getParameter("c"));
     }
 
     private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {

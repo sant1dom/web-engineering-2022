@@ -58,6 +58,7 @@ public class AddImmagini extends CollectorsBaseController {
 
             if (request.getParts() != null) {
                 List<Part> files_to_upload = request.getParts().stream().filter(p -> p.getContentType() != null).collect(Collectors.toList());
+
                 if (!files_to_upload.isEmpty()) {
                     Collection<File> files_uploaded = new ArrayList<>();
                     for (Part image : files_to_upload) {
@@ -73,6 +74,7 @@ public class AddImmagini extends CollectorsBaseController {
                         files_uploaded.add(uploaded_file);
                     }
 
+                    List<Image> images_to_add = new ArrayList<>();
                     Iterator<File> it = files_uploaded.iterator();
                     for (Part file_to_upload : files_to_upload) {
                         if (it.hasNext()) {
@@ -82,10 +84,10 @@ public class AddImmagini extends CollectorsBaseController {
                             immagine.setImageType(file_to_upload.getContentType());
                             immagine.setFileName(file_uploaded.getName());
                             immagine.setDisco(disco);
-                            disco.getImmagini().add(immagine);
+                            images_to_add.add(immagine);
                         }
                     }
-                    dataLayer.getImageDAO().storeImages(disco.getImmagini());
+                    dataLayer.getImageDAO().storeImages(images_to_add);
                 }
                 response.sendRedirect("/show-disco?id=" + id_disco);
             }

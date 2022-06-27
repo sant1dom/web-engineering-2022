@@ -101,7 +101,7 @@ public class EditCollezione extends CollectorsBaseController {
             if (!error) {
                 //chiamata metodo storeCollezione per aggiornare la collezione
                 dataLayer.getCollezioneDAO().storeCollezione(collezione);
-                response.sendRedirect("/show?id=" + collezione.getKey());
+                response.sendRedirect("/show-collezione?id=" + collezione.getKey());
             }
 
 

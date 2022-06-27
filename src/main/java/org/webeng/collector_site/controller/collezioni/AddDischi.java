@@ -3,24 +3,19 @@ package org.webeng.collector_site.controller.collezioni;
 import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
-import org.webeng.collector_site.data.model.Autore;
 import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
-import org.webeng.framework.result.TemplateManagerException;
-import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AddDischi extends CollectorsBaseController {
 
@@ -65,7 +60,7 @@ public class AddDischi extends CollectorsBaseController {
                     dataLayer.getCollezioneDAO().addDiscoCollezione(collezione, disco);
                 }
 
-                response.sendRedirect("/show?id=" + request.getParameter("id"));
+                response.sendRedirect("/show-collezione?id=" + request.getParameter("id"));
             } else {
                 throw new DataException("Nessun disco selezionato");
             }

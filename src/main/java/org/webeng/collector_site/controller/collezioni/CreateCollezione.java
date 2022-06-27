@@ -49,7 +49,7 @@ public class CreateCollezione extends CollectorsBaseController {
                     handleError(ex, request, response);
                 }
             }
-        } catch (TemplateManagerException | DataException ex ){
+        } catch (TemplateManagerException | DataException ex) {
             handleError(ex, request, response);
         }
     }
@@ -62,65 +62,61 @@ public class CreateCollezione extends CollectorsBaseController {
         result.activate("collezioni/create.ftl", request, response);
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute(REFERRER, request.getParameter(REFERRER));
         response.sendRedirect("/login");
     }
 
-    private void saveCollezione(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException ,DataException {
+    private void saveCollezione(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         String titolo = request.getParameter("titolo");
         String privacy = String.valueOf(request.getParameter("privacy"));
         Utente utente = Utility.getUtente(request, response);
         List<String> utenti_usernames = List.of(request.getParameterValues("utenti[]"));
         List<Utente> utenti = new ArrayList<>();
         List<Disco> dischi = new ArrayList<>();
+        CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
 
-        List<Collezione> collezioni = ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
-       Boolean exit=false;
-        for(Collezione c:collezioni) {
-            if(c.getTitolo().equalsIgnoreCase(titolo)) {
+        List<Collezione> collezioni = dataLayer.getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
+        Boolean exit = false;
+        for (Collezione c : collezioni) {
+            if (c.getTitolo().equalsIgnoreCase(titolo)) {
                 request.setAttribute("error", "Hai già una collezione con questo titolo!");
                 action_logged(request, response);
-                exit=true;
+                exit = true;
                 break;
             }
 
         }
-        if(!exit) {
+        if (!exit) {
             try {
-
-
                 for (String disco : request.getParameterValues("disco")) {
-                    dischi.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().getDisco(Integer.parseInt(disco)));
+                    dischi.add(dataLayer.getDiscoDAO().getDisco(Integer.parseInt(disco)));
                 }
 
                 for (String username : utenti_usernames) {
                     try {
-                        Utente user = ((CollectorsDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(username);
+                        Utente user = dataLayer.getUtenteDAO().getUtente(username);
                         utenti.add(user);
                     } catch (DataException ignored) {
                     }
                 }
 
-
                 LocalDate dataCreazione = LocalDate.now();
 
                 //creo una collezione passandogli tutti i parametri e faccio la store della collezione
                 Collezione collezione = new CollezioneImpl(titolo, privacy, utente, dataCreazione, dischi, utenti);
-                ((CollectorsDataLayer) request.getAttribute("datalayer")).getCollezioneDAO().storeCollezione(collezione);
+                dataLayer.getCollezioneDAO().storeCollezione(collezione);
 
                 //per ogni disco selezionato per la collezione aggiungo il disco alla collezione in questione
                 for (Disco disco : dischi) {
-                    ((CollectorsDataLayer) request.getAttribute("datalayer")).getDiscoDAO().addDisco(collezione, disco);
+                    dataLayer.getDiscoDAO().addDisco(collezione, disco);
                 }
 
-                response.sendRedirect("/profilo?id=" + utente.getKey());
+                response.sendRedirect("/show-collezione?id=" + collezione.getKey());
             } catch (Exception e) {
                 handleError(e, request, response);
             }
         }
     }
-
-
 
 }
