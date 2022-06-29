@@ -99,7 +99,7 @@
                         <#list tracce as traccia>
                             <tr>
                                 <td>${traccia.getISWC()}</td>
-                                <td>>${traccia.getTitolo()}</td>
+                                <td>${traccia.getTitolo()}</td>
                                 <td>${traccia.getDurata()}</td>
                             </tr>
                         </#list>

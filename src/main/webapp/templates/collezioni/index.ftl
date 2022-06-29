@@ -1,4 +1,3 @@
-
 <#-- @ftlvariable name="collezioni" type="org.webeng.collector_site.data.model.Collezione[]" -->
 <#-- @ftlvariable name="keyword" type="String" -->
 

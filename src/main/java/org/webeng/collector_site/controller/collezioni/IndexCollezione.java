@@ -13,6 +13,7 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,19 +42,22 @@ public class IndexCollezione extends CollectorsBaseController {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
             CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
-
-            List<Collezione> collezioni_utente = dataLayer.getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
-            List<Collezione> collezioni_condivise = dataLayer.getCollezioneDAO().getCollezioniCondivise(Utility.getUtente(request, response));
+            Utente utente = Utility.getUtente(request, response);
+            List<Collezione> collezioni_utente = new ArrayList<>();
+            List<Collezione> collezioni_condivise = new ArrayList<>();
             List<Collezione> collezioni_pubbliche = dataLayer.getCollezioneDAO().getCollezioni();
+
+            if (utente != null) {
+                collezioni_utente = dataLayer.getCollezioneDAO().getCollezioni(utente);
+                collezioni_condivise = dataLayer.getCollezioneDAO().getCollezioniCondivise(utente);
+            }
+
             Set<Collezione> collezioni = new HashSet<>();
 
             if (request.getParameter("keyword") != null && !request.getParameter("keyword").isBlank()) {
-
-                if (Utility.getUtente(request, response) != null) {
-                    System.out.println("Cerco collezioni utente loggato keyword");
-                    collezioni.addAll(dataLayer.getCollezioneDAO().getCollezioniByKeywordLogged(request.getParameter("keyword"), Utility.getUtente(request, response)));
+                if (utente != null) {
+                    collezioni.addAll(dataLayer.getCollezioneDAO().getCollezioniByKeywordLogged(request.getParameter("keyword"), utente));
                 } else {
-                    System.out.println("Cerco collezioni utente NON loggato keyword");
                     collezioni.addAll(dataLayer.getCollezioneDAO().getCollezioniByKeyword(request.getParameter("keyword")));
                 }
             } else {

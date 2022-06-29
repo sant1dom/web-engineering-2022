@@ -71,7 +71,7 @@ public class CreateTraccia extends CollectorsBaseController {
 
             System.out.println();
 
-            if (request.getParameter("padre") != null && !request.getParameter("padre").isBlank()) {
+            if (!(request.getParameter("padre").equals("")) && !request.getParameter("padre").isBlank()) {
                 padre = dataLayer.getTracciaDAO().getTraccia(Integer.parseInt(request.getParameter("padre")));
             }
 

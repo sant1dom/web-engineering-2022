@@ -237,7 +237,7 @@
                         </tbody>
                     </table>
                     <#else>
-                        <div class="table-empty">Non ci sono dischi.</div>
+                        <div class="table-empty">Non ci sono tracce.</div>
                     </#if>
                 </div>
 
