@@ -341,7 +341,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
             sPadreTraccia.setInt(1, traccia.getKey());
             ResultSet rs = sPadreTraccia.executeQuery();
             if (rs.next()) {
-                padre = getTraccia(rs.getInt("id"));
+                padre = getTraccia(rs.getInt("padre"));
             }
         } catch (SQLException ex) {
             throw new DataException("Error getting track's parent", ex);

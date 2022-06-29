@@ -41,8 +41,7 @@
                             <select id="padre" name="padre" class="selectpicker" data-live-search="true">
                                 <option selected value="">Scegli una traccia</option>
                                 <#list tracce as traccia>
-                                    <option value="${traccia.key}">${traccia.titolo} | ${traccia.durata} | ${traccia.ISWC}
-                                    </option>
+                                    <option value="${traccia.key}">${traccia.titolo} | ${traccia.durata} | ${traccia.ISWC}</option>
                                 </#list>
                             </select>
                         <#else>

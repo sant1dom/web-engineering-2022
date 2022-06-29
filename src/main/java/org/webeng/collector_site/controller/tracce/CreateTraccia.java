@@ -62,15 +62,30 @@ public class CreateTraccia extends CollectorsBaseController {
 
     private void saveTraccia(HttpServletRequest request, HttpServletResponse response) {
         try {
+            CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
             String titolo = request.getParameter("titolo");
             int durata = Integer.parseInt(request.getParameter("durata"));
             String iswc = request.getParameter("iswc");
             List<Autore> autori = new ArrayList<>();
-            for (String autore : request.getParameterValues("autore")) {
-                autori.add(((CollectorsDataLayer) request.getAttribute("datalayer")).getAutoreDAO().getAutore(Integer.parseInt(autore)));
+            Traccia padre = null;
+
+            System.out.println();
+
+            if (request.getParameter("padre") != null && !request.getParameter("padre").isBlank()) {
+                padre = dataLayer.getTracciaDAO().getTraccia(Integer.parseInt(request.getParameter("padre")));
             }
-            Traccia padre = ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().getTraccia(Integer.parseInt(request.getParameter("padre")));
-            ((CollectorsDataLayer) request.getAttribute("datalayer")).getTracciaDAO().storeTraccia(new TracciaImpl(titolo, durata, iswc, autori, padre));
+
+            if (request.getParameterValues("autore") != null && request.getParameterValues("autore").length > 0) {
+                for (String autore : request.getParameterValues("autore")) {
+                    autori.add(dataLayer.getAutoreDAO().getAutore(Integer.parseInt(autore)));
+                }
+            } else {
+                autori= dataLayer.getAutoreDAO().getAutori(padre);
+
+            }
+
+
+            dataLayer.getTracciaDAO().storeTraccia(new TracciaImpl(titolo, durata, iswc, autori, padre));
             response.sendRedirect("/index-traccia");
         } catch (Exception e) {
             handleError(e, request, response);
