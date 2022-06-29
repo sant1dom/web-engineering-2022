@@ -114,6 +114,7 @@ a:hover.bt-navbar-registrati{
     .navbar {
         padding-top: 0.8rem;
         padding-bottom: 0.8rem;
+        height: 5rem;
     }
 
     .navbar-toggler {

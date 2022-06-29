@@ -2,7 +2,8 @@
 <#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index: 100; position: sticky; top: 0">
-    <a class="navbar-brand" href="home">Collector Site</a>
+
+    <a class="navbar-brand" href="home"> <img src="/assets/images/vinile.png" alt="logo" style="width: 3rem; height: auto; margin-right: 1rem">Collector Site</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

@@ -113,6 +113,7 @@
                                 <label for="user_share">Inserire Username utente:</label>
                                 <input type="text" class="form-control" id="user_share"
                                        name="user_share" required>
+                                <input type="hidden" value="CONDIVISA" name="privacy">
                                 <div class="flex justify-center mt-3" style="width: 100%;">
                                     <button type="submit" class="btn btn-warning">Condividi</button>
                                 </div>
@@ -213,42 +214,3 @@
         </div>
     </div>
 </div>
-<script>
-    let id = 1;
-    $(window).on('load', function () {
-        $('.selectpicker').selectpicker();
-
-
-        $('#privacy').on('change', function () {
-            if ($(this).val() === 'CONDIVISA') {
-                $('#condivisione').show();
-            } else {
-                $('#condivisione').hide();
-            }
-        });
-
-    });
-    $('#aggiungi-utente').on('click', function () {
-        $('#condivisione').append(
-            '<input type="text" class="form-control" id="utente_' + ++id + '" name="utenti[]" placeholder="Username">').append($('<a>',
-            {
-                id: 'rimuovi-utente_' + id,
-                onclick: "rimuovi('" + id + "')",
-            }
-        ).html('<i class="lni lni-circle-minus"></i>'));
-
-
-    });
-
-    function rimuovi(id_u) {
-        $('#utente_' + id_u).remove();
-        $('#rimuovi-utente_' + id_u).remove();
-        id--;
-    }
-</script>
-
-<style>
-    #condivisione {
-        display: none;
-    }
-</style>

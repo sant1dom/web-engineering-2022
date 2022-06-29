@@ -77,7 +77,7 @@ public class CreateCollezione extends CollectorsBaseController {
         CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
 
         List<Collezione> collezioni = dataLayer.getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
-        Boolean exit = false;
+        boolean exit = false;
         for (Collezione c : collezioni) {
             if (c.getTitolo().equalsIgnoreCase(titolo)) {
                 request.setAttribute("error", "Hai già una collezione con questo titolo!");
@@ -93,11 +93,10 @@ public class CreateCollezione extends CollectorsBaseController {
                     dischi.add(dataLayer.getDiscoDAO().getDisco(Integer.parseInt(disco)));
                 }
 
-                for (String username : utenti_usernames) {
-                    try {
+                if (privacy.equals("CONDIVISA")) {
+                    for (String username : utenti_usernames) {
                         Utente user = dataLayer.getUtenteDAO().getUtente(username);
                         utenti.add(user);
-                    } catch (DataException ignored) {
                     }
                 }
 
@@ -113,8 +112,8 @@ public class CreateCollezione extends CollectorsBaseController {
                 }
 
                 response.sendRedirect("/show-collezione?id=" + collezione.getKey());
-            } catch (Exception e) {
-                handleError(e, request, response);
+            } catch (DataException | IOException ex) {
+                handleError(ex, request, response);
             }
         }
     }
