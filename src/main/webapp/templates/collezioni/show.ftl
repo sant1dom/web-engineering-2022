@@ -37,7 +37,7 @@
         </div>
     </#if>
     <#if error??>
-        <div class=text-red>
+        <div class="text-red" style="color: red; margin-left: 2rem">
             ${error!}
         </div>
     </#if>

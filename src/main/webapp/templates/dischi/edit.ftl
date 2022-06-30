@@ -77,7 +77,7 @@
                                 data-live-search="true" required>
                             <option value="">Scegli uno stato di conservazione</option>
                             <#list statoConservazione as stato_conservazione>
-                                <#if (disco.getStatoConservazione() == stato_conservazione)>
+                                <#if (disco.getStatoConservazione()?? && disco.getStatoConservazione() == stato_conservazione)>
                                     <option selected value="${stato_conservazione}">${stato_conservazione}</option>
                                 <#else>
                                     <option value="${stato_conservazione}">${stato_conservazione}</option>

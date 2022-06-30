@@ -59,7 +59,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
             sDischiPadri = connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             sEtichette = connection.prepareStatement("SELECT DISTINCT etichetta FROM disco");
-            uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, stato_conservazione = ?, version = ?, padre=? WHERE id = ? AND version = ?");
+            uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, stato_conservazione = ?, version = ? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
             dDiscoCollezione = connection.prepareStatement("DELETE FROM collezione_disco WHERE collezione_id = ? AND disco_id = ?");

@@ -4,9 +4,11 @@ import org.webeng.collector_site.controller.CollectorsBaseController;
 import org.webeng.collector_site.controller.Utility;
 import org.webeng.collector_site.data.dao.CollectorsDataLayer;
 import org.webeng.collector_site.data.model.Collezione;
+import org.webeng.collector_site.data.model.Disco;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
+import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.ServletException;
@@ -23,25 +25,69 @@ public class EditCollezione extends CollectorsBaseController {
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        try {
-            HttpSession s = SecurityHelpers.checkSession(request);
-            String https_redirect_url = SecurityHelpers.checkHttps(request);
-            request.setAttribute("https-redirect", https_redirect_url);
-            if (s == null) {
-                action_anonymous(request, response);
-            } else {
-                if (request.getMethod().equals("POST")) {
-                    action_logged(request, response);
-                } else {
-                    response.sendRedirect("/index-collezione");
+
+        if (request.getMethod().equals("POST")) {
+            try {
+                //Ottengo l'utente loggato
+                Utente utente = Utility.getUtente(request, response);
+                if (utente != null) {
+                    request.setAttribute("utente", utente);
                 }
+                updateCollezione(request, response);
+            } catch (DataException e) {
+                throw new RuntimeException(e);
             }
-        } catch (TemplateManagerException | DataException | IOException ex) {
-            handleError(ex, request, response);
+        } else {
+            try {
+                HttpSession s = SecurityHelpers.checkSession(request);
+                String https_redirect_url = SecurityHelpers.checkHttps(request);
+                request.setAttribute("https-redirect", https_redirect_url);
+                if (s == null) {
+                    action_anonymous(request, response);
+                } else {
+                    //Ottengo l'utente loggato
+                    Utente utente = Utility.getUtente(request, response);
+                    if (utente != null) {
+                        request.setAttribute("utente", utente);
+                    }
+                    action_logged(request, response);
+                }
+            } catch (TemplateManagerException | DataException | IOException ex) {
+                handleError(ex, request, response);
+            }
         }
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        TemplateResult result = new TemplateResult(getServletContext());
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        CollectorsDataLayer dataLayer = ((CollectorsDataLayer) request.getAttribute("datalayer"));
+
+        Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
+        Utente proprietario = collezione.getUtente();
+        List<Disco> dischi = collezione.getDischi();
+        List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
+        List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi());
+
+        dischiAdd.removeAll(dischi);
+
+        //Ogni collezione ha una lista di dischi e il suo proprietario.
+        request.setAttribute("collezione", collezione);
+        request.setAttribute("dischi", dischi);
+        request.setAttribute("proprietario", proprietario);
+        request.setAttribute("utenti_condivisi", utenti_condivisi);
+        request.setAttribute("dischiAdd", dischiAdd);
+
+        result.activate("/collezioni/show.ftl", request, response);
+
+    }
+
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        response.sendRedirect("/login");
+    }
+
+    private void updateCollezione(HttpServletRequest request, HttpServletResponse response) {
         try {
             CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
             Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
@@ -53,7 +99,6 @@ public class EditCollezione extends CollectorsBaseController {
                     }
                 }
             }
-            boolean error = false;
 
             if (request.getParameterValues("user_share") != null) {
 
@@ -63,38 +108,34 @@ public class EditCollezione extends CollectorsBaseController {
                 collezione.setUtentiCondivisi(utenti);
 
             } else {
+                boolean error = false;
                 String titolo = request.getParameter("titolo");
                 String privacy = String.valueOf(request.getParameter("privacy"));
                 List<Collezione> collezioni = dataLayer.getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
                 /*chiamata dei metodi setTitolo,setPrivacy
                 e setUtentiCondivisi sui valori di titolo
                 e privacy inseriti dall'utente */
-                collezione.setTitolo(titolo);
-                collezione.setPrivacy(privacy);
+
 
                 if (!titolo.equalsIgnoreCase(collezione.getTitolo())) {
                     for (Collezione c : collezioni) {
-                        if (c.getTitolo().equalsIgnoreCase(titolo)) {
+                        if (c.getTitolo().equalsIgnoreCase(titolo) && !c.getKey().equals(collezione.getKey())) {
                             request.setAttribute("error", "Hai già una collezione con questo titolo!");
-                            action_logged(request, response);
                             error = true;
                             break;
                         }
                     }
                 }
+                if (!error) {
+                    //chiamata metodo storeCollezione per aggiornare la collezione
+                    collezione.setTitolo(titolo);
+                    collezione.setPrivacy(privacy);
+                    dataLayer.getCollezioneDAO().storeCollezione(collezione);
+                }
             }
-            if (!error) {
-                //chiamata metodo storeCollezione per aggiornare la collezione
-                dataLayer.getCollezioneDAO().storeCollezione(collezione);
-                response.sendRedirect("/show-collezione?id=" + collezione.getKey());
-            }
-        } catch (DataException | IOException | TemplateManagerException ex) {
+            action_logged(request, response);
+        } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
-    }
-
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        response.sendRedirect("/login");
     }
 }
