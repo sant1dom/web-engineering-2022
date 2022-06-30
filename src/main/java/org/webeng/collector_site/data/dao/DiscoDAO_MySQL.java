@@ -35,7 +35,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
     private PreparedStatement dTracciaDisco;
     private PreparedStatement dAutoreDisco;
     private PreparedStatement dischiPopolari;
-
+    private PreparedStatement uDiscoPadre;
 
     public DiscoDAO_MySQL(DataLayer d) {
         super(d);
@@ -59,7 +59,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             sPadreDisco = connection.prepareStatement("SELECT d.padre FROM disco d WHERE id = ?");
             sDischiPadri = connection.prepareStatement("SELECT id FROM disco WHERE disco.padre IS NULL");
             sEtichette = connection.prepareStatement("SELECT DISTINCT etichetta FROM disco");
-            uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, stato_conservazione = ?, version = ? WHERE id = ? AND version = ?");
+            uDisco = connection.prepareStatement("UPDATE disco SET titolo = ?, barcode = ?, anno = ?, genere = ?, etichetta = ?, formato = ?, stato_conservazione = ?, version = ?, padre=? WHERE id = ? AND version = ?");
             iDisco = connection.prepareStatement("INSERT INTO disco (titolo, barcode, anno, genere, etichetta, formato, data_inserimento, utente_id, stato_conservazione, padre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             dDisco = connection.prepareStatement("DELETE FROM disco WHERE id = ?");
             dDiscoCollezione = connection.prepareStatement("DELETE FROM collezione_disco WHERE collezione_id = ? AND disco_id = ?");
@@ -70,6 +70,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             dAutoreDisco= connection.prepareStatement("DELETE FROM disco_autore WHERE disco_id = ? AND autore_id = ?");
             fDischiByKeyword = connection.prepareStatement("SELECT id FROM disco WHERE padre IS NULL AND (titolo LIKE CONCAT('%', ?, '%') OR barcode LIKE CONCAT('%', ?, '%') OR anno LIKE CONCAT('%', ?, '%') OR genere LIKE CONCAT('%', ?, '%') OR etichetta LIKE CONCAT('%', ?, '%')) LIMIT 4");
             dischiPopolari = connection.prepareStatement("SELECT padre, COUNT(*) AS occorrenza FROM disco WHERE padre IS NOT NULL GROUP BY padre ORDER BY occorrenza DESC LIMIT 4");
+            uDiscoPadre= connection.prepareStatement("UPDATE disco SET padre = ? WHERE id = ?");
         } catch (SQLException ex) {
             throw new DataException("Error initializing tracks data layer", ex);
         }
@@ -100,6 +101,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             dAutoreDisco.close();
             fDischiByKeyword.close();
             dischiPopolari.close();
+            uDiscoPadre.close();
         } catch (SQLException ex) {
             throw new DataException("Error closing disks data layer", ex);
         }
@@ -186,6 +188,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 uDisco.setString(4, disco.getGenere().toString());
                 uDisco.setString(5, disco.getEtichetta());
                 uDisco.setString(6, disco.getFormato().toString());
+
                 if (disco.getStatoConservazione() != null) {
                     uDisco.setString(7, disco.getStatoConservazione().toString());
                 } else {
@@ -197,6 +200,8 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 uDisco.setLong(8, next_version);
                 uDisco.setInt(9, disco.getKey());
                 uDisco.setLong(10, current_version);
+
+
 
                 if (uDisco.executeUpdate() == 0) {
                     throw new OptimisticLockException(disco);
@@ -212,6 +217,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 iDisco.setString(6, disco.getFormato().toString());
                 iDisco.setDate(7, Date.valueOf(disco.getDataInserimento()));
                 iDisco.setInt(8, disco.getUtente().getKey());
+
                 if (disco.getStatoConservazione() != null) {
                     iDisco.setString(9, disco.getStatoConservazione().toString());
                 } else {
@@ -249,6 +255,24 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             throw new DataException("Error storing disk", ex);
         }
     }
+    @Override
+    public void  updateDiscoPadre(Disco disco) throws DataException {
+
+        try {
+            if (disco.getPadre() != null) {
+                uDiscoPadre.setInt(1, disco.getPadre().getKey());
+            } else {
+                uDiscoPadre.setNull(1, Types.INTEGER);
+            }
+            uDiscoPadre.setInt(2, disco.getKey());
+            uDiscoPadre.executeUpdate();
+
+        }catch(SQLException ex){
+            throw new DataException("Error updating disk", ex);
+        }
+
+    }
+
 
     @Override
     public void deleteDisco(Disco disco) throws DataException {
@@ -385,7 +409,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataException("Error getting disks' children", ex);
+            throw new DataException("Error getting disks children", ex);
         }
         return dischi;
     }

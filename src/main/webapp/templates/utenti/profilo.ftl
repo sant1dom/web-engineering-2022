@@ -141,15 +141,16 @@
                         <tbody id="table-tbody-dischi">
                         <#list dischi as disco>
                             <tr>
+                                <td><a class="link"
+                                       href="show-disco?id=${disco.getKey()}">${disco.getTitolo()}</a>
+                                </td>
+                                <td>${disco.anno}</td>
+
                                 <#if (disco.getBarCode()??)>
                                     <td>${disco.getBarCode()}</td>
                                 <#else>
                                     <td><i class="fa-solid fa-xmark"></i></td>
                                 </#if>
-                                <td><a class="link"
-                                       href="show-disco?id=${disco.getKey()}">${disco.getTitolo()}</a>
-                                </td>
-                                <td>${disco.anno}</td>
                                 <td>${disco.etichetta?cap_first}</td>
                                 <td>${disco.genere?lower_case?cap_first}</td>
                                 <td>${disco.formato?lower_case?cap_first}</td>
