@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeleteDisco extends CollectorsBaseController {
@@ -68,6 +69,30 @@ public class DeleteDisco extends CollectorsBaseController {
         for(Collezione collezione:collezioni){
             dataLayer.getDiscoDAO().deleteDisco(collezione,disco);
         }
+
+        List<Disco>dischiFigli=dataLayer.getDiscoDAO().getFigli(disco);
+
+        if(dischiFigli!=null){
+            //prendo il primo figlio
+            Disco d =dataLayer.getDiscoDAO().getFigli(disco).get(0);
+            //setto il padre del primo figlio a null
+            d.setPadre(null);
+            //aggiorno il disco con il nuovo padre
+            dataLayer.getDiscoDAO().updateDiscoPadre(d);
+
+            if(dataLayer.getDiscoDAO().getFigli(disco).size()>1) {
+                //cancello il primo figlio dalla lista dei figli del disco padre
+                dataLayer.getDiscoDAO().getFigli(disco).remove(0);
+
+                //setto il nuovo padre ai figli del disco da eliminare
+                for (Disco discoFiglio : dataLayer.getDiscoDAO().getFigli(disco)) {
+                    discoFiglio.setPadre(d);
+                    dataLayer.getDiscoDAO().updateDiscoPadre(discoFiglio);
+                }
+            }
+
+        }
+
         dataLayer.getDiscoDAO().deleteDisco(disco);
         Utente utente = Utility.getUtente(request, response);
         if (utente != null) {

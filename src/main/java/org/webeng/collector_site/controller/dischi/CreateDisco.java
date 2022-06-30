@@ -117,7 +117,7 @@ public class CreateDisco extends CollectorsBaseController {
             String etichetta = request.getParameter("etichetta");
 
 
-            if (!(request.getParameter("padre")==null)) {
+            if (request.getParameter("padre")!=null) {
                 padre_id = request.getParameter("padre");
                 padre = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(padre_id));
                 genere = padre.getGenere();
@@ -144,7 +144,7 @@ public class CreateDisco extends CollectorsBaseController {
                 dataLayer.getDiscoDAO().addDiscoToCollezioni(collezioni, disco);
             }
 
-            response.sendRedirect("/show-disco?id=" + idDisco);
+            response.sendRedirect("/profilo?id=" + utente.getKey().toString());
         } catch (Exception e) {
             e.printStackTrace();
             handleError(e, request, response);

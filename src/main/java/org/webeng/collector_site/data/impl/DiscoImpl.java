@@ -53,6 +53,7 @@ public class DiscoImpl extends DataItemImpl<Integer> implements Disco {
         this.autori = autori;
         this.immagini = immagini;
         this.tracce = tracce;
+        this.figli=null;
         if(padre.getKey() != null) {
             this.padre = padre;
         }

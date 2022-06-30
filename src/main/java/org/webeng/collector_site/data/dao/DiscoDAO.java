@@ -46,7 +46,7 @@ public interface DiscoDAO {
     void deleteDiscoTraccia(Disco disco, Traccia traccia) throws DataException;
     void addDiscoTraccia(Disco disco, List<Traccia> tracce) throws DataException;
 
-
+    void  updateDiscoPadre(Disco disco) throws DataException;
     List<String> getEtichette() throws DataException;
 
     void deleteDiscoAutore(Disco disco, Autore autore) throws DataException;
