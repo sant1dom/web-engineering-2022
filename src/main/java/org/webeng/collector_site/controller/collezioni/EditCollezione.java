@@ -106,6 +106,7 @@ public class EditCollezione extends CollectorsBaseController {
                 List<Utente> utenti = new ArrayList<>();
                 utenti.add(dataLayer.getUtenteDAO().getUtente(username));
                 collezione.setUtentiCondivisi(utenti);
+                dataLayer.getCollezioneDAO().storeCollezione(collezione);
 
             } else {
                 boolean error = false;
