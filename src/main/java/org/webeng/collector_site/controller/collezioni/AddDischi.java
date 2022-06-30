@@ -46,14 +46,15 @@ public class AddDischi extends CollectorsBaseController {
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws DataException {
         try {
-            List<Disco> dischi = new ArrayList<>();
             CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
+            Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
+            List<Disco> dischi = new ArrayList<>();
+
             if (request.getParameterValues("dischi[]") != null) {
                 for (String disco : request.getParameterValues("dischi[]")) {
                     dischi.add(dataLayer.getDiscoDAO().getDisco(Integer.parseInt(disco)));
                 }
 
-                Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
 
                 //aggiunta di ogni disco selezionato nella collezione in questione
                 for (Disco disco : dischi) {

@@ -67,7 +67,7 @@ public class EditCollezione extends CollectorsBaseController {
         Utente proprietario = collezione.getUtente();
         List<Disco> dischi = collezione.getDischi();
         List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
-        List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi());
+        List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi(Utility.getUtente(request, response)));
 
         dischiAdd.removeAll(dischi);
 
@@ -112,9 +112,6 @@ public class EditCollezione extends CollectorsBaseController {
                 String titolo = request.getParameter("titolo");
                 String privacy = String.valueOf(request.getParameter("privacy"));
                 List<Collezione> collezioni = dataLayer.getCollezioneDAO().getCollezioni(Utility.getUtente(request, response));
-                /*chiamata dei metodi setTitolo,setPrivacy
-                e setUtentiCondivisi sui valori di titolo
-                e privacy inseriti dall'utente */
 
 
                 if (!titolo.equalsIgnoreCase(collezione.getTitolo())) {
@@ -127,9 +124,12 @@ public class EditCollezione extends CollectorsBaseController {
                     }
                 }
                 if (!error) {
-                    //chiamata metodo storeCollezione per aggiornare la collezione
+                     /*chiamata dei metodi setTitolo,setPrivacy
+                     e setUtentiCondivisi sui valori di titolo
+                     e privacy inseriti dall'utente */
                     collezione.setTitolo(titolo);
                     collezione.setPrivacy(privacy);
+                    //chiamata metodo storeCollezione per aggiornare la collezione
                     dataLayer.getCollezioneDAO().storeCollezione(collezione);
                 }
             }

@@ -35,7 +35,7 @@ public class ShowCollezione extends CollectorsBaseController {
             Utente proprietario = collezione.getUtente();
             List<Disco> dischi = collezione.getDischi();
             List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
-            List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi());
+            List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi(Utility.getUtente(request, response)));
 
             dischiAdd.removeAll(dischi);
 
