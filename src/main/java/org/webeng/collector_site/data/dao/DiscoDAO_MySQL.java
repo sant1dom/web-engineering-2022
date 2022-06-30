@@ -268,7 +268,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             uDiscoPadre.executeUpdate();
 
         }catch(SQLException ex){
-            throw new DataException("Error updating disk", ex);
+            throw new DataException("Error updating father to the disk", ex);
         }
 
     }

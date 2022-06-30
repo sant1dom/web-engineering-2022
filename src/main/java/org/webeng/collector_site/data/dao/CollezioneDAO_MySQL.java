@@ -279,6 +279,22 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             }
         }
     }
+    @Override
+    public void addUtentiCondivisiCollezione(Collezione collezione) throws DataException {
+        int id = collezione.getKey();
+        for (Utente u : collezione.getUtentiCondivisi()) {
+            if (u.getKey() != null && u.getKey() > 0) {
+                try {
+                    addUtenteCondiviso.setInt(1, id);
+                    addUtenteCondiviso.setInt(2, u.getKey());
+                    addUtenteCondiviso.executeUpdate();
+                } catch (SQLException ex) {
+                    throw new DataException("Error adding shared user to collection", ex);
+                }
+
+            }
+        }
+    }
 
     @Override
     public List<Collezione> getCollezioni() throws DataException {
