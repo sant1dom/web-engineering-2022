@@ -7,7 +7,6 @@ import org.webeng.collector_site.data.model.Collezione;
 import org.webeng.collector_site.data.model.Utente;
 import org.webeng.framework.data.DataException;
 import org.webeng.framework.result.TemplateManagerException;
-import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,45 +23,25 @@ public class EditCollezione extends CollectorsBaseController {
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        if (request.getMethod().equals("POST")) {
-            updateCollezione(request, response);
-        } else {
-            try {
-                HttpSession s = SecurityHelpers.checkSession(request);
-                String https_redirect_url = SecurityHelpers.checkHttps(request);
-                request.setAttribute("https-redirect", https_redirect_url);
-                if (s == null) {
-                    action_anonymous(request, response);
-                } else {
+        try {
+            HttpSession s = SecurityHelpers.checkSession(request);
+            String https_redirect_url = SecurityHelpers.checkHttps(request);
+            request.setAttribute("https-redirect", https_redirect_url);
+            if (s == null) {
+                action_anonymous(request, response);
+            } else {
+                if (request.getMethod().equals("POST")) {
                     action_logged(request, response);
+                } else {
+                    response.sendRedirect("/index-collezione");
                 }
-            } catch (TemplateManagerException | DataException | IOException ex) {
-                handleError(ex, request, response);
             }
+        } catch (TemplateManagerException | DataException | IOException ex) {
+            handleError(ex, request, response);
         }
     }
 
     private void action_logged(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        TemplateResult result = new TemplateResult(getServletContext());
-        CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
-        var collezioneDAO = dataLayer.getCollezioneDAO();
-        var utenteDAO = dataLayer.getUtenteDAO();
-
-        Collezione collezione = collezioneDAO.getCollezione(Integer.parseInt(request.getParameter("id")));
-
-        request.setAttribute("collezione", collezione);
-
-        request.setAttribute("utenti_condivisi", utenteDAO.getUtentiCondivisi(collezione));
-        result.activate("collezioni/edit.ftl", request, response);
-
-    }
-
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        response.sendRedirect("/login");
-    }
-
-    private void updateCollezione(HttpServletRequest request, HttpServletResponse response) {
         try {
             CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
             Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
@@ -94,7 +72,6 @@ public class EditCollezione extends CollectorsBaseController {
                 collezione.setTitolo(titolo);
                 collezione.setPrivacy(privacy);
 
-
                 if (!titolo.equalsIgnoreCase(collezione.getTitolo())) {
                     for (Collezione c : collezioni) {
                         if (c.getTitolo().equalsIgnoreCase(titolo)) {
@@ -111,10 +88,13 @@ public class EditCollezione extends CollectorsBaseController {
                 dataLayer.getCollezioneDAO().storeCollezione(collezione);
                 response.sendRedirect("/show-collezione?id=" + collezione.getKey());
             }
-
-
         } catch (DataException | IOException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
+    }
+
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        response.sendRedirect("/login");
     }
 }
