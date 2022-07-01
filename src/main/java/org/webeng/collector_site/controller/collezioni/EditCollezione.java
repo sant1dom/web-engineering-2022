@@ -105,9 +105,12 @@ public class EditCollezione extends CollectorsBaseController {
                 String username = request.getParameter("user_share");
                 List<Utente> utenti = new ArrayList<>();
                 utenti.add(dataLayer.getUtenteDAO().getUtente(username));
-                collezione.setUtentiCondivisi(utenti);
-                dataLayer.getCollezioneDAO().addUtentiCondivisiCollezione(collezione);
-
+                if(collezione.getUtentiCondivisi().containsAll(utenti))
+                    request.setAttribute("error", "Utente già inserito!");
+                else {
+                     collezione.setUtentiCondivisi(utenti);
+                     dataLayer.getCollezioneDAO().addUtentiCondivisi(collezione);
+                }
             } else {
                 boolean error = false;
                 String titolo = request.getParameter("titolo");

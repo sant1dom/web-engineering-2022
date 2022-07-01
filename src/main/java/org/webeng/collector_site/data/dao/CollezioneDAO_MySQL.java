@@ -264,23 +264,8 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     }
 
     //Condivisione della collezione
-    private void addUtentiCondivisi(Collezione collezione) throws SQLException {
-        int id = collezione.getKey();
-        for (Utente u : collezione.getUtentiCondivisi()) {
-            if (u.getKey() != null && u.getKey() > 0) {
-                try {
-                    addUtenteCondiviso.setInt(1, id);
-                    addUtenteCondiviso.setInt(2, u.getKey());
-                    addUtenteCondiviso.executeUpdate();
-                } catch (SQLException ex) {
-                    continue;
-                }
-
-            }
-        }
-    }
     @Override
-    public void addUtentiCondivisiCollezione(Collezione collezione) throws DataException {
+    public void addUtentiCondivisi(Collezione collezione) throws DataException {
         int id = collezione.getKey();
         for (Utente u : collezione.getUtentiCondivisi()) {
             if (u.getKey() != null && u.getKey() > 0) {

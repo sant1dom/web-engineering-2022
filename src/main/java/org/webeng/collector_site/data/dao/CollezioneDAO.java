@@ -33,5 +33,5 @@ public interface CollezioneDAO {
      List<Collezione> getCollezioniPubbliche(Utente utente) throws DataException;
 
     void deleteCollezione(Collezione collezione) throws DataException;
-    void addUtentiCondivisiCollezione(Collezione collezione) throws DataException;
+    void addUtentiCondivisi(Collezione collezione) throws DataException;
 }
