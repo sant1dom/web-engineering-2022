@@ -206,7 +206,7 @@
                     <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
-                <#if (tracce?? && autori?size > 0)>
+                <#if (tracce?? && tracce?size > 0)>
                 <div class="table-scrollable">
                     <table class="table table-borderless table-striped">
                         <thead class="table-dark">

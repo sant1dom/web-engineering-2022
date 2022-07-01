@@ -29,8 +29,7 @@
                             <select id="padre" name="padre" class="selectpicker" data-live-search="true">
                                 <option selected value="">Scegli un disco</option>
                                 <#list dischiPadri as disco>
-                                    <option value="${disco.key}">${disco.titolo} | ${disco.anno} | ${disco.etichetta}
-                                        | ${disco.genere}</option>
+                                    <option value="${disco.key}">${disco.titolo} | ${disco.anno} | ${disco.etichetta} | ${disco.genere}</option>
                                 </#list>
                             </select>
                         <#else>

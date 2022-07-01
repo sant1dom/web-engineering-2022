@@ -4,14 +4,14 @@ $(document).ready(function () {
     selectpicker.selectpicker();
 
     if (formato.val() === 'DIGITALE') {
-        disableStatoCoservazione();
+        disableStatoConservazione();
     }
 
     formato.on('change', function () {
-        disableStatoCoservazione();
+        disableStatoConservazione();
     });
 
-    function disableStatoCoservazione() {
+    function disableStatoConservazione() {
         let selected = $('#formato option:selected');
         let statoConservazione = $('#statoConservazione');
         if (selected.val() === 'DIGITALE') {
