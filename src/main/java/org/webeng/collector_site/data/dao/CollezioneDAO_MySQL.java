@@ -171,8 +171,6 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
                     collezione.setVersion(next_version);
                 }
 
-                addUtentiCondivisi(collezione);
-
             } else { //insert
                 iCollezione.setString(1, collezione.getTitolo());
                 iCollezione.setString(2, collezione.getPrivacy());
