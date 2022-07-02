@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 public class AddImmagini extends CollectorsBaseController {
     public static final String REFERRER = "referrer";
-    public static final String UPLOAD_LOCATION = "C:/Users/Raluc/Documents/Workspace";
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {

@@ -55,8 +55,8 @@ public class Login extends CollectorsBaseController {
                         int userid = utente.getKey();
                         SecurityHelpers.createSession(request, username, userid);
                         //se è stato trasmesso un URL di origine, torniamo a quell'indirizzo
-                        if (request.getParameter("referrer") != null && !request.getParameter("referrer").isBlank()) {
-                            response.sendRedirect(request.getParameter("referrer"));
+                        if (request.getParameter(REFERRER) != null) {
+                            response.sendRedirect(request.getParameter(REFERRER));
                         } else {
                             response.sendRedirect("/");
                         }

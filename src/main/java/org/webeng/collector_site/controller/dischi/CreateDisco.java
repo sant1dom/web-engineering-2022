@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class CreateDisco extends CollectorsBaseController {
+    public static final String REFERRER = "referrer";
+
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         if (request.getMethod().equals("POST")) {
@@ -85,10 +87,9 @@ public class CreateDisco extends CollectorsBaseController {
         result.activate("dischi/create.ftl", request, response);
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String completeRequestURL = request.getRequestURL() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-        request.setAttribute("referrer", completeRequestURL);
-        request.getRequestDispatcher("/login").forward(request, response);
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute(REFERRER, request.getParameter(REFERRER));
+        response.sendRedirect("/login");
     }
 
     private void saveDisco(HttpServletRequest request, HttpServletResponse response) {

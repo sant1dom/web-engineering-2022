@@ -114,7 +114,43 @@
                     <div class="table-empty">Non ci sono collezioni.</div>
                 </#if>
             </div>
+           <!-- TABELLA COLLEZIONI CONDIVISE CON TE -->
+            <#if (utente?? && utente_generico?? && utente.getKey() == utente_generico.getKey())>
 
+                <div class="table-container" id="collezioni-container">
+                    <div class="title flex justify-between align-items-center">
+                        COLLEZIONI CONDIVISE CON TE
+                        <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-collezioni')" type="text"
+                               placeholder="Search.." class="input-filtro inner-table">
+                    </div>
+                    <#if (collezioni_condivise?? && collezioni_condivise?size > 0)>
+                        <div class="table-scrollable">
+                            <table class="table table-borderless table-striped overflow-auto">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Titolo</th>
+                                    <th scope="col">Data creazione</th>
+                                </tr>
+                                </thead>
+                                <tbody id="table-tbody-collezioni">
+                                <#list collezioni_condivise as collezione_condivisa>
+                                    <tr>
+                                        <td><a class="link"
+                                               href="show-collezione?id=${collezione_condivisa.getKey()}">${collezione_condivisa.getTitolo()}</a>
+                                        </td>
+                                        <td>${collezione_condivisa.dataCreazione?date("yyyy-MM-dd")?string("dd-MM-yyyy")}</td>
+
+                                    </tr>
+                                </#list>
+                            </table>
+                        </div>
+                    <#else>
+                        <div class="table-empty">Non ci sono collezioni.</div>
+                    </#if>
+                </div>
+
+                </#if>
+                <!-- Fine tabella collezioni condivise con te -->
             <div class="table-container" id="dischi-container">
                 <div class="title flex justify-between align-items-center">
                     DISCHI
@@ -179,3 +215,4 @@
         </div>
     </div>
 </div>
+

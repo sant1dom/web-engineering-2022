@@ -14,6 +14,7 @@ import org.webeng.framework.security.SecurityHelpers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,10 +34,13 @@ public class Profilo extends CollectorsBaseController {
             Utente utente_generico;
             List<Collezione> collezioni = null;
             List<Disco> dischi = null;
+            List<Collezione> collezioni_condivise= new ArrayList<>();
 
             Utente utente = Utility.getUtente(request, response);
             if (utente != null) {
                 request.setAttribute("utente", utente);
+                collezioni_condivise=dataLayer.getCollezioneDAO().getCollezioniCondivise(utente);
+                request.setAttribute("collezioni_condivise", collezioni_condivise);
             }
 
             if (request.getParameter("id") != null && !request.getParameter("id").isBlank()) {
