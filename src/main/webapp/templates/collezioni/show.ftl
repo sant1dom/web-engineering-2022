@@ -37,9 +37,15 @@
             </#if>
         </div>
     </#if>
-    <#if error??>
+    <#if errorUser??>
         <div class="text-red" style="color: red; margin-left: 2rem">
-            ${error!}
+            ${errorUser!}
+        </div>
+    </#if>
+
+    <#if errorTitolo??>
+        <div class="text-red" style="color: red; margin-left: 2rem">
+            ${errorTitolo!}
         </div>
     </#if>
     <div class="horizontal-separator"></div>
