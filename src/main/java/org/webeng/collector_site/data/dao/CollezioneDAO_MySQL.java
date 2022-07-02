@@ -24,6 +24,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement uCollezione;
     private PreparedStatement iCollezione;
     private PreparedStatement dCollezione;
+    private PreparedStatement uCollezioneVersion;
     private PreparedStatement addDiscoCollezione;
     private PreparedStatement addUtenteCondiviso;
     private PreparedStatement fCollezioniByTitolo;
@@ -57,6 +58,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             fCollezioniByTitolo = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PUBBLICO' AND titolo LIKE CONCAT('%', ? , '%')");
             fCollezioniByTitoloPrivate = connection.prepareStatement("SELECT * FROM collezione WHERE privacy = 'PRIVATO' AND utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
             fCollezioniByTitoloCondivise = connection.prepareStatement("SELECT * FROM collezione JOIN collezione_condivisa_con ccc on collezione.id = ccc.collezione_id WHERE privacy = 'CONDIVISO' AND ccc.utente_id = ? AND titolo LIKE CONCAT('%', ? , '%')");
+            uCollezioneVersion= connection.prepareStatement("UPDATE collezione SET version = ? WHERE id = ?");
         } catch (SQLException ex) {
             throw new DataException("Error initializing collections data layer", ex);
         }
@@ -81,6 +83,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
             fCollezioniByTitoloCondivise.close();
             idUtentiAttivi.close();
             sCollezioniByUtentePubbliche.close();
+            uCollezioneVersion.close();
         } catch (SQLException ex) {
             throw new DataException("Error destroying collections data layer", ex);
         }
@@ -229,35 +232,18 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
 
     @Override
     public void addDiscoCollezione(Collezione collezione, Disco disco) throws DataException {
-        try {
-            if (collezione.getKey() != null && collezione.getKey() > 0) {
-                if (collezione instanceof DataItemProxy && !((DataItemProxy) collezione).isModified()) {
-                    return;
-                }
+        try{
 
-                uCollezione.setString(1, collezione.getTitolo());
-                uCollezione.setString(2, collezione.getPrivacy());
+            long current_version = collezione.getVersion();
+            long next_version = current_version + 1;
 
-                long current_version = collezione.getVersion();
-                long next_version = current_version + 1;
+            uCollezioneVersion.setLong(1, next_version);
+            uCollezioneVersion.setInt(2, collezione.getKey());
+            uCollezioneVersion.executeUpdate();
+            addDisco(collezione, disco);
 
-                uCollezione.setLong(3, next_version);
-                uCollezione.setInt(4, collezione.getKey());
-                uCollezione.setLong(5, current_version);
-
-                if (uCollezione.executeUpdate() == 0) {
-                    throw new OptimisticLockException(collezione);
-                } else {
-                    collezione.setVersion(next_version);
-                }
-                addDisco(collezione, disco);
-            }
-            if (collezione instanceof DataItemProxy) {
-                ((DataItemProxy) collezione).setModified(false);
-            }
-        } catch (SQLException | OptimisticLockException ex) {
+        }catch(SQLException ex){
             throw new DataException("Unable to add disco to collezione", ex);
-
         }
     }
 
