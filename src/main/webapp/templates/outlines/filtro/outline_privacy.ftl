@@ -7,3 +7,4 @@
 <dd><span class="filtro-link" onclick="ricerca('CONDIVISO', '#table-tbody-collezioni')">CONDIVISO</span></dd>
 <dd><span class="filtro-link" onclick="ricerca('PRIVATO', '#table-tbody-collezioni')">PRIVATO</span></dd>
 
+

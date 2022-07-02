@@ -144,7 +144,7 @@ public class CreateDisco extends CollectorsBaseController {
                 dataLayer.getDiscoDAO().addDiscoToCollezioni(collezioni, disco);
             }
 
-            response.sendRedirect("/profilo?id=" + utente.getKey().toString());
+            response.sendRedirect("/show-disco?id=" + idDisco);
         } catch (Exception e) {
             e.printStackTrace();
             handleError(e, request, response);
