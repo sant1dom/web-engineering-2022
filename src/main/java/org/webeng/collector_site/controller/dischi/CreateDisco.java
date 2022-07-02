@@ -117,7 +117,7 @@ public class CreateDisco extends CollectorsBaseController {
             String etichetta = request.getParameter("etichetta");
 
 
-            if (request.getParameter("padre")!=null) {
+            if (request.getParameter("padre")!=null && !request.getParameter("padre").equals("")) {
                 padre_id = request.getParameter("padre");
                 padre = dataLayer.getDiscoDAO().getDisco(Integer.parseInt(padre_id));
                 genere = padre.getGenere();

@@ -72,7 +72,7 @@ public class DeleteDisco extends CollectorsBaseController {
 
         List<Disco>dischiFigli=dataLayer.getDiscoDAO().getFigli(disco);
 
-        if(dischiFigli!=null){
+        if(dischiFigli!=null && dischiFigli.size()>0){
             //prendo il primo figlio
             Disco d =dataLayer.getDiscoDAO().getFigli(disco).get(0);
             //setto il padre del primo figlio a null
