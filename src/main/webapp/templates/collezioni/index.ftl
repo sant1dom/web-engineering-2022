@@ -38,11 +38,11 @@
                     <dl class="filtro-info list-group list-group-flush">
                         <dt class="filtro-subtitle">PRIVACY COLLEZIONE:</dt>
 
-                        <div class="horizontal-separator filtro-horizontal-separator"></div>
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
 
                         <dd><span class="filtro-link" onclick="ricerca('', '#table-tbody-collezioni')">TUTTI</span></dd>
-                        <dd><span class="filtro-link" onclick="ricerca('PUBBLICA', '#table-tbody-collezioni')">PUBBLICA</span></dd>
-                        <dd><span class="filtro-link" onclick="ricerca('CONDIVISA', '#table-tbody-collezioni')">CONDIVISE CON ME</span></dd>
+                        <dd><span class="filtro-link" onclick="ricerca('PUBBLICO', '#table-tbody-collezioni')">PUBBLICA</span></dd>
+                        <dd><span class="filtro-link" onclick="ricerca('CONDIVISO', '#table-tbody-collezioni')">CONDIVISE CON ME</span></dd>
                         <dd><span class="filtro-link" onclick="ricerca('PRIVATO', '#table-tbody-collezioni')">PRIVATO</span></dd>
                     </dl>
                 </div>

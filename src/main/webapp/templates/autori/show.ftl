@@ -30,16 +30,14 @@
                     <dl class="filtro-info list-group list-group-flush">
                         <dt class="filtro-subtitle">TIPO:</dt>
 
-                        <div class="horizontal-separator filtro-horizontal-separator"></div>
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
 
                         <dd><span class="filtro-link" onclick="filtroTipo('TUTTI')">TUTTI</span></dd>
                         <dd><span class="filtro-link" onclick="filtroTipo('DISCHI' )">DISCHI</span></dd>
                         <dd><span class="filtro-link" onclick="filtroTipo('TRACCE' )">TRACCE</span></dd>
 
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_generi.ftl">
-                        </div>
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_generi.ftl">
                     </dl>
                 </div>
             </div>
@@ -48,7 +46,7 @@
             <div class="table-container" id="dischi-container">
                 <div class="title flex justify-between align-items-center">
                     DISCHI
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-dischi')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-dischi')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (dischi??)>
@@ -82,7 +80,7 @@
             <div class="table-container" id="tracce-container">
                 <div class="title flex justify-between align-items-center">
                     TRACCE
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (tracce??)>

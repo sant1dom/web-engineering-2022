@@ -37,6 +37,14 @@ function selectSuggestion(id, nomeArray, input) {
     search_form.submit();
 }
 
+//permette di selezionare il suggerimento, impostare i campi di ricerca e richiamare la ricerca
+function seeTraccia(nomeArray, input) {
+    search_box.val(input);
+    suggestion_box.hide();
+    item_type.val(nomeArray);
+    search_form.submit();
+}
+
 //permette di selezionare tutti gli elementi di un tipo suggeriti, impostare i campi di ricerca e richiamare la ricerca
 function seeAll(nomeArray) {
     suggestion_box.hide();
@@ -135,7 +143,7 @@ search_box.keyup(function () {
                                         suggestion_box.append($('<a>',
                                             {
                                                 class: "dropdown-item",
-                                                onclick: "selectSuggestion('" + id + "', '" + nomeArray + "', '" + dati + "')",
+                                                onclick: "seeTraccia('" + nomeArray + "', '" + dati[0] + "')",
                                                 value: id,
                                                 text: dati,
                                             }));

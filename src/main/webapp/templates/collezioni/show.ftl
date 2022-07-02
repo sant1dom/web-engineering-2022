@@ -4,6 +4,7 @@
 <#-- @ftlvariable name="dischi" type="org.webeng.collector_site.data.model.Disco[]" -->
 <#-- @ftlvariable name="dischiAdd" type="org.webeng.collector_site.data.model.Disco[]" -->
 <#-- @ftlvariable name="utenti_condivisi" type="org.webeng.collector_site.data.model.Utente[]" -->
+<#-- @ftlvariable name="error" type="String" -->
 
 <#include "../outlines/outline_header.ftl">
 
@@ -129,10 +130,7 @@
                        placeholder="Search.." class="input-filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_generi.ftl">
-                        </div>
+                        <#include "../outlines/filtro/outline_generi.ftl">
                     </dl>
                 </div>
             </div>

@@ -6,6 +6,49 @@
 <#include "outlines/outline_header.ftl">
 
 <div class="page-container">
+    <div class="jumbotron jumbotron-fluid home-jumbotron">
+        <img class="home-jumbotron-img" src="/assets/images/vinile.png" alt="">
+        <div class="container home-jumbotron-desc">
+            <h1 class="display-4 home-jumbotron-text">Collector Site</h1>
+            <p class="lead home-jumbotron-text">Condividi la tua passione per la musica con la community!</p>
+        </div>
+    </div>
+
+<style>
+    .home-jumbotron-img {
+        margin-left: 10rem;
+        height: 15rem;
+        width: auto;
+    }
+
+    .home-jumbotron {
+        background-image: url("/assets/images/home_bg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 70vh;
+
+        display: flex;
+        align-items: center;
+    }
+    .home-jumbotron-text {
+        background: #343a40;
+        color: #fff;
+        font-weight: bold;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .home-jumbotron-desc {
+        margin-left: 20rem;
+        position: absolute;
+        z-index: 2;
+
+    }
+</style>
+
+
+
+
     <#if (utente??)>
         <h3 class="mb-4">Benvenuto: ${utente.getUsername()}</h3>
     </#if>

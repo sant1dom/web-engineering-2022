@@ -1,6 +1,6 @@
 <dt class="filtro-subtitle">GENERE DISCO:</dt>
 
-<div class="horizontal-separator filtro-horizontal-separator"></div>
+<dd class="horizontal-separator filtro-horizontal-separator"></dd>
 
 <dd><span class="filtro-link" onclick="ricerca('', '#table-tbody-dischi')">TUTTI</span></dd>
 <dd><span class="filtro-link" onclick="ricerca('POP', '#table-tbody-dischi')">POP</span></dd>

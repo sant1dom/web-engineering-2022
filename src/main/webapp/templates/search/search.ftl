@@ -31,25 +31,17 @@
             <div class="filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <div>
-                            <#include "../outlines/filtro/outline_tipo.ftl">
-                        </div>
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_generi.ftl">
-                        </div>
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_formato.ftl">
-                        </div>
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_stato_conservazione.ftl">
-                        </div>
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_tipologia.ftl">
-                        </div>
+                        <#include "../outlines/filtro/outline_tipo.ftl">
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_generi.ftl">
+
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_formato.ftl">
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_stato_conservazione.ftl">
+
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_tipologia.ftl">
                     </dl>
                 </div>
             </div>
@@ -59,7 +51,7 @@
             <div class="table-container" id="utenti-container">
                 <div class="title flex justify-between align-items-center">
                     UTENTI
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-utenti')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-utenti')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (utenti?? && utenti?size > 0)>
@@ -91,7 +83,7 @@
             <div class="table-container" id="collezioni-container">
                 <div class="title flex justify-between align-items-center">
                     COLLEZIONI
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-collezioni')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-collezioni')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (collezioni?? && collezioni?size > 0)>
@@ -171,7 +163,7 @@
             <div class="table-container" id="tracce-container">
                 <div class="title flex justify-between align-items-center">
                     TRACCE
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (tracce?? && tracce?size > 0)>
@@ -188,9 +180,7 @@
                         <#list tracce as traccia>
                             <tr>
                                 <td>${traccia.getISWC()}</td>
-                                <td><a class="link"
-                                       href="show-traccia?id=${traccia.getKey()}">${traccia.getTitolo()}</a>
-                                </td>
+                                <td>${traccia.getTitolo()}</td>
                                 <td>${traccia.getDurata()}s</td>
                             </tr>
                         </#list>
@@ -206,7 +196,7 @@
             <div class="table-container" id="autori-container">
                 <div class="title flex justify-between align-items-center">
                     AUTORI
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-autori')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-autori')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (autori?? && autori?size > 0)>

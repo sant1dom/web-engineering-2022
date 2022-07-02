@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="error" type="String" -->
+<#-- @ftlvariable name="keyword" type="String" -->
 <#-- @ftlvariable name="utente" type="org.webeng.collector_site.data.model.Utente" -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index: 100; position: sticky; top: 0">

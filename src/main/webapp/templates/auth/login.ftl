@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="error" type="String" -->
 <link href="/assets/css/auth.css" rel="stylesheet"/>
 <!-- BACKGROUND-IMAGE -->
 <div class="bg-image">
@@ -32,6 +33,6 @@
                 </form>
             </div>
         </div>
-        <img class="vinile login_img" src="/assets/images/vinile.png">
+        <img class="vinile login_img" src="/assets/images/vinile.png" alt="">
     </div>
 </div>

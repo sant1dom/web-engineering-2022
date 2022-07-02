@@ -1,6 +1,6 @@
 <dt class="filtro-subtitle">CONSERVAZIONE:</dt>
 
-<div class="horizontal-separator filtro-horizontal-separator"></div>
+<dd class="horizontal-separator filtro-horizontal-separator"></dd>
 
 <dd><span class="filtro-link" onclick="ricerca('', '#table-tbody-dischi')">TUTTI</span></dd>
 <dd><span class="filtro-link" onclick="ricerca('NUOVO', '#table-tbody-dischi')">NUOVO</span></dd>

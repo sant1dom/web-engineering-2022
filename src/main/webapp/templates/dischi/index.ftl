@@ -35,17 +35,11 @@
                        placeholder="Search.." class="input-filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <div class="resp991">
-                            <#include "../outlines/filtro/outline_generi.ftl">
-                        </div>
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_formato.ftl">
-                        </div>
-                        <div class="resp991">
-                            <div class="horizontal-separator filtro-horizontal-separator"></div>
-                            <#include "../outlines/filtro/outline_stato_conservazione.ftl">
-                        </div>
+                        <#include "../outlines/filtro/outline_generi.ftl">
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_formato.ftl">
+                        <dd class="horizontal-separator filtro-horizontal-separator"></dd>
+                        <#include "../outlines/filtro/outline_stato_conservazione.ftl">
                     </dl>
                 </div>
             </div>
@@ -60,9 +54,9 @@
                     <table class="table table-borderless table-striped">
                         <thead class="table-dark">
                         <tr>
+                            <th scope="col">Barcode</th>
                             <th scope="col">Titolo</th>
                             <th scope="col">Anno</th>
-                            <th scope="col">Barcode</th>
                             <th scope="col">Etichetta</th>
                             <th scope="col">Genere</th>
                             <th scope="col">Formato</th>
@@ -104,4 +98,3 @@
         </div>
     </div>
 </div>
-

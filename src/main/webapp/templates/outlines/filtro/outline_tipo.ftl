@@ -1,6 +1,6 @@
 <dt class="filtro-subtitle">TIPO:</dt>
 
-<div class="horizontal-separator filtro-horizontal-separator"></div>
+<dd class="horizontal-separator filtro-horizontal-separator"></dd>
 
 <dd><span class="filtro-link" onclick="filtroTipo('')">TUTTI</span></dd>
 <dd><span class="filtro-link" onclick="filtroTipo('UTENTI' )">UTENTI</span></dd>

@@ -179,31 +179,31 @@
 
         <div class="tables-container">
             <#if (immagini?? && immagini?size > 0)>
-            <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <#list immagini as immagine>
-                        <div class="carousel-item">
-                            <img class="center" style="max-height: 25rem; height: 100%; width: auto;"
-                                 src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}"
-                                 alt="slide">
-                        </div>
-                    </#list>
+                <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <#list immagini as immagine>
+                            <div class="carousel-item">
+                                <img class="center" style="max-height: 25rem; height: 100%; width: auto;"
+                                     src="/display-immagine?id_disco=${disco.key}&id_image=${immagine.key}"
+                                     alt="slide">
+                            </div>
+                        </#list>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
-                <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
             </#if>
 
             <div class="table-container" id="tracce-container">
                 <div class="title flex justify-between align-items-center">
                     TRACCE
-                    <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
+                    <input onkeyup="ricerca(this.value, '#table-tbody-tracce')" type="text"
                            placeholder="Search.." class="input-filtro inner-table">
                 </div>
                 <#if (tracce?? && tracce?size > 0)>
@@ -241,11 +241,10 @@
                     </#if>
                 </div>
 
-
                 <div class="table-container" id="autori-container">
                     <div class="title flex justify-between align-items-center">
                         AUTORI
-                        <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-autori')" type="text"
+                        <input onkeyup="ricerca(this.value, '#table-tbody-autori')" type="text"
                                placeholder="Search.." class="input-filtro inner-table">
                     </div>
                     <#if (autori?? && autori?size > 0)>

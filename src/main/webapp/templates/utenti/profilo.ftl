@@ -133,7 +133,7 @@
                             <th scope="col">Genere</th>
                             <th scope="col">Formato</th>
                             <th scope="col" style="text-align: center">Stato di conservazione</th>
-                            <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
+                            <#if (utente?? && utente.getKey() == dischi[0].getUtente().getKey())>
                                 <th scope="col" style="text-align: center">Azioni</th>
                             </#if>
                         </tr>
@@ -162,7 +162,7 @@
                                     </#if>
                                 </td>
                                 <td style="text-align: center">
-                                    <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
+                                    <#if (utente?? && utente.getKey() == dischi[0].getUtente().getKey())>
                                         <a href="delete-disco?id=${disco.getKey()}"
                                            class="btn btn-danger"><i class="lni lni-trash-can"></i></a>
                                     </#if>

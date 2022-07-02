@@ -11,6 +11,7 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,21 +34,24 @@ public class Search extends CollectorsBaseController {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
 
-            List<Utente> utenti = Utility.getUtenti(request, response);
-            List<Collezione> collezioni = Utility.getCollezioni(request, response);
-            List<Disco> dischi = Utility.getDischi(request, response);
-            List<Traccia> tracce = Utility.getTracce(request, response);
-            List<Autore> autori = Utility.getAutori(request, response);
+            if (request.getParameter("keyword") != null) {
+                List<Utente> utenti = Utility.getUtenti(request, response);
+                List<Collezione> collezioni = Utility.getCollezioni(request, response);
+                List<Disco> dischi = Utility.getDischi(request, response);
+                List<Traccia> tracce = Utility.getTracce(request, response);
+                List<Autore> autori = Utility.getAutori(request, response);
 
-            request.setAttribute("keyword", request.getParameter("keyword"));
-            request.setAttribute("utenti", utenti);
-            request.setAttribute("collezioni", collezioni);
-            request.setAttribute("dischi", dischi);
-            request.setAttribute("tracce", tracce);
-            request.setAttribute("autori", autori);
-
-            result.activate("search/search.ftl", request, response);
-        }catch (DataException | TemplateManagerException ex) {
+                request.setAttribute("keyword", request.getParameter("keyword"));
+                request.setAttribute("utenti", utenti);
+                request.setAttribute("collezioni", collezioni);
+                request.setAttribute("dischi", dischi);
+                request.setAttribute("tracce", tracce);
+                request.setAttribute("autori", autori);
+                result.activate("search/search.ftl", request, response);
+            } else {
+                response.sendRedirect("/home");
+            }
+        }catch (DataException | TemplateManagerException | IOException ex) {
             handleError(ex, request, response);
         }
     }
