@@ -92,7 +92,7 @@ public class EditCollezione extends CollectorsBaseController {
         try {
             CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
             Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
-            if (collezione.getPrivacy().equals("CONDIVISA") && !String.valueOf(request.getParameter("privacy")).equals("CONDIVISA")) {
+            if (collezione.getPrivacy().equals("CONDIVISO") && !String.valueOf(request.getParameter("privacy")).equals("CONDIVISO")) {
                 List<Utente> utenti_condivisi = dataLayer.getUtenteDAO().getUtentiCondivisi(collezione);
                 if (utenti_condivisi.size() > 0) {
                     for (Utente utente_condiviso : utenti_condivisi) {

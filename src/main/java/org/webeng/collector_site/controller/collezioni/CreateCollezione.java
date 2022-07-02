@@ -94,7 +94,7 @@ public class CreateCollezione extends CollectorsBaseController {
                     dischi.add(dataLayer.getDiscoDAO().getDisco(Integer.parseInt(disco)));
                 }
 
-                if (privacy.equals("CONDIVISA")) {
+                if (privacy.equals("CONDIVISO")) {
                     for (String username : utenti_usernames) {
                         Utente user = dataLayer.getUtenteDAO().getUtente(username);
                         utenti.add(user);

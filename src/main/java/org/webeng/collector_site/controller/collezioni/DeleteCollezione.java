@@ -63,7 +63,7 @@ public class DeleteCollezione extends CollectorsBaseController {
             tra un utente con cui la collezione era condivisa e la collezione in questione
             nella tabella collezione_condivisa_con richiamando il metodo deleteUtenteCondiviso */
 
-            if (collezione.getPrivacy().equals("CONDIVISA")) {
+            if (collezione.getPrivacy().equals("CONDIVISO")) {
                 for (Utente utente : utenti)
                     dataLayer.getUtenteDAO().deleteUtenteCondiviso(collezione, utente);
             }

@@ -60,20 +60,20 @@
                                    name="titolo">
                             <label for="privacy" class="mt-2">Modifica le informazioni:</label>
                             <select id="privacy" name="privacy" class="selectpicker">
-                                <#if (collezione.getPrivacy()="PRIVATA")>
-                                    <option selected="selected" value="PRIVATA">PRIVATA</option>
+                                <#if (collezione.getPrivacy()="PRIVATO")>
+                                    <option selected="selected" value="PRIVATO">PRIVATO</option>
                                 <#else>
-                                    <option value="PRIVATA">PRIVATA</option>
+                                    <option value="PRIVATO">PRIVATO</option>
                                 </#if>
-                                <#if (collezione.getPrivacy()="PUBBLICA")>
-                                    <option selected="selected" value="PUBBLICA">PUBBLICA</option>
+                                <#if (collezione.getPrivacy()="PUBBLICO")>
+                                    <option selected="selected" value="PUBBLICO">PUBBLICO</option>
                                 <#else>
-                                    <option value="PUBBLICA">PUBBLICA</option>
+                                    <option value="PUBBLICO">PUBBLICO</option>
                                 </#if>
-                                <#if (collezione.getPrivacy()="CONDIVISA")>
-                                    <option selected="selected" value="CONDIVISA">CONDIVISA</option>
+                                <#if (collezione.getPrivacy()="CONDIVISO")>
+                                    <option selected="selected" value="CONDIVISO">CONDIVISO</option>
                                 <#else>
-                                    <option value="CONDIVISA">CONDIVISA</option>
+                                    <option value="CONDIVISO">CONDIVISO</option>
                                 </#if>
                             </select>
                             <div class="flex justify-center mt-3" style="width: 100%;">
@@ -103,7 +103,7 @@
                             </#if>
                         </form>
                     </div>
-                    <#if (collezione.getPrivacy() == "CONDIVISA")>
+                    <#if (collezione.getPrivacy() == "CONDIVISO")>
                         <div class="horizontal-separator filtro-horizontal-separator"></div>
                         <div style="width: 100%; padding: 1rem">
                             <button class="btn btn-success" id="share-collezione-btn" style="width: 100%;">Condividi
@@ -114,7 +114,7 @@
                                 <label for="user_share">Inserire Username utente:</label>
                                 <input type="text" class="form-control" id="user_share"
                                        name="user_share" required>
-                                <input type="hidden" value="CONDIVISA" name="privacy">
+                                <input type="hidden" value="CONDIVISO" name="privacy">
                                 <div class="flex justify-center mt-3" style="width: 100%;">
                                     <button type="submit" class="btn btn-warning">Condividi</button>
                                 </div>
@@ -176,7 +176,7 @@
                     </#if>
                 </div>
 
-                <#if (utente?? && proprietario.getKey() == utente.getKey() && collezione.getPrivacy() = "CONDIVISA")>
+                <#if (utente?? && proprietario.getKey() == utente.getKey() && collezione.getPrivacy() = "CONDIVISO")>
                     <div class="table-container">
                         <div class="title">UTENTI CONDIVISI</div>
                         <#if (utenti_condivisi?? && utenti_condivisi?size > 0)>

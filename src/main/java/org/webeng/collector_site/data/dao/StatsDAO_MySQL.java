@@ -40,8 +40,8 @@ public class StatsDAO_MySQL extends DAO implements StatsDAO {
             autoriTotali = connection.prepareStatement("SELECT COUNT(*) FROM autore");
             etichetteTotali = connection.prepareStatement("SELECT COUNT(DISTINCT etichetta) FROM disco WHERE padre IS NULL");
             generiTotali = connection.prepareStatement("SELECT COUNT(DISTINCT genere) FROM disco WHERE padre IS NULL");
-            numeroCollezioniPubbliche = connection.prepareStatement("SELECT COUNT(*) FROM collezione WHERE privacy = 'PUBBLICA'");
-            numeroCollezioniPrivateUtente = connection.prepareStatement("SELECT COUNT(*) FROM collezione WHERE privacy = 'PRIVATA' AND utente_id = ?");
+            numeroCollezioniPubbliche = connection.prepareStatement("SELECT COUNT(*) FROM collezione WHERE privacy = 'PUBBLICO'");
+            numeroCollezioniPrivateUtente = connection.prepareStatement("SELECT COUNT(*) FROM collezione WHERE privacy = 'PRIVATO' AND utente_id = ?");
             numeroCollezioniTotaliUtente = connection.prepareStatement("SELECT COUNT(*) FROM collezione WHERE utente_id = ?");
         } catch (SQLException e) {
             throw new DataException("Error initializing stats data layer",e);

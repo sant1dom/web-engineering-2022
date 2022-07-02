@@ -41,9 +41,9 @@
                     <div class="form-group" style="width: 50%;">
                         <label for="privacy">Privacy</label>
                         <select id="privacy" name="privacy" class="selectpicker">
-                            <option selected="" value="PRIVATA">PRIVATA</option>
-                            <option value="PUBBLICA">PUBBLICA</option>
-                            <option value="CONDIVISA">CONDIVISA</option>
+                            <option selected="" value="PRIVATO">PRIVATO</option>
+                            <option value="PUBBLICO">PUBBLICO</option>
+                            <option value="CONDIVISO">CONDIVISO</option>
                         </select>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
         $('.selectpicker').selectpicker();
 
 
-        if ($('#privacy').val() === 'CONDIVISA') {
+        if ($('#privacy').val() === 'CONDIVISO') {
             condivisione_container.show();
 
         } else {
@@ -89,7 +89,7 @@
         }
 
         $('#privacy').on('change', function () {
-            if ($(this).val() === 'CONDIVISA') {
+            if ($(this).val() === 'CONDIVISO') {
                 condivisione_container.show();
 
             } else {
