@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * Servlet per la visualizzazione del singolo autore.
+ *
  * @author Davide De Acetis
  */
 public class ShowCollezione extends CollectorsBaseController {
@@ -33,11 +34,16 @@ public class ShowCollezione extends CollectorsBaseController {
 
             Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
             Utente proprietario = collezione.getUtente();
-            List<Disco> dischi = collezione.getDischi();
-            List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
-            List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi(Utility.getUtente(request, response)));
 
-            dischiAdd.removeAll(dischi);
+            List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
+            Utente utente = Utility.getUtente(request, response);
+            List<Disco> dischi = collezione.getDischi();
+
+            List<Disco> dischiAdd = new ArrayList<>();
+            if (utente != null) {
+                dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi(utente));
+                dischiAdd.removeAll(dischi);
+            }
 
             //Ogni collezione ha una lista di dischi e il suo proprietario.
             request.setAttribute("collezione", collezione);

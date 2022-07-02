@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="error" type="String" -->
+<#-- @ftlvariable name="referrer" type="String" -->
 <link href="/assets/css/auth.css" rel="stylesheet"/>
 <!-- BACKGROUND-IMAGE -->
 <div class="bg-image">
@@ -9,6 +10,7 @@
             </div>
             <div class="card-body">
                 <form method="post" action="login" class="login100-form validate-form">
+                    <input type="hidden" value="${referrer}" name="referrer">
                     <#if error??>
                         <div class=text-red>
                             ${error!}

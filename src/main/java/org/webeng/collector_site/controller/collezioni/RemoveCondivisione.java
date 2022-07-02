@@ -55,9 +55,10 @@ public class RemoveCondivisione extends CollectorsBaseController {
         response.sendRedirect(request.getHeader("Referer"));
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        response.sendRedirect("/login");
+ private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String completeRequestURL = request.getRequestURL() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        request.setAttribute("referrer", completeRequestURL);
+        request.getRequestDispatcher("/login").forward(request, response);
     }
 }
 

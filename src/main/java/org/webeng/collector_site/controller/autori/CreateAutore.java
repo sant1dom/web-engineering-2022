@@ -11,6 +11,7 @@ import org.webeng.framework.result.TemplateManagerException;
 import org.webeng.framework.result.TemplateResult;
 import org.webeng.framework.security.SecurityHelpers;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class CreateAutore extends CollectorsBaseController {
                     }
                     action_logged(request, response);
                 }
-            } catch (TemplateManagerException | DataException | IOException ex) {
+            } catch (TemplateManagerException | DataException | IOException | ServletException ex) {
                 handleError(ex, request, response);
             }
         }
@@ -50,9 +51,10 @@ public class CreateAutore extends CollectorsBaseController {
         result.activate("autori/create.ftl", request, response);
     }
 
-    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(REFERRER, request.getParameter(REFERRER));
-        response.sendRedirect("/login");
+ private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String completeRequestURL = request.getRequestURL() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        request.setAttribute("referrer", completeRequestURL);
+        request.getRequestDispatcher("/login").forward(request, response);
     }
 
     private void saveAutore(HttpServletRequest request, HttpServletResponse response) {
