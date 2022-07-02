@@ -10,7 +10,9 @@
             </div>
             <div class="card-body">
                 <form method="post" action="login" class="login100-form validate-form">
-                    <input type="hidden" value="${referrer}" name="referrer">
+                    <#if referrer??>
+                        <input type="hidden" value="${referrer!}" name="referrer">
+                    </#if>
                     <#if error??>
                         <div class=text-red>
                             ${error!}
