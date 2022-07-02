@@ -38,6 +38,8 @@
                     <a class="dropdown-item" href="index-traccia">Tracce</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="index-autore">Autori</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="stats">Statistiche</a>
                 </div>
             </li>
         </ul>
