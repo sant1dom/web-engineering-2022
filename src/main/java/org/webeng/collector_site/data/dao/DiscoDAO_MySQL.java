@@ -122,7 +122,7 @@ public class DiscoDAO_MySQL extends DAO implements DiscoDAO {
             d.setGenere(Genere.valueOf(rs.getString("genere")));
             d.setEtichetta(rs.getString("etichetta"));
             d.setFormato(Formato.valueOf(rs.getString("formato")));
-            if (rs.getString("stato_conservazione") != null) {
+            if (rs.getString("stato_conservazione") != null && !rs.getString("stato_conservazione").isBlank()) {
                 d.setStatoConservazione(StatoConservazione.valueOf(rs.getString("stato_conservazione")));
             } else {
                 d.setStatoConservazione(null);

@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * Servlet per il profilo di un utente
+ *
  * @author Davide De Acetis
  */
 public class Profilo extends CollectorsBaseController {
@@ -34,12 +35,12 @@ public class Profilo extends CollectorsBaseController {
             Utente utente_generico;
             List<Collezione> collezioni = null;
             List<Disco> dischi = null;
-            List<Collezione> collezioni_condivise= new ArrayList<>();
+            List<Collezione> collezioni_condivise = new ArrayList<>();
 
             Utente utente = Utility.getUtente(request, response);
             if (utente != null) {
                 request.setAttribute("utente", utente);
-                collezioni_condivise=dataLayer.getCollezioneDAO().getCollezioniCondivise(utente);
+                collezioni_condivise = dataLayer.getCollezioneDAO().getCollezioniCondivise(utente);
                 request.setAttribute("collezioni_condivise", collezioni_condivise);
             }
 
@@ -60,7 +61,7 @@ public class Profilo extends CollectorsBaseController {
 
             request.setAttribute("collezioni", collezioni);
             request.setAttribute("dischi", dischi);
-            
+
             result.activate("utenti/profilo.ftl", request, response);
         } catch (TemplateManagerException | DataException | IOException ex) {
             handleError(ex, request, response);
