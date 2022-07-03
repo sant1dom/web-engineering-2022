@@ -54,10 +54,10 @@
 
             <div class="nav-square hidden aligned">
 
-                <a href="profilo?id=${utente.getKey()}" class="profile hidden"><img class="user_logo" src="/assets/images/users/user_icon.png" alt=""></a>
+                <a href="profilo" class="profile hidden"><img class="user_logo" src="/assets/images/users/user_icon.png" alt=""></a>
                 <a href="logout" class="bt-navbar-registrati hidden">Logout</a>
             </div>
-            <a href="profilo?id=${utente.getKey()}" class="resp991"><img class="user_logo" src="/assets/images/users/user_icon.png" alt=""></a>
+            <a href="profilo" class="resp991"><img class="user_logo" src="/assets/images/users/user_icon.png" alt=""></a>
             <a href="logout" class="bt-navbar-registrati resp991">Logout</a>
 
         </#if>

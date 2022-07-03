@@ -252,8 +252,8 @@
                         <table class="table table-borderless table-striped">
                             <thead class="table-dark">
                             <tr>
-                                <th scope="col">Nome</th>
-                                <th scope="col">Cognome</th>
+                                <th scope="col">Nome e cognome</th>
+                                <th scope="col">Nome d'arte</th>
                                 <th scope="col">Tipologia</th>
                                 <#if (utente?? && utente.getKey() == disco.getUtente().getKey())>
                                     <th scope="col" style="text-align: center">Azioni</th>
@@ -264,9 +264,9 @@
                             <#list autori as autore>
                                 <tr>
                                     <td><a class="link"
-                                           href="show-autore?id=${autore.getKey()}">${autore.getNomeArtistico()}</a>
+                                           href="show-autore?id=${autore.getKey()}">${autore.getNome() + " "+ autore.getCognome()}</a></td>
+                                    <td>${autore.getNomeArtistico()}
                                     </td>
-                                    <td>${autore.getNome() + autore.getCognome()}</td>
                                     <td>${autore.getTipologia()?lower_case?cap_first}</td>
                                     <#if (utente?? && utente.getKey() == disco.getUtente().getKey())>
                                         <td style="text-align: center">

@@ -37,25 +37,29 @@ public class Profilo extends CollectorsBaseController {
             List<Collezione> collezioni_condivise= new ArrayList<>();
 
             Utente utente = Utility.getUtente(request, response);
-            if (utente != null) {
-                request.setAttribute("utente", utente);
-                collezioni_condivise=dataLayer.getCollezioneDAO().getCollezioniCondivise(utente);
-                request.setAttribute("collezioni_condivise", collezioni_condivise);
-            }
 
             if (request.getParameter("id") != null && !request.getParameter("id").isBlank()) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 utente_generico = dataLayer.getUtenteDAO().getUtente(id);
                 if (utente_generico != null) {
                     request.setAttribute("utente_generico", utente_generico);
-                    collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente_generico);
+                    collezioni = dataLayer.getCollezioneDAO().getCollezioniPubbliche(utente_generico);
                     dischi = dataLayer.getDiscoDAO().getDischi(utente_generico);
+                    if (utente != null) {
+                        request.setAttribute("utente", utente);
+                    }
                 } else {
                     response.sendRedirect("/");
                 }
-            } else {
+            } else if(utente != null) {
+                request.setAttribute("utente", utente);
+                request.setAttribute("utente_generico", utente);
                 collezioni = dataLayer.getCollezioneDAO().getCollezioni(utente);
                 dischi = dataLayer.getDiscoDAO().getDischi(utente);
+                collezioni_condivise = dataLayer.getCollezioneDAO().getCollezioniCondivise(utente);
+                request.setAttribute("collezioni_condivise", collezioni_condivise);
+            }else{
+                response.sendRedirect("/");
             }
 
             request.setAttribute("collezioni", collezioni);

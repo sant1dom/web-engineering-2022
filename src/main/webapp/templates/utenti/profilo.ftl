@@ -95,20 +95,15 @@
                             <tbody id="table-tbody-collezioni">
                             <#list collezioni as collezione>
                                 <tr>
-                                      <#if (utente?? && utente.getKey() == collezione.getUtente().getKey() ||utente?? && utente.getKey() != collezione.getUtente().getKey() && collezione.getPrivacy()=="PUBBLICO" )>
                                     <td><a class="link"
                                            href="show-collezione?id=${collezione.getKey()}">${collezione.getTitolo()}</a>
                                     </td>
-                                       <#else>
-                                    <td>${collezione.getTitolo()}</td>
-                                    </#if>
-
                                     <td>${collezione.dataCreazione?date("yyyy-MM-dd")?string("dd-MM-yyyy")}</td>
                                     <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
                                         <td>${collezione.getPrivacy()?lower_case?cap_first}</td>
                                         <td class="table-actions">
                                             <a href="delete-collezione?id=${collezione.getKey()}"
-                                            class="btn btn-danger">rimuovi</a>
+                                               class="btn btn-danger">rimuovi</a>
                                         </td>
                                     </#if>
                                 </tr>
@@ -119,13 +114,14 @@
                     <div class="table-empty">Non ci sono collezioni.</div>
                 </#if>
             </div>
-           <!-- TABELLA COLLEZIONI CONDIVISE CON TE -->
+            <!-- TABELLA COLLEZIONI CONDIVISE CON TE -->
             <#if (utente?? && utente_generico?? && utente.getKey() == utente_generico.getKey())>
 
                 <div class="table-container" id="collezioni-container">
                     <div class="title flex justify-between align-items-center">
                         COLLEZIONI CONDIVISE CON TE
-                        <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-collezioni')" type="text"
+                        <input id="input-filtro" onkeyup="ricerca(this.value, '#table-tbody-collezioni-condivise')"
+                               type="text"
                                placeholder="Search.." class="input-filtro inner-table">
                     </div>
                     <#if (collezioni_condivise?? && collezioni_condivise?size > 0)>
@@ -137,7 +133,7 @@
                                     <th scope="col">Data creazione</th>
                                 </tr>
                                 </thead>
-                                <tbody id="table-tbody-collezioni">
+                                <tbody id="table-tbody-collezioni-condivise">
                                 <#list collezioni_condivise as collezione_condivisa>
                                     <tr>
                                         <td><a class="link"
@@ -154,8 +150,8 @@
                     </#if>
                 </div>
 
-                </#if>
-                <!-- Fine tabella collezioni condivise con te -->
+            </#if>
+            <!-- Fine tabella collezioni condivise con te -->
             <div class="table-container" id="dischi-container">
                 <div class="title flex justify-between align-items-center">
                     DISCHI
