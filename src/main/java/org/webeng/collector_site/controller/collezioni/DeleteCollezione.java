@@ -54,7 +54,7 @@ public class DeleteCollezione extends CollectorsBaseController {
         /* cancellazione di tutte tutte le associazioni
         tra un disco nella collezione e la collezione in questione
         nella tabella collezione_disco richiamando il metodo deleteDisco */
-        if (Utility.getUtente(request, response).equals(collezione.getUtente())) {
+        if (user.equals(collezione.getUtente())) {
             for (Disco disco : dischi) {
                 dataLayer.getDiscoDAO().deleteDisco(collezione, disco);
             }
@@ -70,7 +70,7 @@ public class DeleteCollezione extends CollectorsBaseController {
             //cancellazione della collezione
             dataLayer.getCollezioneDAO().deleteCollezione(collezione);
 
-            response.sendRedirect("/profilo?id=" + user.getKey());
+            response.sendRedirect("/profilo");
         } else {
             response.sendRedirect("/home");
         }
@@ -78,7 +78,7 @@ public class DeleteCollezione extends CollectorsBaseController {
 
  private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String completeRequestURL = request.getRequestURL() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-        request.setAttribute("referrer", completeRequestURL);
+        request.setAttribute(REFERRER, completeRequestURL);
         request.getRequestDispatcher("/login").forward(request, response);
     }
 }

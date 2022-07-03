@@ -100,7 +100,7 @@ public class DeleteDisco extends CollectorsBaseController {
         dataLayer.getDiscoDAO().deleteDisco(disco);
         Utente utente = Utility.getUtente(request, response);
         if (utente != null) {
-            response.sendRedirect("/profilo?id=" + utente.getKey());
+            response.sendRedirect("/profilo");
         } else {
             response.sendRedirect("/index-disco");
         }

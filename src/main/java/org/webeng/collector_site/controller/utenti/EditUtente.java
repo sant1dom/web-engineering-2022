@@ -86,7 +86,7 @@ public class EditUtente extends CollectorsBaseController {
                         utente.setPassword(SecurityHelpers.encryptPassword(password));
                         dataLayer.getUtenteDAO().storeUtente(utente);
 
-                        response.sendRedirect("/profilo?id=" + utente.getKey());
+                        response.sendRedirect("/profilo");
                     } else {
                         request.setAttribute("error", "Password errata");
                         action_logged(request, response);

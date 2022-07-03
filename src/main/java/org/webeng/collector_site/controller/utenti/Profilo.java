@@ -34,7 +34,7 @@ public class Profilo extends CollectorsBaseController {
             Utente utente_generico;
             List<Collezione> collezioni = null;
             List<Disco> dischi = null;
-            List<Collezione> collezioni_condivise= new ArrayList<>();
+            List<Collezione> collezioni_condivise;
 
             Utente utente = Utility.getUtente(request, response);
 
