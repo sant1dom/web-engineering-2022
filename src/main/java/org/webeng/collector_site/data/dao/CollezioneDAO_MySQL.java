@@ -32,6 +32,7 @@ public class CollezioneDAO_MySQL extends DAO implements CollezioneDAO {
     private PreparedStatement fCollezioniByTitoloCondivise;
     private PreparedStatement sCollezioniByUtentePubbliche;
     private PreparedStatement idUtentiAttivi;
+    private PreparedStatement fCollezioniPubbliche;
 
     public CollezioneDAO_MySQL(DataLayer d) {
         super(d);

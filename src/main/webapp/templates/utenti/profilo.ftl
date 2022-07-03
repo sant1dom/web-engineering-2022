@@ -95,9 +95,14 @@
                             <tbody id="table-tbody-collezioni">
                             <#list collezioni as collezione>
                                 <tr>
+                                      <#if (utente?? && utente.getKey() == collezione.getUtente().getKey() ||utente?? && utente.getKey() != collezione.getUtente().getKey() && collezione.getPrivacy()=="PUBBLICO" )>
                                     <td><a class="link"
                                            href="show-collezione?id=${collezione.getKey()}">${collezione.getTitolo()}</a>
                                     </td>
+                                       <#else>
+                                    <td>${collezione.getTitolo()}</td>
+                                    </#if>
+
                                     <td>${collezione.dataCreazione?date("yyyy-MM-dd")?string("dd-MM-yyyy")}</td>
                                     <#if (utente?? && utente.getKey() == collezioni[0].getUtente().getKey())>
                                         <td>${collezione.getPrivacy()?lower_case?cap_first}</td>

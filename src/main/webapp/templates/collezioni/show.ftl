@@ -37,17 +37,12 @@
             </#if>
         </div>
     </#if>
-    <#if errorUser??>
+    <#if error??>
         <div class="text-red" style="color: red; margin-left: 2rem">
-            ${errorUser!}
+            ${error!}
         </div>
     </#if>
 
-    <#if errorTitolo??>
-        <div class="text-red" style="color: red; margin-left: 2rem">
-            ${errorTitolo!}
-        </div>
-    </#if>
     <div class="horizontal-separator"></div>
     <div class="tabelle-filtro-container">
         <div class="side-bar-container">

@@ -106,8 +106,9 @@ public class EditCollezione extends CollectorsBaseController {
                 String username = request.getParameter("user_share");
                 List<Utente> utenti = new ArrayList<>();
                 utenti.add(dataLayer.getUtenteDAO().getUtente(username));
-                if(collezione.getUtentiCondivisi().containsAll(utenti))
-                    request.setAttribute("errorUser", "Utente già inserito!");
+                if(collezione.getUtentiCondivisi().containsAll(utenti)) {
+                    request.setAttribute("error", "Utente già inserito!");
+                }
                 else {
                      collezione.setUtentiCondivisi(utenti);
                      dataLayer.getCollezioneDAO().addUtentiCondivisi(collezione);
@@ -122,7 +123,7 @@ public class EditCollezione extends CollectorsBaseController {
                 if (!titolo.equalsIgnoreCase(collezione.getTitolo())) {
                     for (Collezione c : collezioni) {
                         if (c.getTitolo().equalsIgnoreCase(titolo) && !c.getKey().equals(collezione.getKey())) {
-                            request.setAttribute("errorTitolo", "Hai già una collezione con questo titolo!");
+                            request.setAttribute("error", "Hai già una collezione con questo titolo!");
                             error = true;
                             break;
                         }
