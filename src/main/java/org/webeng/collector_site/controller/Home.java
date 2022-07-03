@@ -29,16 +29,19 @@ public class Home extends CollectorsBaseController {
             TemplateResult result = new TemplateResult(getServletContext());
             request.setAttribute(REFERRER, request.getParameter(REFERRER));
             CollectorsDataLayer dataLayer = (CollectorsDataLayer) request.getAttribute("datalayer");
-            List<Traccia> tracce= dataLayer.getTracciaDAO().getTraccePopolari();
+
+            List<Traccia> tracce = dataLayer.getTracciaDAO().getTraccePopolari();
             List<Disco> dischi = dataLayer.getDiscoDAO().getDischiPopolari();
+
             for(Disco disco: dischi){
                 List<Image> immagini= dataLayer.getImageDAO().getImages(disco);
                 disco.setImmagini(immagini);
             }
             List<Integer> utenti_id= dataLayer.getCollezioneDAO().getUtentiAttivi();
             List<Utente> utenti= new ArrayList<>();
+
             for(Integer id: utenti_id){
-                Utente utente= dataLayer.getUtenteDAO().getUtente(id);
+                Utente utente = dataLayer.getUtenteDAO().getUtente(id);
                 utenti.add(utente);
             }
             for(Utente utente: utenti){
@@ -47,6 +50,7 @@ public class Home extends CollectorsBaseController {
             request.setAttribute("utenti", utenti);
             request.setAttribute("tracce", tracce);
             request.setAttribute("dischi", dischi);
+
             result.activate("index.ftl", request, response);
         } catch (TemplateManagerException | DataException ex) {
             handleError(ex, request, response);

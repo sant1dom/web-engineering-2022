@@ -19,6 +19,14 @@
     display: flex;
 }
 
+.justify-start {
+    justify-content: start;
+}
+
+.justify-evenly {
+    justify-content: space-evenly;
+}
+
 .justify-center {
     justify-content: center;
 }
@@ -37,6 +45,10 @@
 
 .flex-wrap {
     flex-wrap: wrap;
+}
+
+.text-center {
+    text-align: center;
 }
 /*END CSS FLEXBOX*/
 
