@@ -18,33 +18,42 @@
             <div class="filtro">
                 <div class="filtro-list">
                     <dl class="filtro-info list-group list-group-flush">
-                        <label for="autore">Autori</label>
-                        <select id="autore" name="autore" class="selectpicker" data-live-search="true">
-                            <option value="">Scegli un autore</option>
-                            <#list autori as author>
-                                <option value="${author.key}">${author.nomeArtistico}</option>
-                            </#list>
-                        </select>
+                        <dt class="filtro-subtitle"></dt>
+                        <dd>
+                            <label for="autore">Autori</label>
+                            <select id="autore" name="autore" class="selectpicker" data-live-search="true">
+                                <option value="">Scegli un autore</option>
+                                <#list autori as author>
+                                    <option value="${author.key}">${author.nomeArtistico}</option>
+                                </#list>
+                            </select>
+                        </dd>
                         <dd class="horizontal-separator filtro-horizontal-separator"></dd>
-                        <label for="genere">Generi</label>
-                        <select id="genere" name="genere" class="selectpicker" data-live-search="true">
-                            <option value="">Scegli un genere</option>
-                            <#list generi as genre>
-                                <option value="${genre}">${genre}</option>
-                            </#list>
-                        </select>
+                        <dd>
+                            <label for="genere">Generi</label>
+                            <select id="genere" name="genere" class="selectpicker" data-live-search="true">
+                                <option value="">Scegli un genere</option>
+                                <#list generi as genre>
+                                    <option value="${genre}">${genre}</option>
+                                </#list>
+                            </select>
+                        </dd>
                         <dd class="horizontal-separator filtro-horizontal-separator"></dd>
-                        <label for="etichetta">Etichette</label>
-                        <select id="etichetta" name="etichetta" class="selectpicker" data-live-search="true">
-                            <option value="">Scegli un'etichetta</option>
-                            <#list etichette as etichetta>
-                                <option value="${etichetta}">${etichetta}</option>
-                            </#list>
-                        </select>
+                        <dd>
+                            <label for="etichetta">Etichette</label>
+                            <select id="etichetta" name="etichetta" class="selectpicker" data-live-search="true">
+                                <option value="">Scegli un'etichetta</option>
+                                <#list etichette as etichetta>
+                                    <option value="${etichetta}">${etichetta}</option>
+                                </#list>
+                            </select>
+                        </dd>
                         <dd class="horizontal-separator filtro-horizontal-separator"></dd>
-                        <label for="anno">Anno</label>
-                        <input type="number" id="anno" name="anno" class="form-control-md" placeholder="Anno"
-                               min="1900" max="2099">
+                        <dd>
+                            <label for="anno">Anno</label>
+                            <input type="number" id="anno" name="anno" class="form-control-md" placeholder="Anno"
+                                   min="1900" max="2099">
+                        </dd>
                     </dl>
                 </div>
             </div>
@@ -59,6 +68,7 @@
                     <h4 id="ndg"></h4>
                     <h4 id="nde"></h4>
                     <h4 id="ndanno"></h4>
+                    <div class="horizontal-separator filtro-horizontal-separator"></div>
                     <h4>Numero di dischi totali nel sistema: ${stats[0]}</h4>
                     <h4>Numero di tracce totali nel sistema: ${stats[1]}</h4>
                     <h4>Numero di etichette totali nel sistema: ${stats[2]}</h4>

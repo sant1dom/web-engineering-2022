@@ -129,7 +129,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                     u = createUtente(rs);
                     dataLayer.getCache().add(Utente.class, u);
                 } else {
-                    throw new SQLException();
+                    return null;
                 }
             }
         } catch (SQLException ex) {

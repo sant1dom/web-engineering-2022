@@ -66,7 +66,7 @@ public class EditCollezione extends CollectorsBaseController {
         Collezione collezione = dataLayer.getCollezioneDAO().getCollezione(Integer.parseInt(request.getParameter("id")));
         Utente proprietario = collezione.getUtente();
         List<Disco> dischi = collezione.getDischi();
-        List<Utente> utenti_condivisi = collezione.getUtentiCondivisi();
+        List<Utente> utenti_condivisi = dataLayer.getUtenteDAO().getUtentiCondivisi(collezione);
         List<Disco> dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi(Utility.getUtente(request, response)));
 
         dischiAdd.removeAll(dischi);
@@ -82,7 +82,7 @@ public class EditCollezione extends CollectorsBaseController {
 
     }
 
- private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void action_anonymous(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String completeRequestURL = request.getRequestURL() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
         request.setAttribute("referrer", completeRequestURL);
         request.getRequestDispatcher("/login").forward(request, response);
@@ -105,13 +105,15 @@ public class EditCollezione extends CollectorsBaseController {
 
                 String username = request.getParameter("user_share");
                 List<Utente> utenti = new ArrayList<>();
-                utenti.add(dataLayer.getUtenteDAO().getUtente(username));
-                if(collezione.getUtentiCondivisi().containsAll(utenti)) {
+                Utente ut = dataLayer.getUtenteDAO().getUtente(username);
+                utenti.add(ut);
+                if (ut == null) {
+                    request.setAttribute("error", "Utente non trovato");
+                } else if (collezione.getUtentiCondivisi().containsAll(utenti)) {
                     request.setAttribute("error", "Utente già inserito!");
-                }
-                else {
-                     collezione.setUtentiCondivisi(utenti);
-                     dataLayer.getCollezioneDAO().addUtentiCondivisi(collezione);
+                } else {
+                    collezione.setUtentiCondivisi(utenti);
+                    dataLayer.getCollezioneDAO().addUtentiCondivisi(collezione);
                 }
             } else {
                 boolean error = false;

@@ -295,7 +295,7 @@ public class TracciaDAO_MySQL extends DAO implements TracciaDAO {
         List<Traccia> tracce = new ArrayList<>();
         try {
             sTracceByAutore.setInt(1, autore.getKey());
-            ResultSet rs = sTracce.executeQuery();
+            ResultSet rs = sTracceByAutore.executeQuery();
             while (rs.next()) {
                 tracce.add(getTraccia(rs.getInt("id")));
             }
