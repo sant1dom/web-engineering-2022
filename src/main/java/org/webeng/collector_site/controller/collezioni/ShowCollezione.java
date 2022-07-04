@@ -14,6 +14,7 @@ import org.webeng.framework.security.SecurityHelpers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class ShowCollezione extends CollectorsBaseController {
                 dischiAdd = new ArrayList<>(dataLayer.getDiscoDAO().getDischi(utente));
                 dischiAdd.removeAll(dischi);
             }
+            if(!proprietario.equals(utente) && (collezione.getPrivacy().equals("PRIVATO")|| collezione.getPrivacy().equals("CONDIVISO"))){
+                response.sendRedirect("/home");
+            }
 
             //Ogni collezione ha una lista di dischi e il suo proprietario.
             request.setAttribute("collezione", collezione);
@@ -53,7 +57,7 @@ public class ShowCollezione extends CollectorsBaseController {
             request.setAttribute("dischiAdd", dischiAdd);
 
             result.activate("/collezioni/show.ftl", request, response);
-        } catch (DataException | TemplateManagerException ex) {
+        } catch (DataException | TemplateManagerException | IOException ex) {
             handleError(ex, request, response);
         }
     }
